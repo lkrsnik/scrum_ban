@@ -1,0 +1,4 @@
+Django
+djangorestframework
+djangorestframework-jwt
+mysqlclient

@@ -1,0 +1,28 @@
+1. GIT SETUP
+
+-follow the guidelines on Bitbucket/GitHub...
+
+2. DJANGO REST SETUP
+
+a) Create new virtual envirement
+
+pip install virtualenv
+cd VirtualEnv/
+virtualenv __NAME_OF_ENVIREMENT__
+virtualenv -p /usr/bin/python3.4 __NAME_OF_ENVIREMENT__ //adds python3.4 to envirement
+source venv/bin/activate
+
+b) Install pip packages
+sudo apt-get install python3-dev
+pip install -r requirements.txt
+
+c) Setup project
+django-admin.py startproject __PROJECT_NAME__
+python manage.py startapp __APP_NAME__
+
+d) Database setup
+//create localsettings
+//setup DATABASES in django_settings
+
+e) lint initiation
+pip install pep8
