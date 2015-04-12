@@ -9,7 +9,7 @@ a) Create new virtual envirement
 pip install virtualenv
 cd VirtualEnv/
 virtualenv __NAME_OF_ENVIREMENT__
-virtualenv -p /usr/bin/python3.4 __NAME_OF_ENVIREMENT__ //adds python3.4 to envirement
+virtualenv -p /usr/bin/python3.4 __NAME_OF_ENVIREMENT__ //adds python3.4 to environment
 source venv/bin/activate
 
 b) Install pip packages

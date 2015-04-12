@@ -11,17 +11,31 @@ var concat = require('gulp-concat');
 var continous_concat = require('gulp-continuous-concat');
 var watch = require('gulp-watch');
 var plumber = require('gulp-plumber');
+var recess = require('gulp-recess'); // CSS and LESS lint
+var less = require('gulp-less'); 
+var path = require('path');
 
 // tasks
-gulp.task('lint', function () {
+gulp.task('jslint', function () {
     gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(plumber())
         .pipe(jslint())
         .pipe(plumber.stop());
 });
+gulp.task('recess', function () {
+    gulp.src(['./public/src/*.less', './public/src/**/*.less'])
+        .pipe(plumber())
+        .pipe(recess())
+        .pipe(plumber.stop());
+});
 gulp.task('clean', function() {
     gulp.src('./dist/*')
         .pipe(clean({force: true}));
+});
+gulp.task('less', function () {
+    gulp.src(['./public/src/*.less', './public/src/**/*.less'])
+        .pipe(less())
+        .pipe(gulp.dest('./public/src/css'));
 });
 gulp.task('minify-css', function() {
     var opts = {comments:true,spare:true};
@@ -37,7 +51,7 @@ gulp.task('minify-app-js', function() {
 });
 gulp.task('copy-bower-components', function () {
     gulp.src('./public/libs/**')
-        .pipe(gulp.dest('dist/bower_components'));
+        .pipe(gulp.dest('dist/libs'));
 });
 gulp.task('copy-html-files', function () {
     gulp.src(['./public/src/*.html', './public/src/**/*.html'])
@@ -47,24 +61,26 @@ gulp.task('copy-index', function () {
     gulp.src(['./public/index.html'])
         .pipe(gulp.dest('dist/'));
 });
-gulp.task('connect', function () {
+/*gulp.task('connect', function () {
     connect.server({
         root: 'dist/',
         port: 8888
     });
-});
+});*/
+
 
 // watch task
 gulp.task('watch', function () {
-    gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['lint', 'minify-app-js']);
+    gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js']);
     gulp.watch(['./public/src/css/*.css', './public/src/css/**/*.css', './public/src/*.css'], ['minify-css']);
     gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
     gulp.watch(['./public/index.html'], ['copy-index']);
+    gulp.watch(['./gulpfile.js'], ['default', 'build']);
 });
 
 // default task
 gulp.task('default',
-    ['lint', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch', 'connect']
+    ['jslint', 'recess', 'less', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
 );
 // build task
 gulp.task('build',

@@ -9,30 +9,54 @@
   <title>My AngularJS App</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="static/bower_components/html5-boilerplate/css/normalize.css">
-  <link rel="stylesheet" href="static/bower_components/html5-boilerplate/css/main.css">
-  <link rel="stylesheet" href="static/css/app.css">
-  <script src="static/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+
+  <link rel="stylesheet" href="/static/libs/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/libs/metisMenu/dist/metisMenu.min.css">
+  <link rel="stylesheet" href="/static/libs/sb-admin-angular/dist/styles/timeline.css">
+  <link rel="stylesheet" href="/static/libs/sb-admin-angular/dist/styles/sb-admin-2.css">
+  <link rel="stylesheet" href="/static/libs/angular-loading-bar/build/loading-bar.min.css">
+  <link rel="stylesheet" href="/static/libs/morrisjs/morris.css">
+  <link rel="stylesheet" href="/static/libs/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+
 </head>
 <body>
-  <ul class="menu">
+  <!--<ul class="menu">
     <li><a href="#/view1">view1</a></li>
     <li><a href="#/view2">view2</a></li>
-  </ul>
+  </ul>-->
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div ng-view></div>
+  <!--<div ng-view></div>-->
 
-  <div>Angular seed app: v<span app-version></span></div>
+    <div ng-app="myApp">
+
+        <div ui-view></div>
+
+    </div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
   -->
-  <script src="static/bower_components/angular/angular.js"></script>
-  <script src="static/bower_components/angular-route/angular-route.js"></script>
-  <script src="static/js/app.min.js"></script>
+  <script src="/static/libs/jquery/dist/jquery.min.js"></script>
+  <script src="/static/libs/angular/angular.js"></script>
+  <script src="/static/libs/angular-route/angular-route.js"></script>
+  <script src="/static/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="/static/libs/angular-loading-bar/build/loading-bar.min.js"></script>
+
+  <!-- BOOTSTRAP theme -->
+  <script src="/static/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/static/libs/metisMenu/dist/metisMenu.min.js"></script>
+  <script src="/static/libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="/static/libs/sb-admin-angular/dist/js/sb-admin-2.js"></script>
+
+  <!-- CUSTOM -->
+  <script src="/static/js/app.min.js"></script>
+  <!--<script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>-->
 </body>
 </html>
