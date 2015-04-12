@@ -40,7 +40,7 @@ gulp.task('clean', function() {
 //});
 gulp.task('minify-css', function() {
     var opts = {comments:true,spare:true};
-    gulp.src(['./public/src/less/*.less', './public/src/css/**/*.less', './public/src/*.less'])
+    gulp.src(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'])
         .pipe(less())
         .pipe(concat('app.min.css'))
         .pipe(minifyCSS(opts))
@@ -75,7 +75,7 @@ gulp.task('copy-index', function () {
 // watch task
 gulp.task('watch', function () {
     gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js']);
-    gulp.watch(['./public/src/less/*.less', './public/src/less/**/*.less', './public/src/*.less'], ['minify-css']);
+    gulp.watch(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'], ['recess', 'minify-css']);
     gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
     gulp.watch(['./public/index.html'], ['copy-index']);
     gulp.watch(['./gulpfile.js'], ['default', 'build']);

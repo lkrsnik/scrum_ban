@@ -16,14 +16,25 @@
 
 </head>
 <body ng-app="scrumBan" ng-controller="AppCtrl">
-  <ng-include 
-    src="'/static/html/wireframe/navbar.html'"></ng-include>
+  <div id="wrap">
+    <div class="container">
+      <div class="row">
+        <ng-include class="col-md-12 row" 
+          src="'/static/html/wireframe/navbar.html'"></ng-include>
+          
+          <div class="col-md-12 theme-showcase row" role="main">
+            <div ng-view></div>
+          </div>
+      </div>
+    </div>
+    <div id="push"></div>
+  </div>
+  <ng-include class="container row" src="'/static/html/wireframe/footer.html'"></ng-include>
+  
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-
-  <div ng-view></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
