@@ -73,7 +73,7 @@ class Task(models.Model):
     user = models.ForeignKey(User)
 
 
-class Permissions(models.Model):
+class Permission(models.Model):
     role = models.ForeignKey(Group, related_name='role')
     from_position = models.ForeignKey(Column, related_name='from')
     to_position = models.ForeignKey(Column, related_name='to')
