@@ -14,6 +14,7 @@ var plumber = require('gulp-plumber');
 var recess = require('gulp-recess'); // CSS and LESS lint
 var less = require('gulp-less'); 
 var path = require('path');
+var order = require("gulp-order"); // Order of files
 
 // tasks
 gulp.task('jslint', function () {
@@ -32,14 +33,16 @@ gulp.task('clean', function() {
     gulp.src('./dist/*')
         .pipe(clean({force: true}));
 });
-gulp.task('less', function () {
-    gulp.src(['./public/src/*.less', './public/src/**/*.less'])
-        .pipe(less())
-        .pipe(gulp.dest('./public/src/css'));
-});
+//gulp.task('less', function () {
+//    gulp.src(['./public/src/*.less', './public/src/**/*.less'])
+//        .pipe(less())
+//       .pipe(gulp.dest('./public/src/'));
+//});
 gulp.task('minify-css', function() {
     var opts = {comments:true,spare:true};
-    gulp.src(['./public/src/css/*.css', './public/src/css/**/*.css', './public/src/*.css'])
+    gulp.src(['./public/src/less/*.less', './public/src/css/**/*.less', './public/src/*.less'])
+        .pipe(less())
+        .pipe(concat('app.min.css'))
         .pipe(minifyCSS(opts))
         .pipe(gulp.dest('dist/css'));
 });
@@ -72,7 +75,7 @@ gulp.task('copy-index', function () {
 // watch task
 gulp.task('watch', function () {
     gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js']);
-    gulp.watch(['./public/src/css/*.css', './public/src/css/**/*.css', './public/src/*.css'], ['minify-css']);
+    gulp.watch(['./public/src/less/*.less', './public/src/less/**/*.less', './public/src/*.less'], ['minify-css']);
     gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
     gulp.watch(['./public/index.html'], ['copy-index']);
     gulp.watch(['./gulpfile.js'], ['default', 'build']);
@@ -80,7 +83,7 @@ gulp.task('watch', function () {
 
 // default task
 gulp.task('default',
-    ['jslint', 'recess', 'less', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
+    ['jslint', 'recess', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
 );
 // build task
 gulp.task('build',

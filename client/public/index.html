@@ -11,20 +11,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="/static/libs/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/libs/metisMenu/dist/metisMenu.min.css">
-  <link rel="stylesheet" href="/static/libs/sb-admin-angular/dist/styles/timeline.css">
-  <link rel="stylesheet" href="/static/libs/sb-admin-angular/dist/styles/sb-admin-2.css">
-  <link rel="stylesheet" href="/static/libs/angular-loading-bar/build/loading-bar.min.css">
-  <link rel="stylesheet" href="/static/libs/morrisjs/morris.css">
   <link rel="stylesheet" href="/static/libs/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/static/css/app.min.css">
 
 </head>
-<body ng-app="scrumBan">
-  <!--<ul class="menu">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-  </ul>-->
+<body ng-app="scrumBan" ng-controller="AppCtrl">
+  <ng-include 
+    src="'/static/html/wireframe/navbar.html'"></ng-include>
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -39,13 +32,10 @@
   <script src="/static/libs/angular/angular.js"></script>
   <script src="/static/libs/angular-route/angular-route.js"></script>
   <script src="/static/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
-  <script src="/static/libs/angular-loading-bar/build/loading-bar.min.js"></script>
+  <script src="/static/libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
   <!-- BOOTSTRAP theme -->
   <script src="/static/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="/static/libs/metisMenu/dist/metisMenu.min.js"></script>
-  <script src="/static/libs/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-  <script src="/static/libs/sb-admin-angular/dist/js/sb-admin-2.js"></script>
 
   <!-- CUSTOM -->
   <script src="/static/js/app.min.js"></script>
