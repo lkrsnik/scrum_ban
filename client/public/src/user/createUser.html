@@ -32,6 +32,12 @@
                 Email is too short.</p>
         </div>
 
+        <div class="form-group">
+            <label>Select roles:</label>
+            <select class="form-control" 
+                ng-model="user.role" ng-options="role.displayName for role in ROLES"></select>
+        </div>
+
         
         <button class="btn btn-primary" ng-disabled="createUserForm.$invalid" type="submit">Create user</button>
     </form>
