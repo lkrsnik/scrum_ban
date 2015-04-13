@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_jwt',
 )
 
 STATIC_URL = '/static/'
@@ -62,6 +64,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10
 }
@@ -79,7 +84,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'scrum_ban.urls'
 
 WSGI_APPLICATION = 'scrum_ban.wsgi.application'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -99,6 +103,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Set tokens expiration time
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1)
+}
 
 try:
     from .localsettings import *
