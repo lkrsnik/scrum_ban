@@ -11,7 +11,7 @@ class Team(models.Model):
 class UserTeam(models.Model):
     user = models.ForeignKey(User)
     team = models.ForeignKey(Team)
-    is_acitve = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
 
 class Board(models.Model):

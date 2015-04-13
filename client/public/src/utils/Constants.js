@@ -7,23 +7,43 @@
         .constant('ROLES', [
             {
                 displayName: 'Administrator',
-                id: 'Administrator'
+                id: 'administrator'
             },
             {
-                displayName: 'Spremljevalec',
+                displayName: 'Scrum master',
                 id: 'scrummaster'
             },
             {
-                displayName: 'Voditelj',
-                id: 'Leader'
+                displayName: 'Product owner',
+                id: 'productowner'
             },
             {
-                displayName: 'Član',
-                id: 'Participant'
-            },
-            {
-                displayName: 'Udeleženec',
-                id: 'Member'
+                displayName: 'Team member',
+                id: 'teammember'
             }
-        ]);
+        ])
+        .constant('USERS', [
+            {
+                id: 0,
+                firstName: 'Rok',
+                lastName: 'Rupnik',
+                email: 'rok7rupnik@gmail.com',
+                roles: ['teammember']
+            },
+            {
+                id: 1,
+                firstName: 'Luka',
+                lastName: 'Krsnik',
+                email: 'krsnik.luka92@gmail.com',
+                roles: ['scrummaster']
+            },
+            {
+                id: 2,
+                firstName: 'Tone',
+                lastName: 'Priimek',
+                email: 'tone.primek@gmail.com',
+                roles: ['productowner']
+            }
+        ])
+        .constant('API_URL', 'api/');
 }());

@@ -31,6 +31,14 @@
             <p ng-show="createUserForm.email.$error.minlength" class="help-block">
                 Email is too short.</p>
         </div>
+            
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createUserForm.password.$invalid && createUserForm.password.$dirty }">
+            <label>Password</label>
+            <input ng-model="user.password" type="password" name="password" class="form-control" placeholder="Password" ng-minlength="6" required>
+            <p ng-show="createUserForm.password.$error.required  && createUserForm.password.$dirty" class="help-block">Prosim, vnesite geslo.</p>
+            <p ng-show="createUserForm.password.$error.minlength" class="help-block">Password is too short.</p>
+        </div>
 
         <div class="form-group">
             <label>Select roles:</label>
