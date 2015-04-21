@@ -97,19 +97,29 @@ gulp.task('copy-index', function () {
         port: 8888
     });
 });*/
+/**
+ * Run test once and exit
+ */
+gulp.task('test', function (done) {
+    karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done);
+});
 
 // watch task
 gulp.task('watch', function () {
-    gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js']);
-    gulp.watch(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'], ['recess', 'minify-css']);
-    gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
-    gulp.watch(['./public/index.html'], ['copy-index' 'build']);
-    gulp.watch(['./gulpfile.js'], ['default', 'build']);
+    gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js', 'test']);
+    gulp.watch(['./tests/*.js'], ['jslint', 'test']);
+    gulp.watch(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'], ['recess', 'minify-css', 'test']);
+    gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files', 'test']);
+    gulp.watch(['./public/index.html'], ['copy-index', 'test', 'build']);
+    gulp.watch(['./gulpfile.js', './karma.conf.js'], ['default', 'build']);
 });
 
 // default task
 gulp.task('default',
-    ['jslint', 'recess', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
+    ['jslint', 'recess', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'test', 'watch']
 );
 
 // build task
