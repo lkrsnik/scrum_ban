@@ -97,10 +97,10 @@ gulp.task('copy-index', function () {
  * Run test once and exit
  */
 gulp.task('test', function (done) {
-  /*karma.start({
+    karma.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
-  }, done);*/
+  }, done);
 });
 
 // watch task
