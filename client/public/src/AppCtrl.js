@@ -1,9 +1,9 @@
 /*global angular */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('AppCtrl', ['AuthService', '$scope', function ($scope, AuthService) {
+    angular.module('scrumBan').controller('AppCtrl', ['$scope', function ($scope) {
         $scope.login = function () {
-            AuthService.login($scope.user)
+            /*AuthService.login($scope.user)
                 .success(function () {
                     $scope.updateSessionView();
                 })
@@ -13,7 +13,8 @@
                         $scope.loginForm.username.$setValidity('wrongCredentials', false);
                         break;
                     }
-                });
+                });*/
+            return;
         };
     }]);
 }());
