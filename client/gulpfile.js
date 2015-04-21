@@ -20,7 +20,7 @@ var karma = require('karma').server; // Testing
 
 // tasks
 gulp.task('jslint', function () {
-    gulp.src(['./public/src/*.js', './public/src/**/*.js'/*, './tests/*.js'*/])
+    gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(plumber())
         .pipe(jslint())
         .pipe(plumber.stop());
@@ -103,7 +103,7 @@ gulp.task('watch', function () {
     gulp.watch(['./public/src/*.js', './public/src/**/*.js'], ['jslint', 'minify-app-js']);
     gulp.watch(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'], ['recess', 'minify-css']);
     gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
-    gulp.watch(['./public/index.html'], ['copy-index' 'build']);
+    gulp.watch(['./public/index.html'], ['copy-index', 'build']);
     gulp.watch(['./gulpfile.js'], ['default', 'build']);
 });
 
