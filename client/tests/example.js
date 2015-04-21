@@ -2,7 +2,7 @@
 describe('CreateUserCtrl', function () {
     'use strict';
 
-    /*beforeEach(module('scrumBan'));
+    beforeEach(module('scrumBan'));
 
     var CreateUserCtrl,
         scope,
@@ -36,6 +36,6 @@ describe('CreateUserCtrl', function () {
     it('should load correct groups', function () {
         scope.getGroups();
         expect(scope.groups).toEqual(groups);
-    });*/
+    });
 
 });

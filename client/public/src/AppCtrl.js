@@ -8,13 +8,13 @@
                     $scope.updateSessionView();
                 })
                 .error(function (status) {
-                    switch (status) {
+                    /*switch (status) {
                     case (400):
                         {
                         $scope.loginForm.username.$setValidity('wrongCredentials', false);
                         break;
                         }
-                    }
+                    } */
                 });
         };
     }]);
