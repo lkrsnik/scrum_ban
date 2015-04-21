@@ -59,7 +59,7 @@ gulp.task('copy-bower-components', function () {
         .pipe(gulp.dest('dist/libs'));
 });
 gulp.task('copy-fonts', function () {
-    gulp.src('./public/libs/font-awesome/fonts/**')
+    gulp.src(['./public/libs/font-awesome/fonts/**', './public/libs/bootstrap/dist/fonts/**'])
         .pipe(gulp.dest('dist/fonts'));
 });
 gulp.task('concat-libs-js', function () {
