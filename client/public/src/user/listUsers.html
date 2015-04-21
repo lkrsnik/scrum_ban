@@ -10,9 +10,9 @@
         <th>...</th>
     </tr>
     <tr ng-repeat="user in users">
-        <td> {{ user.firstName }} {{ user.lastName }} </td>
+        <td> {{ user.first_name }} {{ user.last_name }} </td>
         <td> {{ user.email }} </td>
-        <td> <span ng-repeat="role in user.roles">{{ role }} </span> </td>
+        <td> <span ng-repeat="group in user.groups">{{ group.name }} </span> </td>
         <td> 
             <a ng-href="#/users/{{user.id}}/edit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-pencil"></span>

@@ -43,7 +43,7 @@
         <div class="form-group">
             <label>Select roles:</label>
             <select class="form-control" 
-                ng-model="user.role" ng-options="role.displayName for role in ROLES"></select>
+                ng-model="user.group" ng-options="group.id as group.name for group in groups"></select>
         </div>
 
         

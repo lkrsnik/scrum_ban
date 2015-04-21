@@ -2,9 +2,10 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('CreateUserCtrl',
-        ['$scope', 'UserService', 'ROLES', function ($scope, UserService, ROLES) {
+        ['$scope', 'UserService', function ($scope, UserService) {
 
-            $scope.ROLES = ROLES;
+            $scope.greeting = 'Hello world';
+            $scope.groups = {};
 
             $scope.createUser = function (user) {
                 console.log('Creating user:');
@@ -15,5 +16,19 @@
                         console.log('User created');
                     });
             };
+
+            $scope.getGroups = function () {
+                UserService.getGroups()
+                    .success(function (data) {
+                        console.log(JSON.stringify(data));
+                        //$scope.users = data;
+                        $scope.groups = data;
+                        $scope.user = {
+                            'group': data[0].id
+                        };
+                    });
+            };
+
+            $scope.getGroups();
         }]);
 }());
