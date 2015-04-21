@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('malo-obcestvo').service('Session',
+    angular.module('scrumBan').service('Session',
         ['$http', 'API_URL',
             function ($http, API_URL) {
                 var thisSession = this;
