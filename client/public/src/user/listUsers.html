@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+  <div class="panel-heading">List users</div>
+
+  <!-- Table -->
+  <table class="table table-hover">
+    <tr>
+        <th>Full name</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>...</th>
+    </tr>
+    <tr ng-repeat="user in users">
+        <td> {{ user.first_name }} {{ user.last_name }} </td>
+        <td> {{ user.email }} </td>
+        <td> <span ng-repeat="group in user.groups">{{ group.name }} </span> </td>
+        <td> 
+            <a ng-href="#/users/{{user.id}}/edit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <span ng-click="deleteUser(user.id)" class="btn btn-danger handcursor">
+                <span class="glyphicon glyphicon-trash"></span>
+            </span>
+        </td>
+    </tr>
+  </table>
+</div>

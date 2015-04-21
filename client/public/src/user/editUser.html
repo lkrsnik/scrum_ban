@@ -1,0 +1,53 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Edit user</div>
+  <div class="panel-body">
+    <form name="editUserForm" class="create-user-form" role="form" ng-submit="updateUser(user)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : editUserForm.firstName.$invalid && editUserForm.firstName.$dirty }">
+            <label>First name</label>
+            <input ng-model="user.firstName" type="text" name="firstName" 
+                class="form-control" placeholder="First name" required autofocus>
+            <p ng-show="editUserForm.firstName.$error.required && editUserForm.firstName.$dirty" 
+                class="help-block">Please enter users first name.</p>
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : editUserForm.lastName.$invalid && editUserForm.lastName.$dirty }">
+            <label>Last name</label>
+            <input ng-model="user.lastName" type="text" name="lastName" 
+                class="form-control" placeholder="Last name" required autofocus>
+            <p ng-show="editUserForm.lastName.$error.required && editUserForm.lastName.$dirty" 
+                class="help-block">Please enter users last name.</p>
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : editUserForm.email.$invalid && editUserForm.email.$dirty }">
+            <label>Email</label>
+            <input ng-model="user.email" type="email" name="email" 
+                class="form-control" placeholder="Email" 
+                ng-minlength="3" required>
+            <p ng-show="editUserForm.email.$error.required && editUserForm.email.$dirty" 
+                class="help-block">Please enter users email.</p>
+            <p ng-show="editUserForm.email.$error.minlength" class="help-block">
+                Email is too short.</p>
+        </div>
+            
+        <div class="form-group" 
+            ng-class="{ 'has-error' : editUserForm.password.$invalid && editUserForm.password.$dirty }">
+            <label>Password</label>
+            <input ng-model="user.password" type="password" name="password" class="form-control" placeholder="Password" ng-minlength="6" required>
+            <p ng-show="editUserForm.password.$error.required  && editUserForm.password.$dirty" class="help-block">Prosim, vnesite geslo.</p>
+            <p ng-show="editUserForm.password.$error.minlength" class="help-block">Password is too short.</p>
+        </div>
+
+        <div class="form-group">
+            <label>Select roles:</label>
+            <select class="form-control" 
+                ng-model="user.role" ng-options="role.displayName for role in ROLES"></select>
+        </div>
+
+        
+        <button class="btn btn-primary" ng-disabled="editUserForm.$invalid" type="submit">Create user</button>
+    </form>
+  </div>
+</div>
