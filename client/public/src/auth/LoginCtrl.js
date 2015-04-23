@@ -1,7 +1,7 @@
 /*global angular, console */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('AppCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+    angular.module('scrumBan').controller('LoginCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
         $scope.login = function (credentials) {
             AuthService.login(credentials)
                 .success(function () {
