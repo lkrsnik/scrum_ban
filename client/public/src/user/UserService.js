@@ -27,8 +27,8 @@
                             console.log(error);
                         });
                 },
-                deleteUser: function (userId) {
-                    return $http.delete(API_URL + 'users/' + userId + '/')
+                updateUser: function (user) {
+                    return $http.put(API_URL + 'users/' + user.id + '/', user)
                         .error(function (error, status) {
                             console.log('Error in deleting user: ' + status);
                             console.log(error);

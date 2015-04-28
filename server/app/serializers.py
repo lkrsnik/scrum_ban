@@ -8,11 +8,18 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'url', 'name')
         read_only_fields = ('id', 'url',)
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    groups = GroupSerializer(many=True)
+    groups = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'
+    )
+
     class Meta:
         model = User
-        fields = ('id', 'url', 'first_name', 'last_name', 'username', 'email', 'groups')
-        read_only_fields = ('id', 'url',)
-
-
+        fields = (
+            'id', 'url', 'is_active',
+            'first_name', 'last_name',
+            'username', 'email', 'groups',)
+        read_only_fields = ('id', 'url', )

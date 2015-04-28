@@ -12,8 +12,8 @@
                 UserService.getUsers()
                     .success(function (data) {
                         console.log(data);
-                        //$scope.users = data;
                         $scope.users = data;
+                        //$scope.users = Underscore.filter(data, function (user) { return user.is_active; });
                     });
             };
 
@@ -30,12 +30,14 @@
 
             $scope.getGroups();
 
-            $scope.deleteUser = function (userId) {
-                console.log('userId: ' + userId);
-                UserService.deleteUser(userId)
-                    .success(function () {
-                        $scope.users = Underscore.filter($scope.users, function (user) { return user.id !== userId; });
-                    });
+            $scope.deleteUser = function (user) {
+                user.is_active = false;
+                UserService.updateUser(user);
+            };
+
+            $scope.activateUser = function (user) {
+                user.is_active = true;
+                UserService.updateUser(user);
             };
         }]);
 }());

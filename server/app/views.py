@@ -17,33 +17,43 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             group_id = request.DATA['group']
             group = Group.objects.filter(id=group_id)
-            if len(group)!=1:
-                return Response({ 'detail': 'No group with id:' + str(group_id) },\
+            if len(group) != 1:
+                return Response(
+                    {'detail': 'No group with id:' + str(group_id)},
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.object.groups = group
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def list(self, request, pk=None):
         """
-        Get method for retrieving all users 
+        Get method for retrieving all users
         """
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def destroy(self, request, pk=None):
+    def update(self, request, pk=None):
         """
         Deletes a single users with specified id
         """
         user = User.objects.filter(id=pk)
-        if len(user)>0:
-            user[0].delete()
+        if len(user) > 0:
+            user_obj = user.first()  # user object
+            user_data = request.DATA  # user data as dictionary
+            serializer = self.get_serializer(user_obj, data=user_data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'error': 'No user with id: ' + str(pk)}, status=status.HTTP_400_BAD_REQUEST)
-        
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+            return Response(
+                {'error': 'No user with id: ' + str(pk)},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -56,7 +66,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def list(self, request, pk=None):
         """
-        Get method for retrieving all groups 
+        Get method for retrieving all groups
         """
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
