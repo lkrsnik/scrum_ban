@@ -1,4 +1,4 @@
-/*global angular, console */
+/*global angular, console, Underscore */
 (function () {
     'use strict';
     angular.module('scrumBan').controller('CreateUserCtrl',
@@ -8,6 +8,9 @@
             $scope.groups = {};
 
             $scope.createUser = function (user) {
+                user.username = user.email;
+                user.groups = Underscore.filter($scope.groups, function (group) { return group.selected; });
+
                 console.log('Creating user:');
                 console.log(user);
 
@@ -23,9 +26,6 @@
                         console.log(JSON.stringify(data));
                         //$scope.users = data;
                         $scope.groups = data;
-                        $scope.user = {
-                            'group': data[0].id
-                        };
                     });
             };
 

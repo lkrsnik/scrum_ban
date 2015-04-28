@@ -5,7 +5,7 @@
         <div class="form-group" 
             ng-class="{ 'has-error' : createUserForm.firstName.$invalid && createUserForm.firstName.$dirty }">
             <label>First name</label>
-            <input ng-model="user.firstName" type="text" name="firstName" 
+            <input ng-model="user.first_name" type="text" name="firstName" 
                 class="form-control" placeholder="First name" required autofocus>
             <p ng-show="createUserForm.firstName.$error.required && createUserForm.firstName.$dirty" 
                 class="help-block">Please enter users first name.</p>
@@ -14,7 +14,7 @@
         <div class="form-group" 
             ng-class="{ 'has-error' : createUserForm.lastName.$invalid && createUserForm.lastName.$dirty }">
             <label>Last name</label>
-            <input ng-model="user.lastName" type="text" name="lastName" 
+            <input ng-model="user.last_name" type="text" name="lastName" 
                 class="form-control" placeholder="Last name" required autofocus>
             <p ng-show="createUserForm.lastName.$error.required && createUserForm.lastName.$dirty" 
                 class="help-block">Please enter users last name.</p>
@@ -42,9 +42,16 @@
 
         <div class="form-group">
             <label>Select roles:</label>
-            <select class="form-control" 
-                ng-model="user.group" ng-options="group.id as group.name for group in groups"></select>
+            <span ng-repeat="group in groups">
+              <input
+                type="checkbox"
+                name="selectedGroups[]"
+                value="{{group.id}}"
+                ng-model="group.selected"
+              > {{group.name}}
+            </span>
         </div>
+        {{groups}}
 
         
         <button class="btn btn-primary" ng-disabled="createUserForm.$invalid" type="submit">Create user</button>

@@ -13,16 +13,17 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
 
     def create(self, request):
+        user_groups = request.DATA.pop('groups')
+        request.DATA['groups'] = []
+        print(request.DATA)
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
-            group_id = request.DATA['group']
-            group = Group.objects.filter(id=group_id)
-            if len(group) != 1:
-                return Response(
-                    {'detail': 'No group with id:' + str(group_id)},
-                    status=status.HTTP_400_BAD_REQUEST)
-            serializer.object.groups = group
-            serializer.save()
+            user = serializer.save()
+
+            for group in user_groups:
+                g = Group.objects.get(id=group['id'])
+                g.user_set.add(user)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -21,11 +21,7 @@
                         });
                 },
                 createUser: function (user) {
-                    return $http.post(API_URL + 'users/', user)
-                        .error(function (error, status) {
-                            console.log('Error in creating user: ' + status);
-                            console.log(error);
-                        });
+                    return $http.post(API_URL + 'users/', user);
                 },
                 updateUser: function (user) {
                     return $http.put(API_URL + 'users/' + user.id + '/', user)
