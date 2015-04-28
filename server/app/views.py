@@ -36,7 +36,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         """
-        Updates a single users with specified id
+        Updates a single user with specified id
         """
         user = User.objects.filter(id=pk)
         if len(user) > 0:
@@ -44,7 +44,15 @@ class UserViewSet(viewsets.ModelViewSet):
             user_data = request.DATA  # user data as dictionary
             serializer = self.get_serializer(user_obj, data=user_data)
             if serializer.is_valid():
-                serializer.save()
+                user = serializer.save()
+
+                for group in Group.objects.all():
+                    group.user_set.remove(user)
+
+                user_groups = request.DATA.pop('groups')
+                for group in user_groups:
+                    g = Group.objects.get(id=group['id'])
+                    g.user_set.add(user)
             else:
                 return Response(
                     serializer.errors,

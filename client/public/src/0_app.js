@@ -16,8 +16,8 @@ var Underscore;
         config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/users', { templateUrl: '/static/html/user/listUsers.html', controller: 'ListUsersCtrl'})
-                .when('/users/create', { templateUrl: '/static/html/user/createUser.html', controller: 'CreateUserCtrl'})
-                .when('/users/:userId/edit', { templateUrl: '/static/html/user/editUser.html', controller: 'EditUserCtrl'})
+                .when('/users/create', { templateUrl: '/static/html/user/createEditUser.html', controller: 'CreateEditUserCtrl'})
+                .when('/users/:userId/edit', { templateUrl: '/static/html/user/createEditUser.html', controller: 'CreateEditUserCtrl'})
                 .otherwise({redirectTo: '/'});
         }]);
 }());
