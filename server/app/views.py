@@ -36,7 +36,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         """
-        Deletes a single users with specified id
+        Updates a single users with specified id
         """
         user = User.objects.filter(id=pk)
         if len(user) > 0:
