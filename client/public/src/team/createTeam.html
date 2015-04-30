@@ -1,0 +1,31 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Create a developer team</div>
+  <div class="panel-body">
+    <form name="createTeamForm" class="create-team-form" role="form" ng-submit="createTeam(team, productOwner, scrumMaster, teamMembers)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createTeamForm.name.$invalid && createTeamForm.name.$dirty }">
+            <label>Name</label>
+            <input ng-model="team.name" type="text" name="name" 
+                class="form-control" placeholder="Name" required autofocus>
+            <p ng-show="createTeamForm.name.$error.required && createTeamForm.name.$dirty" 
+                class="help-block">Please enter teams name.</p>
+        </div>        
+        <div class="form-group">
+            <label>Select product owner:</label>
+            <select class="form-control" 
+                ng-model="productOwner" ng-options="group.id as group.name for group in productOwners"></select>
+        </div>
+        <div class="form-group">
+            <label>Select scrum master:</label>
+            <select class="form-control" 
+                ng-model="scrumMaster" ng-options="group.id as group.name for group in scrumMasters"></select>
+        </div>
+        <div class="form-group">
+            <label>Select team members:</label>
+            <select class="form-control" 
+                ng-model="teamMembers" ng-options="group.id as group.name for group in teamMembers"></select>
+        </div>
+        <button class="btn btn-primary" ng-disabled="createTeamForm.$invalid" type="submit">Create team</button>
+    </form>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User, Group
+from app.models import Team
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers import UserSerializer, GroupSerializer
+from app.serializers import UserSerializer, GroupSerializer, TeamSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -48,3 +49,14 @@ class GroupViewSet(viewsets.ModelViewSet):
         """
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TeamViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows teams to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = TeamSerializer
+    queryset = Team.objects.all()
+
+    
