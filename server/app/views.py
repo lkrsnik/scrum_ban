@@ -34,6 +34,18 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def destroy(self, request, pk=None):
+        """
+        Deletes a single users with specified id
+        """
+        user = User.objects.filter(id=pk)
+        if len(user)>0:
+            user[0].delete()
+        else:
+            return Response({'error': 'No user with id: ' + str(pk)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(status=status.HTTP_204_NO_CONTENT) 
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """

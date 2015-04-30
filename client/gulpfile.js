@@ -20,7 +20,7 @@ var karma = require('karma').server; // Testing
 
 // tasks
 gulp.task('jslint', function () {
-    gulp.src(['./public/src/*.js', './public/src/**/*.js'/*, './tests/*.js'*/])
+    gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(plumber())
         .pipe(jslint())
         .pipe(plumber.stop());
@@ -59,7 +59,7 @@ gulp.task('copy-bower-components', function () {
         .pipe(gulp.dest('dist/libs'));
 });
 gulp.task('copy-fonts', function () {
-    gulp.src('./public/libs/font-awesome/fonts/**')
+    gulp.src(['./public/libs/font-awesome/fonts/**', './public/libs/bootstrap/dist/fonts/**'])
         .pipe(gulp.dest('dist/fonts'));
 });
 gulp.task('concat-libs-js', function () {

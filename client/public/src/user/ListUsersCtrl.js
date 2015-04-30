@@ -31,7 +31,11 @@
             $scope.getGroups();
 
             $scope.deleteUser = function (userId) {
-                $scope.users = Underscore.filter($scope.users, function (user) { return user.id !== userId; });
+                console.log('userId: ' + userId);
+                UserService.deleteUser(userId)
+                    .success(function () {
+                        $scope.users = Underscore.filter($scope.users, function (user) { return user.id !== userId; });
+                    });
             };
         }]);
 }());
