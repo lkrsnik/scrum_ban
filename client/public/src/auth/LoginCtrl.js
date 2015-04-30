@@ -2,19 +2,24 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('LoginCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+        $scope.resetCredentialsValidity = function () {
+            $scope.loginForm.password.$setValidity('wrongCredentials', true);
+        };
+
         $scope.login = function (credentials) {
+            /*jslint unparam: true*/
             AuthService.login(credentials)
                 .success(function () {
-                    console.log("SUCCESS!!!");
-                    //$scope.updateSessionView();
+                    $scope.updateSessionView();
                 })
-                .error(function (status) {
+                .error(function (error, status) {
                     switch (status) {
                     case (400):
-                        $scope.loginForm.username.$setValidity('wrongCredentials', false);
+                        $scope.loginForm.password.$setValidity('wrongCredentials', false);
                         break;
                     }
                 });
+            /*jslint unparam: false*/
         };
     }]);
 }());

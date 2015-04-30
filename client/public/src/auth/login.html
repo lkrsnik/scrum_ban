@@ -1,31 +1,27 @@
-<div class="row">
-  <form name="loginForm" class="" role="form" ng-submit="login()" >
-    <h2 class="">Sign in</h2>
-    <div class="" 
-      ng-class="{ 'has-error' : loginForm.username.$invalid && loginForm.username.$dirty }">
-      <label>Uporabniško ime</label>
-      <input ng-model="user.username" type="text" name="username" 
-        class="form-control" placeholder="Uporabniško ime" 
-        ng-change="resetCredentialsValidity()" required autofocus>
-      <br />
-      <label>Geslo</label>
-      <input ng-model="user.password" type="password" name="password" 
-        class="form-control" placeholder="Geslo" ng-change="resetCredentialsValidity()" required>
-      <p ng-show="loginForm.username.$error.wrongCredentials" class="help-block">
-        Nepravilno uporabniško ime ali geslo!
-      </p>
-    </div>
-    <br/>
-    <button class="btn btn-lg btn-primary btn-block" 
-      ng-disabled="loginForm.$invalid" type="submit">
-      Prijava
-    </button>
+<div class="panel panel-default">
+  <div class="panel-heading">Log In</div>
+  <div class="panel-body">
+    <form name="loginForm" class="create-user-form" role="form" ng-submit="login(credentials)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : loginForm.username.$invalid && loginForm.username.$dirty }">
+            <label>Username</label>
+            <input ng-model="credentials.username" type="text" name="username" 
+                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Username" required autofocus>
+            <p ng-show="loginForm.username.$error.required && loginForm.username.$dirty" 
+                class="help-block">Please enter username.</p>
+        </div>
 
-    <a href="#/ponastavitevgeslakoda">Ste pozabili geslo?</a>
-
-    <h2 class="">Še nimaš računa?</h2>
-    <a  class="col-md-12 btn btn-lg btn-primary" href="#/registracija">
-      Registriraj se
-    </a>
-  </form>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : loginForm.password.$invalid && loginForm.password.$dirty }">
+            <label>Password</label>
+            <input ng-model="credentials.password" type="password" name="password" 
+                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Password" required autofocus>
+            <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" 
+                class="help-block">Please enter password.</p>
+            <p ng-show="loginForm.password.$error.wrongCredentials && (loginForm.password.$dirty || loginForm.username.$dirty)" 
+                class="help-block">Username or password incorrect.</p>
+        </div>
+        <button class="btn btn-primary" ng-disabled="loginForm.$invalid" type="submit">Log In</button>
+    </form>
+  </div>
 </div>

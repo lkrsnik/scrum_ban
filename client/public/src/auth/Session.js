@@ -1,4 +1,4 @@
-/*global angular */
+/*global angular, console */
 (function () {
     'use strict';
 
@@ -9,8 +9,9 @@
                 thisSession.authenticated = false;
 
                 this.createSession = function () {
-                    return $http.get(API_URL + 'me/')
+                    return $http.get(API_URL + 'session/')
                         .success(function (data) {
+                            console.log(data);
                             thisSession.authenticated = true;
                             thisSession.userId = data.user_id;
                             thisSession.role = data.role;
