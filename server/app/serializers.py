@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User, Group
-from app.models import Team
+from app.models import Team, RoleTeam, UserTeam
 from rest_framework import serializers
+
+from django.shortcuts import render
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -21,8 +23,21 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
         fields = ('id', 'name')
-        read_only_fields = ('id')
+        read_only_fields = ('id', )
 
+class UserTeamSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserTeam
+        fields = ('id', 'user', 'team', 'is_active')
+        read_only_fields = ('id', )
+
+"""
+class RoleTeamSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = RoleTeam
+        fields = ('id', 'role', 'team')
+        read_only_fields = ('id', )
+"""
 # example
 """
 class UserForCongregationSerializer(serializers.HyperlinkedModelSerializer):
