@@ -1,20 +1,24 @@
-/*global angular */
+/*global angular, console */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('AppCtrl', ['$scope', function ($scope) {
-        $scope.login = function () {
-            /*AuthService.login($scope.user)
-                .success(function () {
-                    $scope.updateSessionView();
-                })
-                .error(function (status) {
-                    switch (status) {
-                    case (400):
-                        $scope.loginForm.username.$setValidity('wrongCredentials', false);
-                        break;
-                    }
-                });*/
-            return;
-        };
-    }]);
+    angular.module('scrumBan').controller('AppCtrl',
+        ['$scope', '$q', 'Session', function ($scope, $q, Session) {
+            $scope.promises = {
+                sessionPromise: $q.defer().promise
+            };
+            $scope.updateSessionView = function () {
+                if (Session.isLoaded) {
+                    $scope.session = Session;
+                } else {
+                    $scope.promises.sessionPromise = Session.createSession()
+                        .success(function () {
+                            $scope.session = Session;
+                        })
+                        .error(function () {
+                            $scope.session = undefined;
+                        });
+                }
+            };
+            $scope.updateSessionView();
+        }]);
 }());
