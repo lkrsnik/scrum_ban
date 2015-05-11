@@ -1,7 +1,8 @@
 /*global angular, console */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('LoginCtrl', ['$scope', 'AuthService', function ($scope, AuthService) {
+    angular.module('scrumBan').controller('LoginCtrl', 
+        ['$scope', 'AuthService', '$location', function ($scope, AuthService, $location) {
         $scope.resetCredentialsValidity = function () {
             $scope.loginForm.password.$setValidity('wrongCredentials', true);
         };
@@ -11,6 +12,7 @@
             AuthService.login(credentials)
                 .success(function () {
                     $scope.updateSessionView();
+                    $location.path('/');
                 })
                 .error(function (error, status) {
                     switch (status) {

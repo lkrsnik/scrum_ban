@@ -4,6 +4,15 @@
     angular.module('scrumBan').controller('CreateEditUserCtrl',
         ['$scope', 'UserService', '$routeParams', function ($scope, UserService, $routeParams) {
 
+            if (!$scope.session) {
+                $scope.updateSessionView()
+                    .then(function () {
+                        $scope.redirectNonAdmin('/');
+                    });
+            } else {
+                $scope.redirectNonAdmin('/');
+            }
+
             $scope.createOrEdit = ($routeParams.userId === undefined) ? 'create' : 'edit';
             $scope.groups = {};
 
@@ -23,6 +32,8 @@
             $scope.updateUser = function (user) {
                 user.username = user.email;
                 user.groups = Underscore.filter($scope.groups, function (group) { return group.selected; });
+                // Save only group names
+                user.groups = Underscore.map(user.groups, function (group) { return group.name; });
 
                 console.log('Updating user:');
                 console.log(user);

@@ -6,6 +6,15 @@
 
             $scope.ROLES = ROLES;
 
+            if (!$scope.session) {
+                $scope.updateSessionView()
+                    .then(function () {
+                        $scope.redirectNonAdmin('/');
+                    });
+            } else {
+                $scope.redirectNonAdmin('/');
+            }
+
             //console.log('List users');
 
             $scope.getUsers = function () {
