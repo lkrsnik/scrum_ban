@@ -19,7 +19,7 @@
             <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" 
                 class="help-block">Please enter password.</p>
             <p ng-show="loginForm.password.$error.wrongCredentials && (loginForm.password.$dirty || loginForm.username.$dirty)" 
-                class="help-block">Username or password incorrect.</p>
+                class="help-block">Incorrect username, password or locked IP.</p>
         </div>
         <button class="btn btn-primary" ng-disabled="loginForm.$invalid" type="submit">Log In</button>
     </form>

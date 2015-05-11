@@ -4,6 +4,11 @@ from datetime import datetime
 from decimal import Decimal
 
 
+class LockIp(models.Model):
+    faild_attempts = models.IntegerField()
+    ip = models.CharField(max_length=100, default="")
+
+
 class Team(models.Model):
     name = models.CharField(max_length=100, default="")
 
