@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from app.models import Team, RoleTeam, UserTeam
+from app.models import Team, RoleTeam, UserTeam, RoleTeam
 from rest_framework import serializers
 
 from django.shortcuts import render
@@ -25,34 +25,14 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name')
         read_only_fields = ('id', )
 
-class UserTeamSerializer(serializers.HyperlinkedModelSerializer):
+class UserTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTeam
         fields = ('id', 'user', 'team', 'is_active')
         read_only_fields = ('id', )
 
-"""
-class RoleTeamSerializer(serializers.HyperlinkedModelSerializer):
+class RoleTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = RoleTeam
-        fields = ('id', 'role', 'team')
+        fields = ('id', 'user_team', 'role')
         read_only_fields = ('id', )
-"""
-# example
-"""
-class UserForCongregationSerializer(serializers.HyperlinkedModelSerializer):
-    user_congregations = User_CongregationSerializer(many=True)
-    class Meta:
-        model = User
-        fields = ('user_congregations',)
-
-class ApplicationListSerializer(serializers.HyperlinkedModelSerializer):
-    user_username = serializers.Field(source='user_id.username')
-    user_email = serializers.Field(source='user_id.email')
-    user_id = UserForCongregationSerializer()
-    cycle_id = serializers.Field(source='cycle_id.id')
-    class Meta:
-        model = Application
-        fields = ('id', 'user_username', 'user_email', 'cycle_id', 'status', 'applied_date', 'user_id')
-        read_only_fields = ('id',)
-"""

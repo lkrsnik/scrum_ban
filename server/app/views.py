@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User, Group
-from app.models import Team, RoleTeam, UserTeam
+from app.models import Team, RoleTeam, UserTeam, RoleTeam
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers import UserSerializer, GroupSerializer, TeamSerializer, UserTeamSerializer
+from app.serializers import UserSerializer, GroupSerializer, TeamSerializer, UserTeamSerializer, RoleTeamSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -79,31 +79,25 @@ class UserTeamViewSet(viewsets.ModelViewSet):
     serializer_class = UserTeamSerializer
     queryset = UserTeam.objects.all()
 
-    """
     def create(self, request):
-        print('heell')
-        print(request.DATA)
-        serializer = self.get_serializer()
+        serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
-            print('yeeeyyyy')
-            user = User.objects.filter(id=request.DATA['user'])
-            role = Group.objects.filter(id=request.DATA['team'])
-            if len(user)!=1 or len(role)!=1:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            serializer.object.user = user[0]
-            serializer.object.role = role[0]
-            print('yooooooooooooooooooo')
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+           serializer.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    """
-    
-"""    
-class RoleTeamViewSet(viewsets.ModelViewSet):
 
+class RoleTeamViewSet(viewsets.ModelViewSet):
+    """
     API endpoint that allows teams to be viewed or edited.
-    
+    """
     permission_classes = (permissions.AllowAny,)
     serializer_class = RoleTeamSerializer
     queryset = RoleTeam.objects.all()
-"""
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.DATA)
+        if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
