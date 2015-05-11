@@ -12,6 +12,14 @@
                             console.log(error);
                         });
                 },
+
+                getUser: function (userId) {
+                    return $http.get(API_URL + 'users/' + userId + '/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving user: ' + status);
+                            console.log(error);
+                        });
+                },
                 getUsers: function () {
                     return $http.get(API_URL + 'users/')
                         .error(function (error, status) {
@@ -20,9 +28,12 @@
                         });
                 },
                 createUser: function (user) {
-                    return $http.post(API_URL + 'users/', user)
+                    return $http.post(API_URL + 'users/', user);
+                },
+                updateUser: function (user) {
+                    return $http.put(API_URL + 'users/' + user.id + '/', user)
                         .error(function (error, status) {
-                            console.log('Error in creating user: ' + status);
+                            console.log('Error in updating user: ' + status);
                             console.log(error);
                         });
                 }

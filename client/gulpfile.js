@@ -20,7 +20,7 @@ var karma = require('karma').server; // Testing
 
 // tasks
 gulp.task('jslint', function () {
-    gulp.src(['./public/src/*.js', './public/src/**/*.js'/*, './tests/*.js'*/])
+    gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(plumber())
         .pipe(jslint())
         .pipe(plumber.stop());
@@ -51,7 +51,7 @@ gulp.task('minify-css', function() {
 gulp.task('minify-app-js', function() {
     gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(concat('app.min.js'))
-        .pipe(uglify())
+//        .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
 gulp.task('copy-bower-components', function () {
@@ -59,7 +59,7 @@ gulp.task('copy-bower-components', function () {
         .pipe(gulp.dest('dist/libs'));
 });
 gulp.task('copy-fonts', function () {
-    gulp.src('./public/libs/font-awesome/fonts/**')
+    gulp.src(['./public/libs/font-awesome/fonts/**', './public/libs/bootstrap/dist/fonts/**'])
         .pipe(gulp.dest('dist/fonts'));
 });
 gulp.task('concat-libs-js', function () {

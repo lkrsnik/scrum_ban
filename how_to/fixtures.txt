@@ -1,0 +1,7 @@
+1. ko imaš bazo, ki ti je všeč narediš: to z ukazom dumpdata shraniš npr. python manage.py dumpdata > initial.json (to bo bazo shranilo v datoteko initial.json)
+2. kličeš python manage.py loaddata initial.json, ki ti to bazo naloži.
+Kar je trenutno gor, so 
+luka - scrummaster 
+tone - productowner
+rok - teammember
+geslo: 123456

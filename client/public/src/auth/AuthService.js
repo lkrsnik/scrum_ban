@@ -8,7 +8,6 @@
                     return $http.post('/api-token-auth/', credentials)
                         .success(function (data) {
                             $localStorage.token = data.token;
-                            //$location.path("/malaobcestva/ustvari");
                         })
                         .error(function () {
                             delete $localStorage.token;

@@ -2,10 +2,11 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('AppCtrl',
-        ['$scope', '$q', 'Session', function ($scope, $q, Session) {
+        ['$scope', '$q', 'Session', '$location', '$localStorage', function ($scope, $q, Session, $location, $localStorage) {
             $scope.promises = {
                 sessionPromise: $q.defer().promise
             };
+
             $scope.updateSessionView = function () {
                 if (Session.isLoaded) {
                     $scope.session = Session;
@@ -20,5 +21,18 @@
                 }
             };
             $scope.updateSessionView();
+
+            $scope.redirectNonAdmin = function (link) {
+                if ($scope.session.username !== 'admin') {
+                    //console.log('Nimate ustreznih pooblastil za ogled te strani.');
+                    $location.path(link);
+                }
+            };
+
+            $scope.logout = function () {
+                delete $localStorage.token;
+                $scope.updateSessionView();
+                $location.path("/");
+            };
         }]);
 }());

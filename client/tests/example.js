@@ -6,6 +6,7 @@ describe('CreateUserCtrl', function () {
 
     var CreateUserCtrl,
         scope,
+        httpBackend,
         groups = [
             {
                 "id": 5,
@@ -25,16 +26,28 @@ describe('CreateUserCtrl', function () {
         ];
 
     beforeEach(inject(function ($httpBackend, $rootScope, $controller) {
+        httpBackend = $httpBackend;
         scope = $rootScope.$new();
         // backend definition common for all tests
-        $httpBackend.when('GET', 'api/groups')
+        $httpBackend.when('GET', 'api/groups/')
                     .respond(groups);
         CreateUserCtrl = $controller('CreateUserCtrl', {
             $scope: scope
-        });
+        }); 
+
     }));
+    /*
+    afterEach(function(){ 
+        // This asserts that all requests have been flushed to the API.
+        // When not, this function throws an exception
+        httpBackend.verifyNoOutstandingExpectation();  
+        httpBackend.verifyNoOutstandingRequest();
+    }); */
     it('should load correct groups', function () {
         scope.getGroups();
+        // flush all request to API - synchronous mode
+        httpBackend.flush();
+        
         expect(scope.groups).toEqual(groups);
     });
 

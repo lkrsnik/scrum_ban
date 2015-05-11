@@ -1,7 +1,8 @@
 /*global angular, console */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('LoginCtrl', ['$scope', 'AuthService', '$localStorage', function ($scope, AuthService, $localStorage) {
+    angular.module('scrumBan').controller('LoginCtrl', 
+        ['$scope', 'AuthService', '$localStorage', '$location', function ($scope, AuthService, $localStorage, $location) {
         $scope.resetCredentialsValidity = function () {
             $scope.loginForm.password.$setValidity('wrongCredentials', true);
         };
@@ -13,11 +14,12 @@
                     if ($localStorage.ip === undefined || !$localStorage.ip.locked) {
                         $scope.updateSessionView();
                         delete $localStorage.ip;
+						$location.path('/');
                     } else {
                         if ($localStorage.ip.locked_time - (new Date()).getTime() < -20 * 1000) {
                             $scope.updateSessionView();
                             delete $localStorage.ip;
-
+							$location.path('/');
                         } else {
                             delete $localStorage.token;
                             $scope.loginForm.password.$setValidity('wrongCredentials', false);

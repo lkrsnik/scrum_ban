@@ -12,9 +12,9 @@
                     return $http.get(API_URL + 'session/')
                         .success(function (data) {
                             console.log(data);
-                            thisSession.authenticated = true;
-                            thisSession.userId = data.user_id;
-                            thisSession.role = data.role;
+                            thisSession.authenticated = !(data.authenticated === false);
+                            thisSession.username = data.username;
+                            thisSession.roles = data.groups;
                         })
                         .error(function () {
                             thisSession.authenticated = false;

@@ -9,7 +9,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -51,8 +51,9 @@ class UserViewSet(viewsets.ModelViewSet):
                     group.user_set.remove(user)
 
                 user_groups = request.DATA.pop('groups')
+                print(user_groups)
                 for group in user_groups:
-                    g = Group.objects.get(id=group['id'])
+                    g = Group.objects.get(name=group)
                     g.user_set.add(user)
             else:
                 return Response(
