@@ -11,11 +11,14 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'url', 'name')
         read_only_fields = ('id', 'url',)
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     groups = GroupSerializer(many=True)
+
     class Meta:
         model = User
-        fields = ('id', 'url', 'first_name', 'last_name', 'username', 'email', 'groups')
+        fields = ('id', 'url', 'first_name', 'last_name', 'username',
+                        'email', 'groups')
         read_only_fields = ('id', 'url',)
 
 
@@ -25,11 +28,13 @@ class TeamSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name')
         read_only_fields = ('id', )
 
+
 class UserTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTeam
         fields = ('id', 'user', 'team', 'is_active')
         read_only_fields = ('id', )
+
 
 class RoleTeamSerializer(serializers.ModelSerializer):
     class Meta:

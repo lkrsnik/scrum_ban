@@ -43,8 +43,8 @@ class UserViewSet(viewsets.ModelViewSet):
             user[0].delete()
         else:
             return Response({'error': 'No user with id: ' + str(pk)}, status=status.HTTP_400_BAD_REQUEST)
-        
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -57,7 +57,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def list(self, request, pk=None):
         """
-        Get method for retrieving all groups 
+        Get method for retrieving all groups
         """
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -71,6 +71,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
 
+
 class UserTeamViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows teams to be viewed or edited.
@@ -82,9 +83,10 @@ class UserTeamViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RoleTeamViewSet(viewsets.ModelViewSet):
     """
@@ -97,7 +99,6 @@ class RoleTeamViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
-           serializer.save()
-           return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
