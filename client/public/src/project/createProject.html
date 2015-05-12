@@ -1,0 +1,58 @@
+Ob kreiranju projekta se določi šifra projekta, naziv projekta, ime naročnika, datum začetka in predvideni datum zaključka. Nato se projektu dodeli razvojna skupina. Ista razvojna skupina lahko dela na več projektih.
+
+<div class="panel panel-default">
+  <div class="panel-heading">Create new project</div>
+  <div class="panel-body">
+    <form name="createProjectForm" class="create-project-form" role="form" ng-submit="createProject(project)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createProjectForm.code.$invalid && createProjectForm.code.$dirty }">
+            <label>Code</label>
+            <input ng-model="project.code" type="number" name="code" 
+                class="form-control" placeholder="Code" integer required autofocus>
+            <p ng-show="createProjectForm.code.$error.required && createProjectForm.code.$dirty" 
+                class="help-block">Please enter project code (must be a valid number).</p>
+        </div>    
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createProjectForm.name.$invalid && createProjectForm.name.$dirty }">
+            <label>Name</label>
+            <input ng-model="project.name" type="text" name="name" 
+                class="form-control" placeholder="Name" required autofocus>
+            <p ng-show="createProjectForm.name.$error.required && createProjectForm.name.$dirty" 
+                class="help-block">Please enter project name.</p>
+        </div> 
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createProjectForm.client.$invalid && createProjectForm.client.$dirty }">
+            <label>Contracting authority </label>
+            <input ng-model="project.client" type="text" name="client" 
+                class="form-control" placeholder="Contracting authority" required autofocus>
+            <p ng-show="createProjectForm.client.$error.required && createProjectForm.client.$dirty" 
+                class="help-block">Please enter contracting authority of project.</p>
+        </div>    
+        <div class="form-group"
+            ng-class="{ 'has-error' : createProjectForm.start_date.$invalid && createProjectForm.start_date.$dirty }" }>
+            <label>Start date</label>
+            <input ng-model="project.start_date" type="date" name="start_date" 
+                class="form-control" placeholder="Start date" ng-change="validateStartDate()" required autofocus>
+            <p ng-show="createProjectForm.start_date$error.required && createProjectForm.start_date.$dirty" 
+                class="help-block">Please enter start date.</p>
+        </div>
+        <div class="form-group"
+            ng-class="{ 'has-error' : createProjectForm.end_date.$invalid && createProjectForm.end_date.$dirty }" }>
+            <label>End date</label>
+            <input ng-model="project.end_date" type="date" name="end_date" 
+                class="form-control" placeholder="End date" ng-change="validateEndDate()" required autofocus>
+            <p ng-show="createProjectForm.end_date$error.required && createProjectForm.end_date.$dirty" 
+                class="help-block">Please enter end date.</p>
+        </div>
+        <div class="form-group"
+            ng-class="{ 'has-error' : createProjectForm.dev_team.$invalid && createProjectForm.dev_team.$dirty }" }>
+            <label>Select developer team</label>
+            <select class="form-control" 
+                ng-model="project.team" ng-options="t as t.name for t in teams" required name="dev_team"></select>
+                <p ng-show="createProjectForm.dev_team.$error.required && createProjectForm.dev_team.$dirty" 
+                class="help-block">Please select developer team.</p>
+        </div> 
+        <button class="btn btn-primary" ng-disabled="createProjectForm.$invalid" type="submit">Create project</button>
+    </form>
+  </div>
+</div>

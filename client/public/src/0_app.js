@@ -19,6 +19,7 @@ var Underscore;
                 .when('/users/create', { templateUrl: '/static/html/user/createUser.html', controller: 'CreateUserCtrl'})
                 .when('/users/:userId/edit', { templateUrl: '/static/html/user/editUser.html', controller: 'EditUserCtrl'})
                 .when('/teams/create', { templateUrl: '/static/html/team/createTeam.html', controller: 'CreateTeamCtrl'})
+                .when('/projects/create', { templateUrl: '/static/html/project/createProject.html', controller: 'CreateProjectCtrl'})
                 .otherwise({redirectTo: '/'});
         }]);
 }());

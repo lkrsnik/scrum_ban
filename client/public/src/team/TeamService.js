@@ -28,6 +28,13 @@
                             console.log('Error in creating user team: ' + status);
                             console.log(error);
                         });
+                },
+                getTeams: function () {
+                    return $http.get(API_URL + 'teams/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving users: ' + status);
+                            console.log(error);
+                        });
                 }
             };
         }]);
