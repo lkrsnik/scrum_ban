@@ -51,7 +51,7 @@ gulp.task('minify-css', function() {
 gulp.task('minify-app-js', function() {
     gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(concat('app.min.js'))
-        .pipe(uglify())
+//        .pipe(uglify())
         .pipe(gulp.dest('dist/js'));
 });
 gulp.task('copy-bower-components', function () {
