@@ -1,0 +1,34 @@
+<div class="panel panel-default">
+  <div class="panel-heading">List teams</div>
+
+  <!-- Table -->
+  <table class="table table-hover">
+    <tr>
+        <th>Name</th>
+        <th>Product owner</th>
+        <th>Scrum master</th>
+        <th>Team members</th>
+        <th>...</th>
+    </tr>
+    <tr ng-repeat="team in teams">
+        <td> {{ team.name }} </td>
+        <td> {{ user.email }} </td>
+        <td> <span ng-repeat="groupName in user.groups">{{ groupName }} </span> </td>
+        <td> 
+            <span ng-hide="user.is_active" class="glyphicon glyphicon-remove"></span>
+            <span ng-show="user.is_active" class="glyphicon glyphicon-ok"></span></span>
+        </td>
+        <td> 
+            <a ng-href="#/users/{{user.id}}/edit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <span ng-show="user.is_active" ng-click="deleteUser(user)" class="btn btn-danger handcursor" title="Deactivate user">
+                <span class="glyphicon glyphicon-trash"></span>
+            </span>
+            <span ng-hide="user.is_active" ng-click="activateUser(user)" class="btn btn-success handcursor" title="Activate user">
+                <span class="glyphicon glyphicon-plus"></span>
+            </span>
+        </td>
+    </tr>
+  </table>
+</div>
