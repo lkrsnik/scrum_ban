@@ -3,16 +3,7 @@
     'use strict';
     angular.module('scrumBan').controller('CreateTeamCtrl',
         ['$scope', 'TeamService', 'UserService', function ($scope, TeamService, UserService) {
-            
-            if (!$scope.session) {
-                $scope.updateSessionView()
-                    .then(function () {
-                        $scope.redirectNonScrumMaster('/');
-                    });
-            } else {
-                $scope.redirectNonScrumMaster('/');
-            }
-            
+
             $scope.scrumMasters = {};
             $scope.teamMembers = {};
             $scope.productOwners = {};
@@ -21,7 +12,7 @@
             var newRoleTeam, newRoleTeamTeamMember, createRoleTeamPromise, createFirstRoleTeamPromise, createSecondUserTeamPromise;
 
             $scope.getRoles = function () {
-                UserService.getGroups() 
+                UserService.getGroups()
                     .success(function (data) {
                         $scope.scrumMasterR = Underscore.where(data, {name: "ScrumMaster"});
                         $scope.teamMemberR = Underscore.where(data, {name: "TeamMember"});

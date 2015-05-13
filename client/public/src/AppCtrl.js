@@ -28,20 +28,6 @@
                     $location.path(link);
                 }
             };
-            $scope.redirectNonScrumMaster = function(link) {
-                var userRoles = $scope.session.roles;
-                var isScrumMaster = false;
-                var i;
-                for (i = 0; i < userRoles.length; i++) {
-                    if(userRoles[i].name === "ScrumMaster") {
-                        isScrumMaster = true;
-                        break;
-                    }
-                }
-                if(!(isScrumMaster || ($scope.session.username === 'admin'))) {
-                    $location.path(link);
-                }
-            }
 
             $scope.logout = function () {
                 delete $localStorage.token;
