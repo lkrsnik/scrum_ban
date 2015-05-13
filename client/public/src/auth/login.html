@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Log In</div>
+  <div class="panel-body">
+    <form name="loginForm" class="create-user-form" role="form" ng-submit="login(credentials)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : loginForm.username.$invalid && loginForm.username.$dirty }">
+            <label>Username</label>
+            <input ng-model="credentials.username" type="text" name="username" 
+                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Username" required autofocus>
+            <p ng-show="loginForm.username.$error.required && loginForm.username.$dirty" 
+                class="help-block">Please enter username.</p>
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : loginForm.password.$invalid && loginForm.password.$dirty }">
+            <label>Password</label>
+            <input ng-model="credentials.password" type="password" name="password" 
+                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Password" required autofocus>
+            <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" 
+                class="help-block">Please enter password.</p>
+            <p ng-show="loginForm.password.$error.wrongCredentials && (loginForm.password.$dirty || loginForm.username.$dirty)" 
+                class="help-block">Incorrect username, password or locked IP.</p>
+        </div>
+        <button class="btn btn-primary" ng-disabled="loginForm.$invalid" type="submit">Log In</button>
+    </form>
+  </div>
+</div>

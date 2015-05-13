@@ -1,20 +1,38 @@
-/*global angular */
+/*global angular, console */
 (function () {
     'use strict';
-    angular.module('scrumBan').controller('AppCtrl', ['$scope', function ($scope) {
-        $scope.login = function () {
-            /*AuthService.login($scope.user)
-                .success(function () {
-                    $scope.updateSessionView();
-                })
-                .error(function (status) {
-                    switch (status) {
-                    case (400):
-                        $scope.loginForm.username.$setValidity('wrongCredentials', false);
-                        break;
-                    }
-                });*/
-            return;
-        };
-    }]);
+    angular.module('scrumBan').controller('AppCtrl',
+        ['$scope', '$q', 'Session', '$location', '$localStorage', function ($scope, $q, Session, $location, $localStorage) {
+            $scope.promises = {
+                sessionPromise: $q.defer().promise
+            };
+
+            $scope.updateSessionView = function () {
+                if (Session.isLoaded) {
+                    $scope.session = Session;
+                } else {
+                    $scope.promises.sessionPromise = Session.createSession()
+                        .success(function () {
+                            $scope.session = Session;
+                        })
+                        .error(function () {
+                            $scope.session = undefined;
+                        });
+                }
+            };
+            $scope.updateSessionView();
+
+            $scope.redirectNonAdmin = function (link) {
+                if ($scope.session.username !== 'admin') {
+                    //console.log('Nimate ustreznih pooblastil za ogled te strani.');
+                    $location.path(link);
+                }
+            };
+
+            $scope.logout = function () {
+                delete $localStorage.token;
+                $scope.updateSessionView();
+                $location.path("/");
+            };
+        }]);
 }());
