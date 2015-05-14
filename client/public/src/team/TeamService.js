@@ -35,6 +35,20 @@
                             console.log('Error in retrieving teams: ' + status);
                             console.log(error);
                         });
+                },
+                getUserTeams: function () {
+                    return $http.get(API_URL + 'user-teams/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving user teams: ' + status);
+                            console.log(error);
+                        });
+                },
+                getRoleTeams: function () {
+                    return $http.get(API_URL + 'role-teams/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving role teams: ' + status);
+                            console.log(error);
+                        });
                 }
             };
         }]);
