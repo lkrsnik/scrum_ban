@@ -24,16 +24,16 @@
             $scope.createTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
                 TeamService.createTeam(team)
-                    .success(function (data) {
+                    .success(function (dataTeam) {
                         var newPO =
                             {
-                                "team": data.id,
+                                "team": dataTeam.id,
                                 "user": productOwner.id,
                                 "is_active": true
                             },
                             newSM =
                             {
-                                "team": data.id,
+                                "team": dataTeam.id,
                                 "user": scrumMaster.id,
                                 "is_active": true
                             };
@@ -75,7 +75,14 @@
                                                     var i = 0;
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                            TeamService.createUserTeam(newPO)
+                                                            console.log("theyy're not equal")
+                                                            var newTM =
+                                                                {
+                                                                    "team": dataTeam.id,
+                                                                    "user": members[i].id,
+                                                                    "is_active": true
+                                                                };
+                                                            TeamService.createUserTeam(newTM)
                                                                 .success(function (data) {
                                                                     newRoleTeamTeamMember =
                                                                         {
@@ -85,6 +92,7 @@
                                                                     TeamService.createRoleTeam(newRoleTeamTeamMember);
                                                                 });
                                                         } else {
+                                                            console.log("they equal")
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {
