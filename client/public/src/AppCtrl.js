@@ -38,7 +38,7 @@
                         break;
                     }
                 }
-                if(!(isScrumMaster || ($scope.session.username === 'admin'))) {
+                if (!(isScrumMaster || ($scope.session.username === 'admin'))) {
                     $location.path(link);
                 }
             }

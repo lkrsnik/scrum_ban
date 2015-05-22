@@ -62,7 +62,7 @@
                                 for (var i = 0; i < scteams.length; i++) {
                                     // get only relevant userTeams for this team
                                     var userTeams = Underscore.filter($scope.userTeams, function(userTeam) {
-                                        return userTeam.team == scteams[i].id;
+                                        return (userTeam.team == scteams[i].id && userTeam.is_active);
                                     });
                                     var teamPO = null;
                                     var teamSM = null;
@@ -98,7 +98,7 @@
             };
                         
 
-             $scope.getRoles = function () {
+            $scope.getRoles = function () {
                 UserService.getGroups() 
                     .success(function (data) {
                         for (var i = 0; i < data.length; i++) {
