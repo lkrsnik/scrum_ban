@@ -62,3 +62,5 @@ malo-obcestvo.wsgi
 client/node_modules
 client/public/libs
 client/public/dist
+
+smrpoenv

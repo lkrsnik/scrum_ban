@@ -7,6 +7,7 @@ from django.contrib import admin
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'session', views.SessionViewSet, 'session')
 router.register(r'teams', views.TeamViewSet)
 router.register(r'user-teams', views.UserTeamViewSet)
 router.register(r'role-teams', views.RoleTeamViewSet)

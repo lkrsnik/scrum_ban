@@ -32,10 +32,56 @@
                 getTeams: function () {
                     return $http.get(API_URL + 'teams/')
                         .error(function (error, status) {
-                            console.log('Error in retrieving users: ' + status);
+                            console.log('Error in retrieving teams: ' + status);
+                            console.log(error);
+                        });
+                },
+                getUserTeams: function () {
+                    return $http.get(API_URL + 'user-teams/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving user teams: ' + status);
+                            console.log(error);
+                        });
+                },
+                getRoleTeams: function () {
+                    return $http.get(API_URL + 'role-teams/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving role teams: ' + status);
+                            console.log(error);
+                        });
+                },
+                getTeam: function (teamId) {
+                    return $http.get(API_URL + 'teams/'+ teamId + '/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving team: ' + status);
+                            console.log(error);
+                        });
+                },
+                updateTeam: function (team) {
+                    console.log(team);
+                    return $http.put(API_URL + 'teams/' + team.id + '/', team)
+                        .error(function (error, status) {
+                            console.log('Error in updating team: ' + status);
+                            console.log(error);
+                        });
+                },
+                updateUserTeam: function (userteam) {
+                    console.log(userteam);
+                    return $http.put(API_URL + 'user-teams/' + userteam.id + '/', userteam)
+                        .error(function (error, status) {
+                            console.log('Error in updating user team: ' + status);
+                            console.log(error);
+                        });
+                },
+                updateRoleTeam: function (roleteam) {
+                    console.log(roleteam);
+                    return $http.put(API_URL + 'role-teams/' + roleteam.id + '/', roleteam)
+                        .error(function (error, status) {
+                            console.log('Error in updating role team: ' + status);
                             console.log(error);
                         });
                 }
+
             };
         }]);
 }());
