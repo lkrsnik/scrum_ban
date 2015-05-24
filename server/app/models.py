@@ -58,6 +58,7 @@ class Card(models.Model):
     development_start_date = models.DateTimeField(default=datetime.now)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
+    project = models.ForeignKey(Project)
     user = models.ForeignKey(User)
 
 

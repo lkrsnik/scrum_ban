@@ -1,3 +1,4 @@
+from django.db import models
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
@@ -23,3 +24,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'first_name', 'last_name',
             'username', 'email', 'groups',)
         read_only_fields = ('id', 'url', )
+
+class BoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
+        fields = ('id', 'user', 'team', 'is_active')
+        read_only_fields = ('id', )
