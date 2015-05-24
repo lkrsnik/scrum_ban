@@ -59,3 +59,4 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('id', 'code', 'name', 'client', 'start_date', 'end_date', 'board', 'team')
         read_only_fields = ('id', )
+        
