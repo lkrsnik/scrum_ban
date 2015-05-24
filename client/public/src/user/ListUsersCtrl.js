@@ -11,13 +11,14 @@
                     .then(function () {
                         $scope.redirectNonAuthenticated('/');
                         $scope.redirectNonAdmin('/');
+                    }, function () {  // In case session promise fails
+                        $scope.redirectNonAdmin('/');
+                        $scope.redirectNonAuthenticated('/');
                     });
             } else {
                 $scope.redirectNonAuthenticated('/');
                 $scope.redirectNonAdmin('/');
             }
-
-            //console.log('List users');
 
             $scope.getUsers = function () {
                 UserService.getUsers()

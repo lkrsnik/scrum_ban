@@ -9,6 +9,9 @@
                     .then(function () {
                         $scope.redirectNonAdmin('/');
                         $scope.redirectNonAuthenticated('/');
+                    }, function () { // In case session promise fails
+                        $scope.redirectNonAdmin('/');
+                        $scope.redirectNonAuthenticated('/');
                     });
             } else {
                 $scope.redirectNonAuthenticated('/');
