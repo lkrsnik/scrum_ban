@@ -4,6 +4,7 @@ var gulp = require('gulp');
 // plugins
 var connect = require('gulp-connect');
 var jslint = require('gulp-jslint');
+var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var clean = require('gulp-clean');
@@ -23,6 +24,13 @@ gulp.task('jslint', function () {
     gulp.src(['./public/src/*.js', './public/src/**/*.js'])
         .pipe(plumber())
         .pipe(jslint())
+        .pipe(plumber.stop());
+});
+gulp.task('jshint', function () {
+    gulp.src(['./public/src/*.js', './public/src/**/*.js'])
+        .pipe(plumber())
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'))
         .pipe(plumber.stop());
 });
 gulp.task('recess', function () {
@@ -111,7 +119,7 @@ gulp.task('watch', function () {
 
 // default task
 gulp.task('default',
-    ['jslint', 'recess', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
+    ['jshint', 'jslint', 'recess', 'minify-css', 'minify-app-js', 'copy-index', 'copy-html-files', 'watch']
 );
 
 // build task

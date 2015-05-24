@@ -13,14 +13,26 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    groups = GroupSerializer(many=True)
+    groups = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='name'
+    )
 
     class Meta:
         model = User
-        fields = ('id', 'url', 'first_name', 'last_name', 'username',
-                        'email', 'groups')
-        read_only_fields = ('id', 'url',)
+        fields = (
+            'id', 'url', 'is_active',
+            'first_name', 'last_name', 
+            'username', 'email', 'groups',)
+        read_only_fields = ('id', 'url', )
+        extra_kwargs = {'password': {'write_only': True}}
 
+    def create(self, validated_data):
+        # for user registration password
+        # don't touch this!!!
+        user = User.objects.create_user(**validated_data)
+        return user
 
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -47,5 +59,3 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('id', 'code', 'name', 'client', 'start_date', 'end_date', 'board', 'team')
         read_only_fields = ('id', )
-
-
