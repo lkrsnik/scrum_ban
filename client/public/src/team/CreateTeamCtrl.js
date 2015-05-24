@@ -3,7 +3,7 @@
     'use strict';
     angular.module('scrumBan').controller('CreateTeamCtrl',
         ['$scope', 'TeamService', 'UserService', function ($scope, TeamService, UserService) {
-            
+
             if (!$scope.session) {
                 $scope.updateSessionView()
                     .then(function () {
@@ -12,7 +12,7 @@
             } else {
                 $scope.redirectNonScrumMaster('/');
             }
-            
+
             $scope.scrumMasters = {};
             $scope.teamMembers = {};
             $scope.productOwners = {};
@@ -21,14 +21,13 @@
             var newRoleTeam, newRoleTeamTeamMember, createRoleTeamPromise, createFirstRoleTeamPromise, createSecondUserTeamPromise;
 
             $scope.getRoles = function () {
-                UserService.getGroups() 
+                UserService.getGroups()
                     .success(function (data) {
                         $scope.scrumMasterR = Underscore.where(data, {name: "ScrumMaster"});
                         $scope.teamMemberR = Underscore.where(data, {name: "TeamMember"});
                         $scope.productOwnerR = Underscore.where(data, {name: "ProductOwner"});
                     });
             };
-
 
             $scope.createTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
@@ -81,27 +80,29 @@
                                         createFirstRoleTeamPromise.then(function () {
                                             createSecondUserTeamPromise.then(function () {
                                                 createRoleTeamPromise.then(function () {
-                                                    var i = 0;
+                                                    var i = 0,
+                                                        newTM,
+                                                        createUserTeamSuccessFun = function (data) {
+                                                            newRoleTeamTeamMember =
+                                                                {
+                                                                    "user_team": data.id,
+                                                                    "role": $scope.teamMemberR[0].id
+                                                                };
+                                                            TeamService.createRoleTeam(newRoleTeamTeamMember);
+                                                        };
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                            console.log("they're not equal")
-                                                            var newTM =
+                                                            console.log("they're not equal");
+                                                            newTM =
                                                                 {
                                                                     "team": dataTeam.id,
                                                                     "user": members[i].id,
                                                                     "is_active": true
                                                                 };
                                                             TeamService.createUserTeam(newTM)
-                                                                .success(function (data) {
-                                                                    newRoleTeamTeamMember =
-                                                                        {
-                                                                            "user_team": data.id,
-                                                                            "role": $scope.teamMemberR[0].id
-                                                                        };
-                                                                    TeamService.createRoleTeam(newRoleTeamTeamMember);
-                                                                });
+                                                                .success(createUserTeamSuccessFun);
                                                         } else {
-                                                            console.log("they equal")
+                                                            console.log("they equal");
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {

@@ -3,7 +3,7 @@
     'use strict';
     angular.module('scrumBan').controller('EditTeamCtrl',
         ['$scope', 'TeamService', 'UserService', '$routeParams', function ($scope, TeamService, UserService, $routeParams) {
-            
+
             if (!$scope.session) {
                 $scope.updateSessionView()
                     .then(function () {
@@ -13,16 +13,18 @@
                 $scope.redirectNonScrumMaster('/');
             }
 
-            var team = null;           
-
             $scope.roleNames = {};
             $scope.scrumMasters = {};
             $scope.teamMembers = {};
             $scope.productOwners = {};
             $scope.userteamSM = null;
             $scope.userteamPO = null;
-            var newRoleTeam, newRoleTeamTeamMember, createRoleTeamPromise, createFirstRoleTeamPromise, createSecondUserTeamPromise;
-
+            var team = null,
+                newRoleTeam,
+                newRoleTeamTeamMember,
+                createRoleTeamPromise,
+                createFirstRoleTeamPromise,
+                createSecondUserTeamPromise;
 
             $scope.getTeam = function () {
                 TeamService.getTeam($routeParams.teamId)
@@ -32,32 +34,40 @@
                         TeamService.getUserTeams()
                             .success(function (data) {
                                 $scope.userTeams = data;
-                                $scope.userTeams = Underscore.filter(data, function(userTeam) { return (userTeam.team == $scope.team.id && userTeam.is_active) });
+                                $scope.userTeams = Underscore.filter(data, function (userTeam) {
+                                    return (userTeam.team === $scope.team.id && userTeam.is_active);
+                                });
                                 TeamService.getRoleTeams()
                                     .success(function (data) {
                                         $scope.roleTeams = data;
-                                        $scope.roleTeams = Underscore.filter(data, function(roleTeam) { return Underscore.where($scope.userTeams, {'id': roleTeam.user_team}).length > 0; });
+                                        $scope.roleTeams = Underscore.filter(data, function (roleTeam) {
+                                            return Underscore.where($scope.userTeams, {'id': roleTeam.user_team}).length > 0;
+                                        });
                                         // update selections in form
-                                        var selectedTM = [];
-                                        for (var i = 0; i < $scope.roleTeams.length; i++) {
-                                            if ($scope.roleTeams[i].role == $scope.roleNames["ScrumMaster"]) {
-                                                $scope.scrumMaster = Underscore.find($scope.scrumMasters, function (sm) {
-                                                    return Underscore.where($scope.userTeams, {'user': sm.id});
-                                                });
-                                            } else if ($scope.roleTeams[i].role == $scope.roleNames["ProductOwner"]) {
-                                                $scope.productOwner = Underscore.find($scope.productOwners, function (sm) {
-                                                    return Underscore.where($scope.userTeams, {'user': sm.id});
-                                                });
+                                        var selectedTM = [],
+                                            scrumMasterFindFun = function (sm) {
+                                                return Underscore.where($scope.userTeams, {'user': sm.id});
+                                            },
+                                            productOwnerFindFun = function (sm) {
+                                                return Underscore.where($scope.userTeams, {'user': sm.id});
+                                            },
+                                            elseFindFun = function (sm) {
+                                                return Underscore.where($scope.userTeams, {'user': sm.id});
+                                            },
+                                            i;
+                                        for (i = 0; i < $scope.roleTeams.length; i += 1) {
+                                            if ($scope.roleTeams[i].role === $scope.roleNames.ScrumMaster) {
+                                                $scope.scrumMaster = Underscore.find($scope.scrumMasters, scrumMasterFindFun);
+                                            } else if ($scope.roleTeams[i].role === $scope.roleNames.ProductOwner) {
+                                                $scope.productOwner = Underscore.find($scope.productOwners, productOwnerFindFun);
                                             } else {
-                                                selectedTM.push(Underscore.find($scope.teamMembers, function (sm) {
-                                                    return Underscore.where($scope.userTeams, {'user': sm.id});
-                                                }));
+                                                selectedTM.push(Underscore.find($scope.teamMembers, elseFindFun));
                                             }
-                                        };
+                                        }
                                         $scope.teamMembersS = selectedTM;
-                                });
-                        });
-                });
+                                    });
+                            });
+                    });
             };
             $scope.getGroups = function () {
                 UserService.getUsers()
@@ -69,15 +79,14 @@
                     });
             };
             $scope.getGroups();
-            
-
 
             $scope.getRoles = function () {
-                UserService.getGroups() 
+                UserService.getGroups()
                     .success(function (data) {
-                        for (var i = 0; i < data.length; i++) {
+                        var i;
+                        for (i = 0; i < data.length; i *= 1) {
                             $scope.roleNames[data[i].name] = data[i].id;
-                        };
+                        }
                         $scope.scrumMasterR = Underscore.where(data, {name: "ScrumMaster"});
                         $scope.teamMemberR = Underscore.where(data, {name: "TeamMember"});
                         $scope.productOwnerR = Underscore.where(data, {name: "ProductOwner"});
@@ -85,14 +94,14 @@
             };
             $scope.getRoles();
 
-            $scope.editTeam = function (team, productOwner, scrumMaster, members) {
+            /*$scope.editTeam = function (team, productOwner, scrumMaster, members) {
                 // najdi razlike v memberjih
                 // izpiši, kaj boš naredil ??
                 // upadate team
                 // update roleTeam - deaktiviraj roleteame
                 // create nov userTeam
                 // create nov roleTeam
-            }
+            };*/
 
             $scope.createTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
@@ -145,18 +154,19 @@
                                         createFirstRoleTeamPromise.then(function () {
                                             createSecondUserTeamPromise.then(function () {
                                                 createRoleTeamPromise.then(function () {
-                                                    var i = 0;
+                                                    var i = 0,
+                                                        createUserTeamSuccessFun = function (data) {
+                                                            newRoleTeamTeamMember =
+                                                                {
+                                                                    "user_team": data.id,
+                                                                    "role": $scope.teamMemberR[0].id
+                                                                };
+                                                            TeamService.createRoleTeam(newRoleTeamTeamMember);
+                                                        };
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
                                                             TeamService.createUserTeam(newPO)
-                                                                .success(function (data) {
-                                                                    newRoleTeamTeamMember =
-                                                                        {
-                                                                            "user_team": data.id,
-                                                                            "role": $scope.teamMemberR[0].id
-                                                                        };
-                                                                    TeamService.createRoleTeam(newRoleTeamTeamMember);
-                                                                });
+                                                                .success(createUserTeamSuccessFun);
                                                         } else {
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
@@ -181,7 +191,5 @@
                             });
                     });
             };
-
-           
         }]);
 }());

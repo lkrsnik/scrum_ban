@@ -14,10 +14,10 @@
                 console.log(project);
                 project.team = project.team.id;
                 project.board = null;
-                project.start_date = $filter('date')(theme.start_date_web_training, 'yyyy-MM-dd');
+                //project.start_date = $filter('date')(theme.start_date_web_training, 'yyyy-MM-dd');
                 ProjectService.createProject(project)
                     .success(function (dataTeam) {
-                        console.log("parteeey");
+                        console.log(dataTeam);
                     });
             };
 

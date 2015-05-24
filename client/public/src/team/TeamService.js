@@ -51,7 +51,7 @@
                         });
                 },
                 getTeam: function (teamId) {
-                    return $http.get(API_URL + 'teams/'+ teamId + '/')
+                    return $http.get(API_URL + 'teams/' + teamId + '/')
                         .error(function (error, status) {
                             console.log('Error in retrieving team: ' + status);
                             console.log(error);
