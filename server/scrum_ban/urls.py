@@ -1,13 +1,13 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from rest_framework import routers
-from app import views
+from app.views import user, auth
 from django.contrib import admin
 
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
-router.register(r'session', views.SessionViewSet, 'session')
+router.register(r'users', user.UserViewSet)
+router.register(r'groups', user.GroupViewSet)
+router.register(r'session', auth.SessionViewSet, 'session')
 router.register(r'teams', views.TeamViewSet)
 router.register(r'user-teams', views.UserTeamViewSet)
 router.register(r'role-teams', views.RoleTeamViewSet)

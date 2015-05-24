@@ -3,14 +3,14 @@ from django.test import RequestFactory
 from app.models import Team, RoleTeam, UserTeam, RoleTeam, Project
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers import UserSerializer, GroupSerializer, TeamSerializer, UserTeamSerializer, RoleTeamSerializer, ProjectSerializer
+from app.serializers.user import UserSerializer, GroupSerializer, TeamSerializer, UserTeamSerializer, RoleTeamSerializer, ProjectSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (permissions.AllowAny,) 
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -81,21 +81,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         Get method for retrieving all groups
         """
         serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class SessionViewSet(viewsets.ViewSet):
-    def list(self, request, pk=None):
-        roamingUser = request.user
-        if (permissions.IsAuthenticated
-                .has_permission(self, request, SessionViewSet)):
-            # you need to generate a fake request for hyperlinked results
-            context = dict(request=RequestFactory().get('/'))
-            serializer = UserSerializer(request.user, context=context)
-        else:
-            JSON = {}
-            JSON['authenticated'] = False
-            return Response(JSON, status=status.HTTP_200_OK)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
