@@ -16,14 +16,14 @@
                             $scope.session = Session;
                         })
                         .error(function () {
-                            $scope.session = undefined;
+                            $scope.session = Session;
                         });
                 }
             };
             $scope.updateSessionView();
 
             $scope.redirectNonAdmin = function (link) {
-                if ($scope.session.username !== 'admin') {
+                if ($scope.session && $scope.session.username !== 'admin') {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $location.path(link);
                 }
@@ -42,6 +42,12 @@
                     $location.path(link);
                 }
             }
+
+            $scope.redirectNonAuthenticated = function (link) {
+                if ($scope.session && !$scope.session.authenticated) {
+                    $location.path(link);
+                }
+            };
 
             $scope.logout = function () {
                 delete $localStorage.token;
