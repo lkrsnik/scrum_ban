@@ -84,7 +84,7 @@
                                                     var i = 0;
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                            console.log("theyy're not equal")
+                                                            console.log("they're not equal")
                                                             var newTM =
                                                                 {
                                                                     "team": dataTeam.id,

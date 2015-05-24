@@ -10,5 +10,15 @@
                     });
             };
             $scope.getTeams();
+            $scope.createProject = function (project) {
+                console.log(project);
+                project.team = project.team.id;
+                project.board = null;
+                ProjectService.createProject(project)
+                    .success(function (dataTeam) {
+                        console.log("parteeey");
+                    });
+            };
+
         }]);
 }());

@@ -30,7 +30,7 @@ class Project(models.Model):
     client = models.CharField(max_length=500, default="")
     start_date = models.DateTimeField(default=datetime.now)
     end_date = models.DateTimeField(default=datetime.now)
-    board = models.ForeignKey(Board)
+    board = models.ForeignKey(Board, blank=True)
     team = models.ForeignKey(Team)
 
 
