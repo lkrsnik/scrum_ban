@@ -1,12 +1,14 @@
 /*global angular, Underscore: true */
+/* jshint ignore: start */
 var Underscore;
+/* jshint ignore: end */
 (function () {
     'use strict';
 
-    /*jslint nomen: true */
-    /*global _ */
+    /*jslint nomen: true*/
+    /*global _*/
     Underscore = _;
-    /*jslint nomen: false */
+    /*jslint nomen: false*/
 
     // Declare app level module which depends on views, and components
     angular.module('scrumBan', [
