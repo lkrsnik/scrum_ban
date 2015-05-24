@@ -20,7 +20,6 @@ class UserTeam(models.Model):
 
 
 class Board(models.Model):
-    wip = models.IntegerField()
     name = models.CharField(max_length=100, default="")
 
 
@@ -58,7 +57,7 @@ class Card(models.Model):
     development_start_date = models.DateTimeField(default=datetime.now)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, null=True)
     user = models.ForeignKey(User)
 
 

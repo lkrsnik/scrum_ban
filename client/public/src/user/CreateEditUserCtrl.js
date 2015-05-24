@@ -27,10 +27,9 @@
 
             $scope.createUser = function (user) {
                 user.username = user.email;
-                user.groups = Underscore.filter($scope.groups, function (group) { return group.selected; });
-
-                //console.log('Creating user:');
-                //console.log(user);
+                user.groups = Underscore.filter($scope.groups, function (group) {
+                    return group.selected;
+                });
 
                 UserService.createUser(user)
                     .success(function () {

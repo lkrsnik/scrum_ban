@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Create a board</div>
+  <div class="panel-body">
+    <form name="createBoardForm" class="create-board-form" role="form" 
+        ng-submit="createBoard(board)" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : createBoardForm.name.$invalid && createBoardForm.name.$dirty }">
+            <label>Board name</label>
+            <input ng-model="board.name" type="text" name="name" 
+                class="form-control" placeholder="First name" required autofocus>
+            <p ng-show="createBoardForm.name.$error.required && createBoardForm.name.$dirty" 
+                class="help-block">Please enter board name.</p>
+        </div>
+        
+        <button class="btn btn-primary" ng-disabled="createBoardForm.$invalid"
+            type="submit">Create board</button>
+    </form>
+  </div>
+</div>

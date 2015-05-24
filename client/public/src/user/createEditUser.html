@@ -1,7 +1,8 @@
 <div class="panel panel-default">
   <div class="panel-heading">Create a user</div>
   <div class="panel-body">
-    <form name="createUserForm" class="create-user-form" role="form" ng-submit="saveUser(user)" novalidate>
+    <form name="createUserForm" class="create-user-form" role="form"
+        ng-submit="saveUser(user)" novalidate>
         <div class="form-group" 
             ng-class="{ 'has-error' : createUserForm.firstName.$invalid && createUserForm.firstName.$dirty }">
             <label>First name</label>

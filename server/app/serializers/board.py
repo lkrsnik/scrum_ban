@@ -6,5 +6,5 @@ from rest_framework import serializers
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
-        fields = ('id', 'wip', 'name')
-        read_only_fields = ('id', )
+        fields = ('id', 'name')
+        read_only_fields = ('id',)
