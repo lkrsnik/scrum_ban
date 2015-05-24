@@ -32,10 +32,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         # don't touch this!!!
         user = User.objects.create_user(**validated_data)
         return user
-
-
-class BoardSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Board
-        fields = ('id', 'user', 'team', 'is_active')
-        read_only_fields = ('id', )

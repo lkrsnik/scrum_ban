@@ -1,12 +1,13 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from rest_framework import routers
-from app.views import user, auth
+from app.views import user, auth, board
 from django.contrib import admin
 
 router = routers.DefaultRouter()
 router.register(r'users', user.UserViewSet)
 router.register(r'groups', user.GroupViewSet)
+router.register(r'boards', board.BoardViewSet)
 router.register(r'session', auth.SessionViewSet, 'session')
 
 # Wire up our API using automatic URL routing.
