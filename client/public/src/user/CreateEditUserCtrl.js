@@ -21,6 +21,10 @@
             $scope.createOrEdit = ($routeParams.userId === undefined) ? 'create' : 'edit';
             $scope.groups = {};
 
+            $scope.resetEmailValidity = function () {
+                $scope.createUserForm.email.$setValidity('emailExists', true);
+            };
+
             $scope.createUser = function (user) {
                 user.username = user.email;
                 user.groups = Underscore.filter($scope.groups, function (group) { return group.selected; });
@@ -32,6 +36,18 @@
                     .success(function () {
                         //console.log('User created');
                         $location.path('/users/');
+                    })
+                    .error(function (error, status) {
+                        switch (status) {
+                        case (400):
+                            if (error.username &&
+                                    error.username.indexOf('User with this Username already exists.')) {
+                                $scope.createUserForm.email.$setValidity('emailExists', false);
+                            }
+
+                            //$scope.createUserForm.email.$setValidity('emailExists', false);
+                            break;
+                        }
                     });
             };
 
