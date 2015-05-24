@@ -15,6 +15,8 @@
     "angular-bootstrap": "~0.12.1",
     "underscore": "~1.8.3",
     "angular-underscore-module": "~1.0.1",
-    "ngstorage": "~0.3.0"
+    "ngstorage": "~0.3.0",
+    "bootstrap": "~3.3.4",
+    "font-awesome": "~4.3.0"
   }
 }

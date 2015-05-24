@@ -113,7 +113,4 @@ JWT_AUTH = {
 try:
     from .localsettings import *
 except:
-    try:
-        from .localsettings import *
-    except:
-        pass
+    pass
