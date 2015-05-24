@@ -7,11 +7,13 @@
             $scope.ROLES = ROLES;
 
             if (!$scope.session) {
-                $scope.updateSessionView()
+                $scope.promises.sessionPromise
                     .then(function () {
+                        $scope.redirectNonAuthenticated('/');
                         $scope.redirectNonAdmin('/');
                     });
             } else {
+                $scope.redirectNonAuthenticated('/');
                 $scope.redirectNonAdmin('/');
             }
 

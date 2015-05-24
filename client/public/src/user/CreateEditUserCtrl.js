@@ -5,11 +5,13 @@
         ['$scope', 'UserService', '$routeParams', function ($scope, UserService, $routeParams) {
 
             if (!$scope.session) {
-                $scope.updateSessionView()
+                $scope.promises.sessionPromise
                     .then(function () {
                         $scope.redirectNonAdmin('/');
+                        $scope.redirectNonAuthenticated('/');
                     });
             } else {
+                $scope.redirectNonAuthenticated('/');
                 $scope.redirectNonAdmin('/');
             }
 

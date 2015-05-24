@@ -29,6 +29,12 @@
                 }
             };
 
+            $scope.redirectNonAuthenticated = function (link) {
+                if (!$scope.session.authenticated) {
+                    $location.path(link);
+                }
+            };
+
             $scope.logout = function () {
                 delete $localStorage.token;
                 $scope.updateSessionView();
