@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'app',
     'rest_framework_jwt',
-    'axes',
 )
 
 STATIC_URL = '/static/'
@@ -80,8 +79,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.FailedLoginMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
 ROOT_URLCONF = 'scrum_ban.urls'

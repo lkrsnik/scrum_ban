@@ -25,11 +25,14 @@
             <label>Email</label>
             <input ng-model="user.email" type="email" name="email" 
                 class="form-control" placeholder="Email" 
+                ng-change="resetUsernameValidity()" 
                 ng-minlength="3" required>
             <p ng-show="createUserForm.email.$error.required && createUserForm.email.$dirty" 
                 class="help-block">Please enter users email.</p>
             <p ng-show="createUserForm.email.$error.minlength" class="help-block">
                 Email is too short.</p>
+            <p ng-show="createUserForm.email.$error.emailExists" class="help-block">
+                User with this e-mail allready exists.</p>
         </div>
             
         <div class="form-group" 
