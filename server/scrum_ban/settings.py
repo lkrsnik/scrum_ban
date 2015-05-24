@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'app',
     'rest_framework_jwt',
-    'axes',
 )
 
 STATIC_URL = '/static/'
@@ -115,4 +114,7 @@ JWT_AUTH = {
 try:
     from .localsettings import *
 except:
-    pass
+    try:
+        from .localsettings import *
+    except:
+        pass
