@@ -30,20 +30,23 @@
             };
 
             $scope.redirectNonScrumMaster = function (link) {
-                var userRoles = $scope.session.roles,
-                    isScrumMaster = false,
-                    i;
-                for (i = 0; i < userRoles.length; i += 1) {
-                    if (userRoles[i].name === "ScrumMaster") {
-                        isScrumMaster = true;
-                        break;
+                if (!$scope.session || !$scope.session.authenticated) {
+                    $location.path(link);
+                } else {
+                    var userRoles = $scope.session.roles,
+                        isScrumMaster = false,
+                        i;
+                    for (i = 0; i < userRoles.length; i += 1) {
+                        if (userRoles[i] === "ScrumMaster") {
+                            isScrumMaster = true;
+                            break;
+                        }
+                    }
+                    if (!isScrumMaster && ($scope.session.username !== 'admin')) {
+                        $location.path(link);
                     }
                 }
-                if (!(isScrumMaster || ($scope.session.username === 'admin'))) {
-                    $location.path(link);
-                }
             };
-
             $scope.redirectNonAuthenticated = function (link) {
                 if ($scope.session && !$scope.session.authenticated) {
                     $location.path(link);
