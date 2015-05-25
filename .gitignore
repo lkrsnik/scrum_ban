@@ -57,6 +57,7 @@ server/app/migrations
 server/app/media
 robots.txt
 malo-obcestvo.wsgi
+smrpoenv/
 
 # Node packages
 client/node_modules
