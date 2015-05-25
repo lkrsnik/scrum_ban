@@ -1,8 +1,5 @@
 from django.contrib.auth.models import User, Group
-from app.models import Team, RoleTeam, UserTeam, RoleTeam, Project
 from rest_framework import serializers
-
-from django.shortcuts import render
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,7 +20,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = (
             'id', 'url', 'is_active',
-            'first_name', 'last_name',
+            'first_name', 'last_name', 'password',
             'username', 'email', 'groups',)
         read_only_fields = ('id', 'url', )
         extra_kwargs = {'password': {'write_only': True}}
@@ -33,4 +30,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         # don't touch this!!!
         user = User.objects.create_user(**validated_data)
         return user
-        
