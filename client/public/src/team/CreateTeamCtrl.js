@@ -130,9 +130,9 @@
             $scope.getGroups = function () {
                 UserService.getUsers()
                     .success(function (data) {
-                        $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'ScrumMaster'}).length > 0; });
-                        $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'TeamMember'}).length > 0; });
-                        $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'ProductOwner'}).length > 0; });
+                        $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ScrumMaster'); });
+                        $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'TeamMember'); });
+                        $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ProductOwner'); });
                     });
             };
             $scope.getGroups();

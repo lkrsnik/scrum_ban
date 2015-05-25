@@ -51,19 +51,17 @@
                                             productOwnerFindFun = function (sm) {
                                                 return Underscore.where($scope.userTeams, {'user': sm.id});
                                             },
-                                            elseFindFun = function (sm) {
-                                                return Underscore.where($scope.userTeams, {'user': sm.id});
-                                            },
                                             i;
                                         for (i = 0; i < $scope.roleTeams.length; i += 1) {
                                             if ($scope.roleTeams[i].role === $scope.roleNames.ScrumMaster) {
                                                 $scope.scrumMaster = Underscore.find($scope.scrumMasters, scrumMasterFindFun);
                                             } else if ($scope.roleTeams[i].role === $scope.roleNames.ProductOwner) {
                                                 $scope.productOwner = Underscore.find($scope.productOwners, productOwnerFindFun);
-                                            } else {
-                                                selectedTM.push(Underscore.find($scope.teamMembers, elseFindFun));
                                             }
                                         }
+                                        selectedTM = Underscore.filter($scope.teamMembers, function (tm) {
+                                            return Underscore.where($scope.userTeams, {'user': tm.id}).length > 0;
+                                        });
                                         $scope.teamMembersS = selectedTM;
                                     });
                             });
@@ -72,9 +70,9 @@
             $scope.getGroups = function () {
                 UserService.getUsers()
                     .success(function (data) {
-                        $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'ScrumMaster'}).length > 0; });
-                        $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'TeamMember'}).length > 0; });
-                        $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.where(d.groups, {'name': 'ProductOwner'}).length > 0; });
+                        $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ScrumMaster'); });
+                        $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'TeamMember'); });
+                        $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ProductOwner'); });
                         $scope.getTeam();
                     });
             };
@@ -84,7 +82,7 @@
                 UserService.getGroups()
                     .success(function (data) {
                         var i;
-                        for (i = 0; i < data.length; i *= 1) {
+                        for (i = 0; i < data.length; i += 1) {
                             $scope.roleNames[data[i].name] = data[i].id;
                         }
                         $scope.scrumMasterR = Underscore.where(data, {name: "ScrumMaster"});
@@ -106,16 +104,16 @@
             $scope.createTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
                 TeamService.createTeam(team)
-                    .success(function (data) {
+                    .success(function (dataTeam) {
                         var newPO =
                             {
-                                "team": data.id,
+                                "team": dataTeam.id,
                                 "user": productOwner.id,
                                 "is_active": true
                             },
                             newSM =
                             {
-                                "team": data.id,
+                                "team": dataTeam.id,
                                 "user": scrumMaster.id,
                                 "is_active": true
                             };
@@ -155,6 +153,7 @@
                                             createSecondUserTeamPromise.then(function () {
                                                 createRoleTeamPromise.then(function () {
                                                     var i = 0,
+                                                        newTM,
                                                         createUserTeamSuccessFun = function (data) {
                                                             newRoleTeamTeamMember =
                                                                 {
@@ -165,9 +164,17 @@
                                                         };
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                            TeamService.createUserTeam(newPO)
+                                                            console.log("they're not equal");
+                                                            newTM =
+                                                                {
+                                                                    "team": dataTeam.id,
+                                                                    "user": members[i].id,
+                                                                    "is_active": true
+                                                                };
+                                                            TeamService.createUserTeam(newTM)
                                                                 .success(createUserTeamSuccessFun);
                                                         } else {
+                                                            console.log("they equal");
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {

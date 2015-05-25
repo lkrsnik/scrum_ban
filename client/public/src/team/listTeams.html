@@ -14,7 +14,7 @@
         <td> {{ team.name }} </td>
         <td> {{ team.productOwner.first_name }} {{ team.productOwner.last_name }} </td>
         <td> {{ team.scrumMaster.first_name }} {{ team.scrumMaster.last_name }} </td>
-        <td> <span ng-repeat="teamMember in team.teamMembers">{{ teamMember.first_name }} {{ teamMember.last_name}}</span> </td>
+        <td> <span ng-repeat="teamMember in team.teamMembers">{{ teamMember.first_name }} {{ teamMember.last_name}}{{$last ? '' : ', '}}</span> </td>
         <td> 
             <a ng-href="#/teams/{{team.id}}/edit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-pencil"></span>
