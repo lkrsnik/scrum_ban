@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', '$routeParams', function ($scope, BoardService, $routeParams) {
+        ['$scope', 'BoardService', '$routeParams', 'ngDialog', function ($scope, BoardService, $routeParams, ngDialog) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -27,5 +27,24 @@
                 .success(function (data) {
                     $scope.boards = data;
                 });
+
+            $scope.saveColumn = function (column) {
+                if (column.mode.id) {
+                    BoardService.updateColumn(column);
+                } else {
+                    BoardService.createColumn(column);
+                }
+            };
+
+            $scope.createColumn = function () {
+                ngDialog.openConfirm({
+                    template: '/static/src/board/createColumn.html',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope
+                })
+                    .then(function () {
+                        BoardService.createColumn($scope.column);
+                    });
+            };
         }]);
 }());

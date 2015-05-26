@@ -14,7 +14,8 @@ var Underscore;
     angular.module('scrumBan', [
         'ngRoute',
         'underscore',
-        'ngStorage'
+        'ngStorage',
+        'ngDialog'
     ]).
         config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
             $routeProvider
