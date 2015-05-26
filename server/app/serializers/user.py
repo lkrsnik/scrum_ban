@@ -30,3 +30,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         # don't touch this!!!
         user = User.objects.create_user(**validated_data)
         return user
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data.get('password', instance.password))
+        instance.save()
+        return instance
