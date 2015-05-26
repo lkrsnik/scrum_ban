@@ -1,4 +1,4 @@
-/*global angular, console */
+/*global angular, console, Underscore */
 (function () {
     'use strict';
     angular.module('scrumBan').controller('AppCtrl',
