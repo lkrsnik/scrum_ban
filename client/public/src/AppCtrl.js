@@ -23,7 +23,7 @@
             $scope.updateSessionView();
 
             $scope.redirectNonAdmin = function (link) {
-                if ($scope.session && $scope.session.username !== 'admin') {
+                if ($scope.session && !Underscore.contains($scope.session.roles, 'Admin')) {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $location.path(link);
                 }
