@@ -35,8 +35,8 @@ class Project(models.Model):
 
 class Column(models.Model):
     name = models.CharField(max_length=100, default="")
-    wip = models.IntegerField()
-    location = models.IntegerField()
+    wip = models.IntegerField(default=0)
+    location = models.IntegerField(default=0)
     parent_column = models.ForeignKey('self', null=True)
     board = models.ForeignKey(Board)
     is_border = models.BooleanField(default=False)
