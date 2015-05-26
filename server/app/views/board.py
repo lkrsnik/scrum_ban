@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers.board import BoardSerializer
+from app.serializers.board import BoardSerializer, ColumnSerializer
 from app.models import Board, Column
 
 
