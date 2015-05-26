@@ -19,6 +19,7 @@
             }
 
             $scope.rootCols = [];
+            $scope.allCols = [];
 
             BoardService.getBoard($routeParams.boardId)
                 .success(function (data) {
@@ -30,8 +31,18 @@
                     $scope.boards = data;
                 });
 
+            BoardService.getColumns()
+                .success(function (data) {
+                    $scope.allCols = data;
+                    $scope.rootCols = Underscore.filter(data, function (col) {
+                        return col.parent_column === null;
+                    });
+                });
+
             $scope.createColumn = function () {
-                $scope.newColumn = {};
+                $scope.newColumn = {
+                    parent_column: null
+                };
                 ngDialog.openConfirm({
                     template: '/static/html/board/createEditColumn.html',
                     className: 'ngdialog-theme-plain',
@@ -40,14 +51,20 @@
                     .then(function () {
                         $scope.newColumn.board = $routeParams.boardId;
                         $scope.newColumn.location = $scope.rootCols.length;
-                        $scope.newColumn.parent_column = null;
 
                         console.log($scope.newColumn);
                         BoardService.createColumn($scope.newColumn)
                             .then(function () {
-                                delete $scope.newColumn;
+                                $scope.proccessSavedColumn($scope.newColumn);
                             });
                     });
+            };
+
+            $scope.proccessSavedColumn = function (column) {
+                if (column.parent_column === null) {
+                    $scope.rootCols.push(column);
+                }
+                $scope.allCols.push(column);
             };
         }]);
 }());

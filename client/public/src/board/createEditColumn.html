@@ -11,6 +11,14 @@
             <p ng-show="columnForm.name.$error.required && columnForm.name.$dirty" 
                 class="help-block">Please enter column name.</p>
         </div>
+
+
+        <div class="form-group" ng-if="allCols.length > 0" 
+            ng-class="{ 'has-error' : columnForm.name.$invalid && columnForm.name.$dirty }" }>
+            <label>Select parent column:</label>
+            <select class="form-control" 
+                ng-model="newColumn.parent_column" ng-options="c.id as c.name for c in allCols"> </select>
+        </div>
         
         <div class="form-group" 
             ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">

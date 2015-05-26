@@ -34,6 +34,7 @@ class Project(models.Model):
 
 
 class Column(models.Model):
+    name = models.CharField(max_length=100, default="")
     wip = models.IntegerField()
     location = models.IntegerField()
     parent_column = models.ForeignKey('self', null=True)
