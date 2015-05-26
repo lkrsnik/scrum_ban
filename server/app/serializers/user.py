@@ -23,7 +23,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'first_name', 'last_name', 'password',
             'username', 'email', 'groups',)
         read_only_fields = ('id', 'url', )
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True, 'required': False}}
 
     def create(self, validated_data):
         # for user registration password
