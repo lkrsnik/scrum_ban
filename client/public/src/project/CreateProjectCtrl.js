@@ -4,6 +4,15 @@
     angular.module('scrumBan').controller('CreateProjectCtrl',
         ['$scope', '$filter', 'ProjectService', 'TeamService', function ($scope, $filter, ProjectService, TeamService) {
 
+            if (!$scope.session) {
+                $scope.updateSessionView()
+                    .then(function () {
+                        $scope.redirectNonScrumMaster('/');
+                    });
+            } else {
+                $scope.redirectNonScrumMaster('/');
+            }
+            
             $scope.getTeams = function () {
                 TeamService.getTeams()
                     .success(function (data) {
@@ -45,6 +54,5 @@
                         console.log(dataTeam);
                     });
             };
-
         }]);
 }());
