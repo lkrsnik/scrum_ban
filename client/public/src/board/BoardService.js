@@ -7,6 +7,12 @@
             return {
                 createBoard: function (board) {
                     return $http.post(API_URL + 'boards/', board);
+                },
+                getBoard: function (boardId) {
+                    return $http.get(API_URL + 'boards/' + boardId + '/');
+                },
+                getBoards: function () {
+                    return $http.get(API_URL + 'boards/');
                 }
             };
         }]);
