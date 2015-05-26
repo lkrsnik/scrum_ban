@@ -11,7 +11,6 @@
                 this.createSession = function () {
                     return $http.get(API_URL + 'session/')
                         .success(function (data) {
-                            console.log(data);
                             thisSession.authenticated = (data.authenticated !== false);
                             thisSession.username = data.username;
                             thisSession.roles = data.groups;

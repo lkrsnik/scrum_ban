@@ -16,13 +16,13 @@
                 },
                 createColumn: function (column) {
                     return $http.post(API_URL + 'columns/', column);
+                },
+                getColumns: function () {
+                    return $http.get(API_URL + 'columns/');
                 }/*,
                 getBoard: function (boardId) {
                     return $http.get(API_URL + 'boards/' + boardId + '/');
-                },
-                getBoards: function () {
-                    return $http.get(API_URL + 'boards/');
-                }*/
+                },*/
             };
         }]);
 }());
