@@ -90,7 +90,10 @@ gulp.task('concat-libs-js', function () {
 gulp.task('concat-libs-css', function () {
     gulp.src([
             './public/libs/bootstrap/dist/css/bootstrap.min.css',
-            './public/libs/font-awesome/css/font-awesome.min.css'])
+            './public/libs/font-awesome/css/font-awesome.min.css',
+            './public/libs/ngDialog/css/ngDialog-theme-default.css',
+            './public/libs/ngDialog/css/ngDialog-theme-plain.css',
+            './public/libs/ngDialog/css/ngDialog.css',])
         .pipe(concat_css('libs.css'))
         .pipe(gulp.dest('dist/libs'));
 });

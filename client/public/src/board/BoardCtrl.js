@@ -38,7 +38,7 @@
 
             $scope.createColumn = function () {
                 ngDialog.openConfirm({
-                    template: '/static/src/board/createColumn.html',
+                    template: '/static/html/board/createColumn.html',
                     className: 'ngdialog-theme-plain',
                     scope: $scope
                 })
