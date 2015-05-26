@@ -39,7 +39,7 @@
         <div class="form-group" 
             ng-class="{ 'has-error' : createUserForm.password.$invalid && createUserForm.password.$dirty }">
             <label>Password</label>
-            <input ng-model="user.password" type="password" name="password" class="form-control" placeholder="Password" ng-minlength="6" required>
+            <input ng-model="user.password" type="password" name="password" class="form-control" placeholder="Password" ng-minlength="6">
             <p ng-show="createUserForm.password.$error.required  && createUserForm.password.$dirty" class="help-block">Prosim, vnesite geslo.</p>
             <p ng-show="createUserForm.password.$error.minlength" class="help-block">Password is too short.</p>
         </div>
@@ -56,7 +56,8 @@
             </span>
         </div>
         
-        <button class="btn btn-primary" type="submit">Create user</button>
+        <button class="btn btn-primary" ng-disabled="createUserForm.$invalid" 
+            type="submit">Save user</button>
     </form>
 
 

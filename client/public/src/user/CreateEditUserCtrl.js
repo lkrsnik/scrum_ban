@@ -56,8 +56,12 @@
                 // Save only group names
                 user.groups = Underscore.map(user.groups, function (group) { return group.name; });
 
+                if (user.password === '') {
+                    delete user.password;
+                    console.log(user);
+                }
                 //console.log('Updating user:');
-                //console.log(user);
+                console.log(user);
 
                 UserService.updateUser(user)
                     .success(function () {
