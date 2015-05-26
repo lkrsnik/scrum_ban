@@ -8,6 +8,7 @@ router = routers.DefaultRouter()
 router.register(r'users', user.UserViewSet)
 router.register(r'groups', user.GroupViewSet)
 router.register(r'boards', board.BoardViewSet)
+router.register(r'columns', board.ColumnViewSet)
 router.register(r'session', auth.SessionViewSet, 'session')
 
 # Wire up our API using automatic URL routing.

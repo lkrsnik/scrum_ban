@@ -18,6 +18,8 @@
                 $scope.redirectNonAdmin('/');
             }
 
+            $scope.rootCols = [];
+
             BoardService.getBoard($routeParams.boardId)
                 .success(function (data) {
                     $scope.board = data;
@@ -29,13 +31,22 @@
                 });
 
             $scope.createColumn = function () {
+                $scope.newColumn = {};
                 ngDialog.openConfirm({
                     template: '/static/html/board/createEditColumn.html',
                     className: 'ngdialog-theme-plain',
                     scope: $scope
                 })
                     .then(function () {
-                        BoardService.createColumn($scope.column);
+                        $scope.newColumn.board = $routeParams.boardId;
+                        $scope.newColumn.location = $scope.rootCols.length;
+                        $scope.newColumn.parent_column = null;
+
+                        console.log($scope.newColumn);
+                        BoardService.createColumn($scope.newColumn)
+                            .then(function () {
+                                delete $scope.newColumn;
+                            });
                     });
             };
         }]);

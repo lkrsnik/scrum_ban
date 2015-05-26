@@ -2,7 +2,7 @@
   <div class="panel-heading">Create a column</div>
   <div class="panel-body">
     <form name="columnForm" class="create-column-form" role="form" 
-        ng-submit="createColumn(newColumn)" novalidate>
+        ng-submit="confirm()" novalidate>
         <div class="form-group" 
             ng-class="{ 'has-error' : columnForm.name.$invalid && columnForm.name.$dirty }">
             <label>Column name</label>
