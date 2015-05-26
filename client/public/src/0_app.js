@@ -23,6 +23,7 @@ var Underscore;
                 .when('/users/create', { templateUrl: '/static/html/user/createEditUser.html', controller: 'CreateEditUserCtrl'})
                 .when('/users/:userId/edit', { templateUrl: '/static/html/user/createEditUser.html', controller: 'CreateEditUserCtrl'})
 
+                .when('/boards', { templateUrl: '/static/html/board/listBoards.html', controller: 'ListBoardsCtrl' })
                 .when('/boards/create', { templateUrl: '/static/html/board/createBoard.html', controller: 'CreateBoardCtrl' })
                 .when('/boards/:boardId', { templateUrl: '/static/html/board/board.html', controller: 'BoardCtrl' })
 

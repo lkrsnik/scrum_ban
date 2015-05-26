@@ -1,0 +1,46 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Create a column</div>
+  <div class="panel-body">
+    <form name="columnForm" class="create-column-form" role="form" 
+        ng-submit="confirm()" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : columnForm.name.$invalid && columnForm.name.$dirty }">
+            <label>Column name</label>
+            <input ng-model="newColumn.name" type="text" name="name" 
+                class="form-control" placeholder="Column name" required autofocus>
+            <p ng-show="columnForm.name.$error.required && columnForm.name.$dirty" 
+                class="help-block">Please enter column name.</p>
+        </div>
+        
+        <div class="form-group" 
+            ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
+            <label>Column wip value</label>
+            <input ng-model="newColumn.wip" type="number" name="wip" 
+                class="form-control" placeholder="0" required>
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
+            <label>Is high priority column:</label>
+            <input type="checkbox" value="" ng-model="newColumn.is_high_priority">
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
+            <label>Is border column:</label>
+            <input type="checkbox" value="" ng-model="newColumn.is_border">
+        </div>
+
+        <div class="form-group" 
+            ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
+            <label>Is acceptance test column:</label>
+            <input type="checkbox" value="" ng-model="newColumn.acceptance_test">
+        </div>
+
+        {{newColumn}}
+        
+        <button class="btn btn-primary" ng-disabled="columnForm.$invalid"
+            type="submit">Save column</button>
+    </form>
+  </div>
+</div>

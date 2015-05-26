@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Boards</div>
+
+  <!-- Table -->
+  <table class="table table-hover">
+    <tr ng-repeat="board in boards" ng-click="redirect('boards/' + board.id)">
+        <td> {{ board.name }}</td>
+    </tr>
+  </table>
+</div>

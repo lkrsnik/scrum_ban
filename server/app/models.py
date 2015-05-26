@@ -36,7 +36,7 @@ class Project(models.Model):
 class Column(models.Model):
     wip = models.IntegerField()
     location = models.IntegerField()
-    parent_column = models.ForeignKey('self')
+    parent_column = models.ForeignKey('self', null=True)
     board = models.ForeignKey(Board)
     is_border = models.BooleanField(default=False)
     is_high_priority = models.BooleanField(default=False)
