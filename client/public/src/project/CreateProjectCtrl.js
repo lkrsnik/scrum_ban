@@ -3,6 +3,7 @@
     'use strict';
     angular.module('scrumBan').controller('CreateProjectCtrl',
         ['$scope', '$filter', 'ProjectService', 'TeamService', function ($scope, $filter, ProjectService, TeamService) {
+
             $scope.getTeams = function () {
                 TeamService.getTeams()
                     .success(function (data) {
