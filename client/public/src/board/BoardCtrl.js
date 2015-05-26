@@ -28,17 +28,9 @@
                     $scope.boards = data;
                 });
 
-            $scope.saveColumn = function (column) {
-                if (column.mode.id) {
-                    BoardService.updateColumn(column);
-                } else {
-                    BoardService.createColumn(column);
-                }
-            };
-
             $scope.createColumn = function () {
                 ngDialog.openConfirm({
-                    template: '/static/html/board/createColumn.html',
+                    template: '/static/html/board/createEditColumn.html',
                     className: 'ngdialog-theme-plain',
                     scope: $scope
                 })
