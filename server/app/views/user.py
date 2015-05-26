@@ -2,13 +2,14 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.user import UserSerializer, GroupSerializer
+from app.permissions import IsAdminGroup
 
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAdminGroup,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
