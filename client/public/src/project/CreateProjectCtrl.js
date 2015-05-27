@@ -12,7 +12,6 @@
             } else {
                 $scope.redirectNonScrumMaster('/');
             }
-            
             $scope.getTeams = function () {
                 TeamService.getTeams()
                     .success(function (data) {

@@ -1,7 +1,7 @@
  <div class="panel panel-default">
   <div class="panel-heading">Edit {{ team.name }}</div>
   <div class="panel-body">
-    <form name="createTeamForm" class="create-team-form" role="form" ng-submit="createTeam(team, productOwner, scrumMaster, teamMembersS)" novalidate>
+    <form name="createTeamForm" class="create-team-form" role="form" ng-submit="editTeam(team, productOwner, scrumMaster, teamMembersS)" novalidate>
         <div class="form-group"  
             ng-class="{ 'has-error' : createTeamForm.name.$invalid && createTeamForm.name.$dirty }">
             <label>Name</label>
