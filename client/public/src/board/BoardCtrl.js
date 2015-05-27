@@ -66,5 +66,11 @@
                 }
                 $scope.allCols.push(column);
             };
+
+            $scope.getSubCols = function (parentColId) {
+                return Underscore.filter($scope.allCols, function (col) {
+                    return col.parent_column === parentColId;
+                });
+            };
         }]);
 }());

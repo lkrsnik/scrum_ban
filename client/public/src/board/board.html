@@ -4,6 +4,18 @@
             <span class="glyphicon glyphicon-plus"></span>
         </span>
     </div>
+    <div class="col-md-12 board-col-line">
+
+        <div class="panel panel-default panel-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
+            ng-style="{'width': (100/rootCols.length - 2) + '%'}"></div>
+        <!--<div class="col" ng-repeat="rCol in rootCols">
+            <h1>{{rCol.name}}</h1>
+            <div class="sub-col" ng-repeat="col in getSubCols(rCol.id)">
+                {{col.name}}
+            </div>
+
+        </div>-->
+    </div>
 </div>
 
 {{board}} <br />
