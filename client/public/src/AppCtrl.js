@@ -22,23 +22,27 @@
             };
             $scope.updateSessionView();
 
+            $scope.redirect = function (link) {
+                $location.path(link);
+            };
+
             $scope.redirectNonAdmin = function (link) {
                 if ($scope.session && !Underscore.contains($scope.session.roles, 'Admin')) {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
-                    $location.path(link);
+                    $scope.redirect(link);
                 }
             };
 
             $scope.redirectNonAuthenticated = function (link) {
                 if ($scope.session && !$scope.session.authenticated) {
-                    $location.path(link);
+                    $scope.redirect(link);
                 }
             };
 
             $scope.logout = function () {
                 delete $localStorage.token;
                 $scope.updateSessionView();
-                $location.path("/");
+                $scope.redirect("/");
             };
         }]);
 }());
