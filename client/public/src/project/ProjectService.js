@@ -10,6 +10,13 @@
                             console.log('Error in creating team: ' + status);
                             console.log(error);
                         });
+                },
+                getProjects: function () {
+                    return $http.get(API_URL + 'projects/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving projects: ' + status);
+                            console.log(error);
+                        });
                 }
             };
         }]);

@@ -30,7 +30,7 @@
             ng-class="{ 'has-error' : createProjectForm.start_date.$invalid && createProjectForm.start_date.$dirty }" }> 
             <label>Start date</label>
             <input ng-model="project.start_date" type="date" name="start_date" 
-                class="form-control" placeholder="Start date" ng-change="validateStartDate()" required autofocus>
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" ng-change="validateStartDate()" required autofocus>
             <p ng-show="createProjectForm.start_date.$error.required && createProjectForm.start_date.$dirty" 
                 class="help-block">Please enter start date.</p>
             <p ng-show="createProjectForm.start_date.$error.startBeforeToday" class="help-block">Start date is before today!</p>
@@ -39,7 +39,7 @@
             ng-class="{ 'has-error' : createProjectForm.end_date.$invalid && createProjectForm.end_date.$dirty }" }>
             <label>End date</label>
             <input ng-model="project.end_date" type="date" name="end_date" 
-                class="form-control" placeholder="End date" ng-change="validateEndDate()" required autofocus>
+                class="form-control" placeholder="End date (yyyy-mm-dd)" ng-change="validateEndDate()" required autofocus>
             <p ng-show="createProjectForm.end_date.$error.required && createProjectForm.end_date.$dirty" 
                 class="help-block">Please enter end date.</p>
             <p ng-show="createProjectForm.end_date.$error.finishBeforeStart" class="help-block">End date is before start date!</p>

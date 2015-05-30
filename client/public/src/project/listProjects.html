@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+  <div class="panel-heading">List projects</div>
+
+  <!-- Table -->
+  <table class="table table-hover">
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Contacting authority</th>
+        <th>Start date</th>
+        <th>End date</th>
+        <th>Developer team</th>
+        <th>...</th>
+    </tr>
+    <tr ng-repeat="project in projects">
+        <td> {{ project.code }} </td>
+        <td> {{ project.name }} </td>
+        <td> {{ project.client }} </td>
+        <td> {{ project.start_date | date: 'yyyy-MM-dd' }} </td>
+        <td> {{ project.end_date | date: 'yyyy-MM-dd' }} </td>
+        <td> {{ project.team }} </td>
+        <td> 
+            <a ng-href="#/projects/{{project.id}}/edit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <span ng-click="deleteProject(project)" class="btn btn-danger handcursor" title="Delete project">
+                <span class="glyphicon glyphicon-trash"></span>
+            </span>
+        </td>
+    </tr> 
+  </table>
+</div>
