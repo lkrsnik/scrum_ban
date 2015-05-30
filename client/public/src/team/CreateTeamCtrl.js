@@ -134,6 +134,7 @@
             $scope.getGroups = function () {
                 UserService.getUsers()
                     .success(function (data) {
+                        data = Underscore.filter(data, function (d) {return d.is_active; });
                         $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ScrumMaster'); });
                         $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'TeamMember'); });
                         $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ProductOwner'); });
