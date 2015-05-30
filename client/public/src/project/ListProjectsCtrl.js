@@ -27,7 +27,7 @@
                 TeamService.getTeams()
                     .success(function (data) {
                         Underscore.map($scope.projects, function (p) {
-                            p.team = Underscore.find(data, function (t) {
+                            p.team_name = Underscore.find(data, function (t) {
                                 return t.id === p.team;
                             }).name;
                         });
@@ -37,15 +37,20 @@
             };
             $scope.getProjects();
 
-            /*
-            $scope.deleteUser = function (user) {
-                user.is_active = false;
-                UserService.updateUser(user);
+            
+            $scope.deleteProject = function (project) {
+            	/* TODO_: ČE OBSTAJAJO KARTICE ZA PROJEKT, SE TA LE DEAKTIVIRA, NE IZBRIŠE!!!
+
+                project.is_active = false;
+                ProjectService.updateProject(project);
+                */
+                ProjectService.deleteProject(project);
+
             };
 
-            $scope.activateUser = function (user) {
-                user.is_active = true;
-                UserService.updateUser(user);
-            }; */
+            $scope.activateProject = function (project) {
+                project.is_active = true;
+                ProjectService.updateProject(project);
+            };
         }]);
 }());

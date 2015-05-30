@@ -18,13 +18,16 @@
         <td> {{ project.client }} </td>
         <td> {{ project.start_date | date: 'yyyy-MM-dd' }} </td>
         <td> {{ project.end_date | date: 'yyyy-MM-dd' }} </td>
-        <td> {{ project.team }} </td>
+        <td> {{ project.team_name }} </td>
         <td> 
             <a ng-href="#/projects/{{project.id}}/edit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-pencil"></span>
             </a>
-            <span ng-click="deleteProject(project)" class="btn btn-danger handcursor" title="Delete project">
+            <span ng-show="project.is_active" ng-click="deleteProject(project)" class="btn btn-danger handcursor" title="Delete project">
                 <span class="glyphicon glyphicon-trash"></span>
+            </span>
+            <span ng-hide="project.is_active" ng-click="activateProject(project)" class="btn btn-success handcursor" title="Activate project">
+                <span class="glyphicon glyphicon-plus"></span>
             </span>
         </td>
     </tr> 

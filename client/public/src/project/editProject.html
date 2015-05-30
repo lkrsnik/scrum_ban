@@ -1,7 +1,7 @@
 <div class="panel panel-default">
-  <div class="panel-heading">Create new project</div>
+  <div class="panel-heading">Edit project: {{ project.name }}</div>
   <div class="panel-body">
-    <form name="createProjectForm" class="create-project-form" role="form" ng-submit="createProject(project)" novalidate>
+    <form name="createProjectForm" class="create-project-form" role="form" ng-submit="editProject(project)" novalidate>
         <div class="form-group" 
             ng-class="{ 'has-error' : createProjectForm.code.$invalid && createProjectForm.code.$dirty }">
             <label>Code</label>
@@ -52,7 +52,7 @@
                 <p ng-show="createProjectForm.dev_team.$error.required && createProjectForm.dev_team.$dirty" 
                 class="help-block">Please select developer team.</p>
         </div> 
-        <button class="btn btn-primary" ng-disabled="createProjectForm.$invalid" type="submit">Create project</button>
+        <button class="btn btn-primary" ng-disabled="createProjectForm.$invalid" type="submit">Edit project</button>
     </form>
   </div>
 </div>

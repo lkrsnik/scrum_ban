@@ -32,6 +32,7 @@ class Project(models.Model):
     end_date = models.fields.DateTimeField(default=datetime.now)
     board = models.ForeignKey(Board, blank=True, null=True)
     team = models.ForeignKey(Team)
+    is_active = models.BooleanField(default=True)
 
 
 class Column(models.Model):
