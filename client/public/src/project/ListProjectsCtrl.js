@@ -37,9 +37,8 @@
             };
             $scope.getProjects();
 
-            
             $scope.deleteProject = function (project) {
-            	/* TODO_: ČE OBSTAJAJO KARTICE ZA PROJEKT, SE TA LE DEAKTIVIRA, NE IZBRIŠE!!!
+                /* TODO_: ČE OBSTAJAJO KARTICE ZA PROJEKT, SE TA LE DEAKTIVIRA, NE IZBRIŠE!!!
 
                 project.is_active = false;
                 ProjectService.updateProject(project);
