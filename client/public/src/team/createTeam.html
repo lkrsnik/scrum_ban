@@ -14,7 +14,7 @@
             ng-class="{ 'has-error' : createTeamForm.name.$invalid && createTeamForm.name.$dirty }" }>
             <label>Select product owner:</label>
             <select class="form-control" 
-                ng-model="productOwner" ng-options="p as p.username for p in productOwners" required></select>
+                ng-model="productOwner" ng-options='p as (p.first_name + " " + p.last_name) for p in productOwners' required></select>
             <p ng-show="createTeamForm.name.$error.required && createTeamForm.name.$dirty" 
                 class="help-block">Please select product owner.</p>
         </div>
@@ -22,12 +22,13 @@
             ng-class="{ 'has-error' : createTeamForm.name.$invalid && createTeamForm.name.$dirty }" }>
             <label>Select scrum master:</label>
             <select class="form-control" 
-                ng-model="scrumMaster" ng-options="s as s.username for s in scrumMasters" required ></select>
+                ng-model="scrumMaster" ng-options='s as (s.first_name + " " + s.last_name) for s in scrumMasters' required ></select>
         </div> 
         <div class="form-group"
             ng-class="{ 'has-error' : createTeamForm.name.$invalid && createTeamForm.name.$dirty }" }>
             <label>Select team members:</label>
-            <select class="form-control"  size="10" multiple ng-multiple="true" ng-model="teamMembersS" ng-options="m as m.username for m in teamMembers" required> </select>
+            <select class="form-control"  size="10" multiple ng-multiple="true" ng-model="teamMembersS" 
+                 ng-options='m as (m.first_name + " " + m.last_name) for m in teamMembers' required> </select> 
             <p ng-show="createTeamForm.name.$error.required && createTeamForm.name.$dirty" 
                 class="help-block">Please select team members.</p>
         </div>
