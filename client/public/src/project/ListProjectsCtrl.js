@@ -43,6 +43,9 @@
                 project.is_active = false;
                 ProjectService.updateProject(project);
                 */
+
+                $scope.projects = Underscore.without($scope.projects, project);
+
                 ProjectService.deleteProject(project);
 
             };
