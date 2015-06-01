@@ -66,6 +66,20 @@
             };
 
             $scope.createCard = function () {
+                var type;
+                if ($scope.session && Underscore.contains($scope.session.roles, 'ProductOwner')) {
+                    type = 'newFunctionality';
+                }
+                if ($scope.session && Underscore.contains($scope.session.roles, 'ScrumMaster')) {
+                    type = 'silverBullet';
+                }
+                $scope.newCard = {
+                    completion_date: null,
+                    development_start_date: null,
+                    is_active: true,
+                    user: null,
+                    type: type
+                };
                 ngDialog.openConfirm({
                     template: '/static/html/board/createEditCard.html',
                     className: 'ngdialog-theme-plain',
@@ -73,6 +87,12 @@
                 })
                     .then(function () {
                         console.log($scope.newCard);
+                        /*if (type === 'newFunctionality') {
+                            column = Underscore.filter($scope.allCols, function (col) {
+                                return (col.is_high_priority === true && project);
+                                }                        
+                            });
+                        }*/
                     });
             };
 

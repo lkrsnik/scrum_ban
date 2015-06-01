@@ -54,12 +54,12 @@ class Card(models.Model):
     name = models.TextField(max_length=100, default="")
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
-    completion_date = models.DateTimeField(default=datetime.now)
-    development_start_date = models.DateTimeField(default=datetime.now)
+    completion_date = models.DateTimeField(default=datetime.now, null=True)
+    development_start_date = models.DateTimeField(default=datetime.now, null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
 
 
 class Move(models.Model):
