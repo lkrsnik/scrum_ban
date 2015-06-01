@@ -19,7 +19,11 @@
                 },
                 getColumns: function () {
                     return $http.get(API_URL + 'columns/');
-                }/*,
+                },
+                createCard: function (card) {
+                    return $http.post(API_URL + 'card/', card);
+                }
+                /*,
                 getBoard: function (boardId) {
                     return $http.get(API_URL + 'boards/' + boardId + '/');
                 },*/

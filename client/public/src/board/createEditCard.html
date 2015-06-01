@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Create a card</div>
+  dodaj opis za kakšno kreiranje gre glede na to ali je scrum master -silver bullet ali PO - nova funkcionalnost
+  <div class="panel-body">
+    <form name="cardForm" class="create-card-form" role="form" 
+        ng-submit="confirm()" novalidate>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
+            <label>Card name</label>
+            <input ng-model="newCard.name" type="text" name="name" 
+                class="form-control" placeholder="Card name" required autofocus>
+            <p ng-show="cardForm.name.$error.required && cardForm.name.$dirty" 
+                class="help-block">Please enter card name.</p>
+        </div>   
+        <div class="form-group" 
+            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
+            <label>Card content</label>
+            <input ng-model="newCard.content" type="text" name="name" 
+                class="form-control" placeholder="Card content" required autofocus>
+            <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
+            Please enter card content.</p>
+        </div> 
+        <div class="form-group"
+            ng-class="{ 'has-error' : createCardForm.dev_team.$invalid && createCardForm.dev_team.$dirty }" }>
+            <label>Select responsible user</label>
+            <select class="form-control" 
+                ng-model="cardForm.user" ng-options="u as u.first_name for u in allUsers" name="user"></select>
+        </div>        
+        <button class="btn btn-primary" ng-disabled="cardForm.$invalid"
+            type="submit">Save card</button>
+    </form>
+  </div>
+</div>

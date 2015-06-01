@@ -4,6 +4,11 @@
             <span class="glyphicon glyphicon-plus"></span>
         </span>
     </div>
+     <div class="col-md-12 board-cmd-line">
+        <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
+            <span class="glyphicon glyphicon-plus"></span>
+        </span>
+    </div>
     <div class="col-md-12 board-col-line">
 
         <div class="panel panel-default panel-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
