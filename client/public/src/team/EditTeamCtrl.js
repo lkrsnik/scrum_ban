@@ -56,21 +56,24 @@
                                         // update selections in form
                                         var selectedTM = [],
                                             scrumMasterFindFun = function (sm) {
-                                                return Underscore.where($scope.userTeams, {'user': sm.id});
+                                                return Underscore.find($scope.userTeams, function (ut) {
+                                                    return ut.user === sm.id &&
+                                                           Underscore.where($scope.roleTeams, {'user_team': ut.id, 'role': $scope.roleNames.ScrumMaster}).length > 0;
+                                                });
                                             },
                                             productOwnerFindFun = function (sm) {
-                                                return Underscore.where($scope.userTeams, {'user': sm.id});
-                                            },
-                                            i;
-                                        for (i = 0; i < $scope.roleTeams.length; i += 1) {
-                                            if ($scope.roleTeams[i].role === $scope.roleNames.ScrumMaster) {
-                                                $scope.scrumMaster = Underscore.find($scope.scrumMasters, scrumMasterFindFun);
-                                            } else if ($scope.roleTeams[i].role === $scope.roleNames.ProductOwner) {
-                                                $scope.productOwner = Underscore.find($scope.productOwners, productOwnerFindFun);
-                                            }
-                                        }
+                                                return Underscore.find($scope.userTeams, function (ut) {
+                                                    return ut.user === sm.id &&
+                                                           Underscore.where($scope.roleTeams, {'user_team': ut.id, 'role': $scope.roleNames.ProductOwner}).length > 0;
+                                                });
+                                            };
+                                        $scope.scrumMaster = Underscore.find($scope.scrumMasters, scrumMasterFindFun);
+                                        $scope.productOwner = Underscore.find($scope.productOwners, productOwnerFindFun);
                                         selectedTM = Underscore.filter($scope.teamMembers, function (tm) {
-                                            return Underscore.where($scope.userTeams, {'user': tm.id}).length > 0;
+                                            return Underscore.find($scope.userTeams, function (ut) {
+                                                return ut.user === tm.id &&
+                                                    Underscore.where($scope.roleTeams, {'user_team': ut.id, 'role': $scope.roleNames.TeamMember}).length > 0;
+                                            });
                                         });
                                         $scope.previousSelectedSM = $scope.scrumMaster;
                                         $scope.previousSelectedPO = $scope.productOwner;
