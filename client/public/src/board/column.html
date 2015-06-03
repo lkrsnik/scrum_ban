@@ -1,5 +1,8 @@
-<div class="panel-heading">{{col.name}}</div>
+<div class="panel-heading">{{col.name}} {{$index}}</div>
 <div class="panel-body">
-    <div class="panel panel-default panel-subcolumn" ng-repeat="col in getSubCols(col.id)" ng-style="{'width': (100/getSubCols(col.parent_column).length - 2) + '%'}"
-        ng-include="'/static/html/board/column.html'"></div>
+    <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
+        ng-style="{
+                    'width': (100/getSubCols(col.parent_column).length) + '%',
+                    'left': $index*100/getSubCols(col.parent_column).length + '%'
+                }" ng-include="'/static/html/board/column.html'"></div>
 </div>
