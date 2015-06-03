@@ -34,9 +34,8 @@
             BoardService.getColumns()
                 .success(function (data) {
                     $scope.allCols = data;
-                    $scope.rootCols = Underscore.filter(data, function (col) {
-                        return col.parent_column === null;
-                    });
+                    $scope.rootCols = $scope.getRootCols($scope.allCols);
+                    $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);
                 });
 
             UserService.getUsers()
@@ -55,14 +54,21 @@
                 })
                     .then(function () {
                         $scope.newColumn.board = $routeParams.boardId;
-                        $scope.newColumn.location = $scope.rootCols.length;
+                        $scope.newColumn.location = $scope.getSubCols($scope.newColumn.parent_column).length;
 
                         console.log($scope.newColumn);
                         BoardService.createColumn($scope.newColumn)
-                            .then(function () {
-                                $scope.proccessSavedColumn($scope.newColumn);
+                            .success(function (data) {
+                                $scope.proccessSavedColumn(data);
                             });
                     });
+            };
+
+            $scope.deleteColumn = function (column) {
+                BoardService.deleteColumn(column.id);
+
+                $scope.allCols = Underscore.without($scope.allCols, column);
+                $scope.rootCols = $scope.getRootCols($scope.allCols);
             };
 
             $scope.createCard = function () {
@@ -107,6 +113,25 @@
                 return Underscore.filter($scope.allCols, function (col) {
                     return col.parent_column === parentColId;
                 });
+            };
+
+            $scope.getRootCols = function (allCols) {
+                return Underscore.filter(allCols, function (col) {
+                    return col.parent_column === null;
+                });
+            };
+
+            $scope.getMaxColDepth = function (cols) {
+                var maxDepth = 0,
+                    tmp,
+                    i;
+                for (i = 0; i < cols.length; i += 1) {
+                    tmp = 1 + $scope.getMaxColDepth($scope.getSubCols(cols[i].id));
+                    if (tmp > maxDepth) {
+                        maxDepth = tmp;
+                    }
+                }
+                return maxDepth;
             };
         }]);
 }());

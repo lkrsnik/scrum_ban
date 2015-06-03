@@ -1,4 +1,7 @@
-<div class="panel-heading">{{col.name}} {{$index}}</div>
+<div class="panel-heading">
+    {{col.name}}
+    <span ng-show="getSubCols(col.id).length == 0" ng-click="deleteColumn(col)"  class="glyphicon glyphicon-trash handcursor"></span>
+</div>
 <div class="panel-body">
     <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="{
