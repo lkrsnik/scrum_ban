@@ -45,5 +45,10 @@
                 roles: ['productowner']
             }
         ])
+        .constant('COL_DIM', {
+            'width': 200,
+            'height': 800,
+            'headerHeight': 40
+        })
         .constant('API_URL', 'api/');
 }());

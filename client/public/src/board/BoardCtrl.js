@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', function ($scope, BoardService, UserService, $routeParams, ngDialog) {
+        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -193,13 +193,13 @@
                     col.style = {
                         'width': $scope.getColsWidth(subCols, depth + 1),
                         'left': kumWidth,
-                        'min-height': 800 - (depth * 40) // Offset the column height according to column depth
+                        'min-height': COL_DIM.height - (depth * COL_DIM.headerHeight) // Offset the column height according to column depth
                     };
                     kumWidth += col.style.width;
                 }
 
                 // This here we specify width for single column
-                return (kumWidth === 0) ? 200 : kumWidth;
+                return (kumWidth === 0) ? COL_DIM.width : kumWidth;
             };
 
         }]);
