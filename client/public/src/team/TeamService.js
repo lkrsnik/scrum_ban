@@ -103,6 +103,13 @@
                             console.log('Error in creating user team activity: ' + status);
                             console.log(error);
                         });
+                },
+                getUserTeamActivity: function () {
+                    return $http.get(API_URL + 'user-team-activities/')
+                        .error(function (error, status) {
+                            console.log('Error in retrieving user team activities: ' + status);
+                            console.log(error);
+                        });
                 }
 
             };

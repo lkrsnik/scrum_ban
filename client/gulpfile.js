@@ -80,7 +80,8 @@ gulp.task('concat-libs-js', function () {
             './public/libs/underscore/underscore.js',
             './public/libs/angular-underscore-module/angular-underscore-module.js',
             './public/libs/bootstrap/dist/js/bootstrap.min.js',
-            './public/libs/ngstorage/ngStorage.js'
+            './public/libs/ngstorage/ngStorage.js',
+            './public/libs/ngDialog/js/ngDialog.js'
             ])
         .pipe(concat('libs.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -89,7 +90,10 @@ gulp.task('concat-libs-js', function () {
 gulp.task('concat-libs-css', function () {
     gulp.src([
             './public/libs/bootstrap/dist/css/bootstrap.min.css',
-            './public/libs/font-awesome/css/font-awesome.min.css'])
+            './public/libs/font-awesome/css/font-awesome.min.css',
+            './public/libs/ngDialog/css/ngDialog-theme-default.css',
+            './public/libs/ngDialog/css/ngDialog-theme-plain.css',
+            './public/libs/ngDialog/css/ngDialog.css',])
         .pipe(concat_css('libs.css'))
         .pipe(gulp.dest('dist/libs'));
 });

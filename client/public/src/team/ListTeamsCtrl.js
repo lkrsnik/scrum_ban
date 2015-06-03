@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('ListTeamsCtrl',
-        ['$scope', 'TeamService', 'UserService', function ($scope, TeamService, UserService) {
+        ['$scope', 'TeamService', 'UserService', 'ngDialog', function ($scope, TeamService, UserService, ngDialog) {
 
             if (!$scope.session) {
                 $scope.updateSessionView()
@@ -93,6 +93,30 @@
                                 }
                                 $scope.teams = scteams;
                                 console.log($scope.teams);
+                            });
+                    });
+            };
+
+            $scope.getDetails = function (team) {
+                console.log(team);
+                TeamService.getUserTeams()
+                    .success(function (data) {
+                        $scope.allUsers = Underscore.where(data, {team: team.id});
+                        UserService.getUsers()
+                            .success(function (userdata) {
+                                TeamService.getUserTeamActivity()
+                                    .success(function (data) {
+                                        var i;
+                                        for (i = 0; i < $scope.allUsers.length; i += 1) {
+                                            $scope.allUsers[i].activities = Underscore.where(data, {user_team: $scope.allUsers[i].id});
+                                            $scope.allUsers[i].user = Underscore.where(userdata, {id: $scope.allUsers[i].user});
+                                        }
+                                        ngDialog.openConfirm({
+                                            template: '/static/html/team/details.html',
+                                            className: 'ngdialog-theme-plain',
+                                            scope: $scope
+                                        });
+                                    });
                             });
                     });
             };
