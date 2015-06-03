@@ -7,15 +7,12 @@
             if (!$scope.session) {
                 $scope.promises.sessionPromise
                     .then(function () {
-                        $scope.redirectNonAdmin('/');
                         $scope.redirectNonAuthenticated('/');
                     }, function () { // In case session promise fails
-                        $scope.redirectNonAdmin('/');
                         $scope.redirectNonAuthenticated('/');
                     });
             } else {
                 $scope.redirectNonAuthenticated('/');
-                $scope.redirectNonAdmin('/');
             }
 
             $scope.rootCols = [];
@@ -31,8 +28,9 @@
                     $scope.boards = data;
                 });
 
-            BoardService.getColumns()
+            BoardService.getColumns($routeParams.boardId)
                 .success(function (data) {
+                    console.log(data);
                     $scope.allCols = data;
                     $scope.rootCols = $scope.getSubCols(null);
                     $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);

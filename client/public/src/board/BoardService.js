@@ -20,8 +20,10 @@
                 deleteColumn: function (columnId) {
                     return $http.delete(API_URL + 'columns/' + columnId + '/');
                 },
-                getColumns: function () {
-                    return $http.get(API_URL + 'columns/');
+                getColumns: function (boardId) {
+                    return $http.get(API_URL + 'columns/', {
+                        params: { boardId: boardId }
+                    });
                 }/*,
                 getBoard: function (boardId) {
                     return $http.get(API_URL + 'boards/' + boardId + '/');

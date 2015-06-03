@@ -14,6 +14,9 @@ class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
 
     def list(self, request, pk=None):
+        if (request.user.is_staff):
+            serializer = self.serializer_class(self.queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         userTeamQS = UserTeam.objects.filter(user=request.user)
         projectQS = Project.objects.filter(team__in=userTeamQS.values('team'))
         boardQS = Board.objects.filter(id__in=projectQS.values('board'))
@@ -28,6 +31,11 @@ class ColumnViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ColumnSerializer
     queryset = Column.objects.all()
+
+    def list(self, request, pk=None):
+        columnQS = Column.objects.filter(board=request.QUERY_PARAMS['boardId'])
+        serializer = self.serializer_class(columnQS, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CardViewSet(viewsets.ModelViewSet):
