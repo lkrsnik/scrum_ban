@@ -47,6 +47,11 @@
                             };
                         TeamService.createUserTeam(newPO)
                             .success(function (data) {
+                                var newAct =
+                                    {
+                                        "user_team": data.id
+                                    };
+                                TeamService.createUserTeamActivity(newAct);
                                 newRoleTeam =
                                     {
                                         "user_team": data.id,
@@ -68,6 +73,11 @@
                                         } else {
                                             createSecondUserTeamPromise = TeamService.createUserTeam(newSM)
                                                 .success(function (data) {
+                                                    newAct =
+                                                        {
+                                                            "user_team": data.id
+                                                        };
+                                                    TeamService.createUserTeamActivity(newAct);
                                                     newRoleTeam =
                                                         {
                                                             "user_team": data.id,
@@ -84,6 +94,11 @@
                                                         created = [],
                                                         newTM,
                                                         createUserTeamSuccessFun = function (data) {
+                                                            newAct =
+                                                                {
+                                                                    "user_team": data.id
+                                                                };
+                                                            TeamService.createUserTeamActivity(newAct);
                                                             newRoleTeamTeamMember =
                                                                 {
                                                                     "user_team": data.id,

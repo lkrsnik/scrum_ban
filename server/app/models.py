@@ -18,9 +18,12 @@ class UserTeam(models.Model):
     team = models.ForeignKey(Team)
     is_active = models.BooleanField(default=True)
 
+class UserTeamActivity(models.Model):
+    user_team = models.ForeignKey(UserTeam)
+    date = models.DateTimeField(default=datetime.now)
+    activated = models.BooleanField(default=True)
 
 class Board(models.Model):
-    wip = models.IntegerField()
     name = models.CharField(max_length=100, default="")
 
 
@@ -36,9 +39,10 @@ class Project(models.Model):
 
 
 class Column(models.Model):
+    name = models.CharField(max_length=100, default="")
     wip = models.IntegerField()
     location = models.IntegerField()
-    parent_column = models.ForeignKey('self')
+    parent_column = models.ForeignKey('self', null=True)
     board = models.ForeignKey(Board)
     is_border = models.BooleanField(default=False)
     is_high_priority = models.BooleanField(default=False)
@@ -55,11 +59,12 @@ class Card(models.Model):
     name = models.TextField(max_length=100, default="")
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
-    completion_date = models.DateTimeField(default=datetime.now)
-    development_start_date = models.DateTimeField(default=datetime.now)
+    completion_date = models.DateTimeField(default=datetime.now, null=True)
+    development_start_date = models.DateTimeField(default=datetime.now, null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
-    user = models.ForeignKey(User)
+    project = models.ForeignKey(Project, null=True)
+    user = models.ForeignKey(User, null=True)
 
 
 class Move(models.Model):

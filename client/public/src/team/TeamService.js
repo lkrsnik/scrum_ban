@@ -96,6 +96,13 @@
                             console.log('Error in deleting role team: ' + status);
                             console.log(error);
                         });
+                },
+                createUserTeamActivity: function (userteamactivity) {
+                    return $http.post(API_URL + 'user-team-activities/', userteamactivity)
+                        .error(function (error, status) {
+                            console.log('Error in creating user team activity: ' + status);
+                            console.log(error);
+                        });
                 }
 
             };
