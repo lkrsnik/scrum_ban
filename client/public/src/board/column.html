@@ -4,8 +4,5 @@
 </div>
 <div class="panel-body">
     <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
-        ng-style="{
-                    'width': (100/getSubCols(col.parent_column).length) + '%',
-                    'left': $index*100/getSubCols(col.parent_column).length + '%'
-                }" ng-include="'/static/html/board/column.html'"></div>
+        ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
 </div>

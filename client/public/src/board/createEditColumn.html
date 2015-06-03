@@ -12,12 +12,37 @@
                 class="help-block">Please enter column name.</p>
         </div>
 
-
         <div class="form-group" ng-if="allCols.length > 0" 
-            ng-class="{ 'has-error' : columnForm.name.$invalid && columnForm.name.$dirty }" }>
+            ng-class="{ 'has-error' : columnForm.parent_column.$invalid && 
+                                      columnForm.parent_column.$dirty }" }>
             <label>Select parent column:</label>
             <select class="form-control" 
-                ng-model="newColumn.parent_column" ng-options="c.id as c.name for c in allCols"> </select>
+                ng-model="newColumn.parent_column" ng-options="c.id as c.name for c in allCols"
+                ng-change="newColumn.left = undefined; newColumn.right = undefined">
+                <option value="">-- choose parent column --</option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-if="newColumn.right === undefined && getSubCols(newColumn.parent_column).length > 0" 
+            ng-class="{ 'has-error' : columnForm.left.$invalid && columnForm.left.$dirty }" }>
+            <label>Select left column:</label>
+            <select class="form-control" 
+                ng-model="newColumn.left" 
+                ng-options="c.location as c.name for c in getSubCols(newColumn.parent_column)"
+                ng-required="newColumn.right === undefined && getSubCols(newColumn.parent_column).length > 0">
+                <option value="">-- choose left column --</option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-if="newColumn.left === undefined && getSubCols(newColumn.parent_column).length > 0" 
+            ng-class="{ 'has-error' : columnForm.right.$invalid && columnForm.right.$dirty }" }>
+            <label>Select right column:</label>
+            <select class="form-control" 
+                ng-model="newColumn.right" 
+                ng-options="c.location as c.name for c in getSubCols(newColumn.parent_column)"
+                ng-required="newColumn.left === undefined && getSubCols(newColumn.parent_column).length > 0">
+                <option value="">-- choose right column --</option>
+            </select>
         </div>
         
         <div class="form-group" 

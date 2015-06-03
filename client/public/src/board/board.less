@@ -3,20 +3,14 @@
 .panel-column {
     display: inline-block !important;
     position: absolute;
-    overflow: auto;
+    overflow: hidden;
 
     .panel-body {
         padding: 0;
     }
 }
-.panel-root-column {
-    min-height: @board-col-line-heigth;
-}
-.panel-subcolumn {
-    height: 100%;
-}
 
 .board-col-line {
     display: inline-block;
-    margin-bottom: @board-col-line-heigth; // Done to move the objects after this div under it
+    margin-bottom: @board-col-line-heigth + 20; // Done to move the objects after this div under it
 }

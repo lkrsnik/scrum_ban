@@ -7,13 +7,10 @@
             <span class="glyphicon glyphicon-plus"></span>
         </span>
     </div>
-    <div class="col-md-12 board-col-line" ng-style="{'width': getMaxColDepth(rootCols) * rootCols.length * 200}">
+    <div class="col-md-12 board-col-line" ng-style="{'width': getSubColsWidth(rootCols, 0)}">
 
         <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
-            ng-style="{
-                        'width': (100/rootCols.length) + '%',
-                        'left': $index*100/rootCols.length + '%'
-                    }"></div>
+            ng-style="col.style"></div>
         <!--<div class="col" ng-repeat="rCol in rootCols">
             <h1>{{rCol.name}}</h1>
             <div class="sub-col" ng-repeat="col in getSubCols(rCol.id)">

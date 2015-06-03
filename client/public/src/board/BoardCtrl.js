@@ -34,7 +34,7 @@
             BoardService.getColumns()
                 .success(function (data) {
                     $scope.allCols = data;
-                    $scope.rootCols = $scope.getRootCols($scope.allCols);
+                    $scope.rootCols = $scope.getSubCols(null);
                     $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);
                 });
 
@@ -54,7 +54,9 @@
                 })
                     .then(function () {
                         $scope.newColumn.board = $routeParams.boardId;
-                        $scope.newColumn.location = $scope.getSubCols($scope.newColumn.parent_column).length;
+                        $scope.newColumn.location = $scope.calculateColLocation($scope.newColumn);
+                        delete $scope.newColumn.left;
+                        delete $scope.newColumn.right;
 
                         console.log($scope.newColumn);
                         BoardService.createColumn($scope.newColumn)
@@ -68,7 +70,7 @@
                 BoardService.deleteColumn(column.id);
 
                 $scope.allCols = Underscore.without($scope.allCols, column);
-                $scope.rootCols = $scope.getRootCols($scope.allCols);
+                $scope.rootCols = $scope.getSubCols(null);
             };
 
             $scope.createCard = function () {
@@ -102,23 +104,54 @@
                     });
             };
 
-            $scope.proccessSavedColumn = function (column) {
-                if (column.parent_column === null) {
-                    $scope.rootCols.push(column);
+            $scope.proccessSavedColumn = function (col) {
+                if (col.parent_column === null) {
+                    $scope.rootCols.push(col);
                 }
-                $scope.allCols.push(column);
+                $scope.allCols.push(col);
+            };
+
+            $scope.calculateColLocation = function (col) {
+                var tmpCols;
+                if (col.left === undefined && col.right === undefined) {
+                    return 100;
+                }
+                if (col.right === undefined) {
+                    tmpCols = $scope.getSubColsRightOf(col.parent_column, col.left);
+                    if (tmpCols && tmpCols.length > 0) {
+                        return (col.left + tmpCols[0].location) / 2;
+                    }
+                    return col.left + 1;
+                }
+                if (col.left === undefined) {
+                    tmpCols = $scope.getSubColsLeftOf(col.parent_column, col.right);
+                    if (tmpCols && tmpCols.length > 0) {
+                        return (col.right + tmpCols[0].location) / 2;
+                    }
+                    return col.right - 1;
+                }
+                return (col.left + col.right) / 2;
+            };
+
+            $scope.getSubColsLeftOf = function (parentColId, rightColLocation) {
+                var result = Underscore.filter($scope.allCols, function (col) {
+                    return col.parent_column === parentColId && (rightColLocation === null || col.location < rightColLocation);
+                });
+                return Underscore.sortBy(result, 'location');
+            };
+
+            $scope.getSubColsRightOf = function (parentColId, leftColLocation) {
+                var result = Underscore.filter($scope.allCols, function (col) {
+                    return col.parent_column === parentColId && (leftColLocation === null || col.location > leftColLocation);
+                });
+                return Underscore.sortBy(result, 'location');
             };
 
             $scope.getSubCols = function (parentColId) {
-                return Underscore.filter($scope.allCols, function (col) {
+                var result = Underscore.filter($scope.allCols, function (col) {
                     return col.parent_column === parentColId;
                 });
-            };
-
-            $scope.getRootCols = function (allCols) {
-                return Underscore.filter(allCols, function (col) {
-                    return col.parent_column === null;
-                });
+                return Underscore.sortBy(result, 'location');
             };
 
             $scope.getMaxColDepth = function (cols) {
@@ -133,5 +166,40 @@
                 }
                 return maxDepth;
             };
+
+            $scope.getMaxSubColsLen = function (cols) {
+                var maxSubColsLen = cols.length,
+                    tmp,
+                    i;
+                for (i = 0; i < cols.length; i += 1) {
+                    tmp = $scope.getMaxSubColsLen($scope.getSubCols(cols[i].id));
+                    if (tmp > maxSubColsLen) {
+                        maxSubColsLen = tmp;
+                    }
+                }
+                return maxSubColsLen;
+            };
+
+            $scope.getSubColsWidth = function (cols, depth) {
+                var kumWidth = 0,
+                    i,
+                    col,
+                    subCols;
+
+                for (i = 0; i < cols.length; i += 1) {
+                    col = cols[i];
+                    subCols = $scope.getSubCols(col.id);
+
+                    col.style = {
+                        'width': $scope.getSubColsWidth(subCols, depth + 1),
+                        'left': kumWidth,
+                        'min-height': 800 - (depth * 40)
+                    };
+                    kumWidth += col.style.width;
+                }
+
+                return (kumWidth === 0) ? 200 : kumWidth;
+            };
+
         }]);
 }());
