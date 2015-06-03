@@ -1,8 +1,22 @@
+@board-col-line-heigth: 500px;
+
 .panel-column {
     display: inline-block !important;
-    min-height: 500px;
+    position: absolute;
+    overflow: auto;
+
+    .panel-body {
+        padding: 0;
+    }
+}
+.panel-root-column {
+    min-height: @board-col-line-heigth;
 }
 .panel-subcolumn {
-    display: inline-block !important;
-    min-height: 300px;
+    height: 100%;
+}
+
+.board-col-line {
+    display: inline-block;
+    margin-bottom: @board-col-line-heigth; // Done to move the objects after this div under it
 }

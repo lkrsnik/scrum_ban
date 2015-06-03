@@ -3,16 +3,17 @@
         <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
             <span class="glyphicon glyphicon-plus"></span>
         </span>
-    </div>
-     <div class="col-md-12 board-cmd-line">
         <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
             <span class="glyphicon glyphicon-plus"></span>
         </span>
     </div>
     <div class="col-md-12 board-col-line">
 
-        <div class="panel panel-default panel-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
-            ng-style="{'width': (100/rootCols.length - 2) + '%'}"></div>
+        <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
+            ng-style="{
+                        'width': (100/rootCols.length) + '%',
+                        'left': $index*100/rootCols.length + '%'
+                    }"></div>
         <!--<div class="col" ng-repeat="rCol in rootCols">
             <h1>{{rCol.name}}</h1>
             <div class="sub-col" ng-repeat="col in getSubCols(rCol.id)">
@@ -23,7 +24,7 @@
     </div>
 </div>
 
-{{board}} <br />
+<p>{{board}}</p> <br />
 {{boards}} <br />
 {{allCols}} <br />
 {{rootCols}}
