@@ -1,11 +1,13 @@
 <div class="row board-container">
-    <div class="col-md-12 board-cmd-line">
-        <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
-            <span class="glyphicon glyphicon-plus"></span>
-        </span>
-        <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
-            <span class="glyphicon glyphicon-plus"></span>
-        </span>
+    <div class="col-md-12 panel panel-default board-cmd-line">
+        <div class="panel-body">
+            <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
+                <span class="glyphicon glyphicon-plus"></span> Column
+            </span>
+            <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
+                <span class="glyphicon glyphicon-plus"></span> Card
+            </span>
+        </div>
     </div>
     <div class="col-md-12 board-col-line" ng-style="{'width': getColsWidth(rootCols, 0)}">
 
