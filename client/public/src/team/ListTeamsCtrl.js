@@ -92,12 +92,6 @@
                                     scteams[i].teamMembers = teamMembers;
                                 }
                                 $scope.teams = scteams;
-                                // if the user is not admin, show only those teams, which he is KanbanMaster in
-                                if ($scope.session.username !== "admin") {
-                                    Underscore.filter($scope.teams, function (team) {
-                                        return team.scrumMaster.id === $scope.session.userid;
-                                    });
-                                }
                                 console.log($scope.teams);
                             });
                     });

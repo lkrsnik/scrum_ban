@@ -80,6 +80,22 @@
                             console.log('Error in updating role team: ' + status);
                             console.log(error);
                         });
+                },
+                deleteUserTeam: function (userteam) {
+                    console.log(userteam);
+                    return $http.delete(API_URL + 'user-teams/' + userteam.id + '/')
+                        .error(function (error, status) {
+                            console.log('Error in deleting user team: ' + status);
+                            console.log(error);
+                        });
+                },
+                deleteRoleTeam: function (roleteam) {
+                    console.log(roleteam);
+                    return $http.delete(API_URL + 'role-teams/' + roleteam.id + '/')
+                        .error(function (error, status) {
+                            console.log('Error in deleting role team: ' + status);
+                            console.log(error);
+                        });
                 }
 
             };

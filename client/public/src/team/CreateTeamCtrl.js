@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('CreateTeamCtrl',
-        ['$scope', 'TeamService', 'UserService', function ($scope, TeamService, UserService) {
+        ['$scope', '$q', 'TeamService', 'UserService', '$location', function ($scope, $q, TeamService, UserService, $location) {
 
             if (!$scope.session) {
                 $scope.updateSessionView()
@@ -81,6 +81,7 @@
                                             createSecondUserTeamPromise.then(function () {
                                                 createRoleTeamPromise.then(function () {
                                                     var i = 0,
+                                                        created = [],
                                                         newTM,
                                                         createUserTeamSuccessFun = function (data) {
                                                             newRoleTeamTeamMember =
@@ -88,7 +89,7 @@
                                                                     "user_team": data.id,
                                                                     "role": $scope.teamMemberR[0].id
                                                                 };
-                                                            TeamService.createRoleTeam(newRoleTeamTeamMember);
+                                                            created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
                                                         };
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
@@ -116,9 +117,12 @@
                                                                         "role": $scope.teamMemberR[0].id
                                                                     };
                                                             }
-                                                            TeamService.createRoleTeam(newRoleTeamTeamMember);
+                                                            created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
                                                         }
                                                     }
+                                                    $q.all(created).then(function () {
+                                                        $location.path('/teams/');
+                                                    });
                                                 });
                                             });
                                         });
@@ -130,6 +134,7 @@
             $scope.getGroups = function () {
                 UserService.getUsers()
                     .success(function (data) {
+                        data = Underscore.filter(data, function (d) {return d.is_active; });
                         $scope.scrumMasters = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ScrumMaster'); });
                         $scope.teamMembers = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'TeamMember'); });
                         $scope.productOwners = Underscore.filter(data, function (d) {return Underscore.contains(d.groups, 'ProductOwner'); });
