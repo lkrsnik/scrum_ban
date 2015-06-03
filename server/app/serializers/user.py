@@ -34,6 +34,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        instance.set_password(validated_data.get('password', instance.password))
+        instance.set_password(validated_data.get('password',
+                                                 instance.password))
         instance.save()
         return instance

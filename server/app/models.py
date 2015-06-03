@@ -55,7 +55,8 @@ class Card(models.Model):
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
     completion_date = models.DateTimeField(default=datetime.now, null=True)
-    development_start_date = models.DateTimeField(default=datetime.now, null=True)
+    development_start_date = models.DateTimeField(default=datetime.now,
+                                                  null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)
