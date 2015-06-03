@@ -30,7 +30,6 @@
 
             BoardService.getColumns($routeParams.boardId)
                 .success(function (data) {
-                    console.log(data);
                     $scope.allCols = data;
                     $scope.rootCols = $scope.getSubCols(null);
                     $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);
@@ -178,7 +177,10 @@
                 return maxSubColsLen;
             };
 
-            $scope.getSubColsWidth = function (cols, depth) {
+            // Function return the kumulative width of given columns and while calculating it
+            // sets the style settings for every column
+            // When called with $scope.rootCols it will return board width
+            $scope.getColsWidth = function (cols, depth) {
                 var kumWidth = 0,
                     i,
                     col,
@@ -189,13 +191,14 @@
                     subCols = $scope.getSubCols(col.id);
 
                     col.style = {
-                        'width': $scope.getSubColsWidth(subCols, depth + 1),
+                        'width': $scope.getColsWidth(subCols, depth + 1),
                         'left': kumWidth,
-                        'min-height': 800 - (depth * 40)
+                        'min-height': 800 - (depth * 40) // Offset the column height according to column depth
                     };
                     kumWidth += col.style.width;
                 }
 
+                // This here we specify width for single column
                 return (kumWidth === 0) ? 200 : kumWidth;
             };
 
