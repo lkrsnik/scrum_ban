@@ -17,13 +17,12 @@
                 createColumn: function (column) {
                     return $http.post(API_URL + 'columns/', column);
                 },
+                deleteColumn: function (columnId) {
+                    return $http.delete(API_URL + 'columns/' + columnId + '/');
+                },
                 getColumns: function () {
                     return $http.get(API_URL + 'columns/');
-                },
-                createCard: function (card) {
-                    return $http.post(API_URL + 'cards/', card);
-                }
-                /*,
+                }/*,
                 getBoard: function (boardId) {
                     return $http.get(API_URL + 'boards/' + boardId + '/');
                 },*/

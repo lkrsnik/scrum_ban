@@ -7,7 +7,7 @@
             <span class="glyphicon glyphicon-plus"></span>
         </span>
     </div>
-    <div class="col-md-12 board-col-line">
+    <div class="col-md-12 board-col-line" ng-style="{'width': getMaxColDepth(rootCols) * rootCols.length * 200}">
 
         <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" ng-include="'/static/html/board/column.html'"
             ng-style="{
@@ -28,3 +28,4 @@
 {{boards}} <br />
 {{allCols}} <br />
 {{rootCols}}
+<p>{{maxColDepth}}</p>

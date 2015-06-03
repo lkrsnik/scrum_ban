@@ -1,5 +1,6 @@
 {
   "globalstrict": true,
+  "plusplus": false,
   "globals": {
     "angular": false,
     "describe": false,
