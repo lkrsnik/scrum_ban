@@ -72,18 +72,20 @@
 
             $scope.createCard = function () {
                 var type;
+                $scope.type;
+                $scope.allProjects = null;
                 if ($scope.session && Underscore.contains($scope.session.roles, 'ProductOwner')) {
-                    type = 'newFunctionality';
+                    $scope.type = 'newFunctionality';
                 }
                 if ($scope.session && Underscore.contains($scope.session.roles, 'ScrumMaster')) {
-                    type = 'silverBullet';
+                    $scope.type = 'silverBullet';
                 }
                 $scope.newCard = {
                     completion_date: null,
                     development_start_date: null,
                     is_active: true,
                     user: null,
-                    type: type
+                    type: $scope.type
                 };
                 ngDialog.openConfirm({
                     template: '/static/html/board/createEditCard.html',

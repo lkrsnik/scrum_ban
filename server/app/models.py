@@ -29,7 +29,7 @@ class Project(models.Model):
     client = models.CharField(max_length=500, default="")
     start_date = models.DateTimeField(default=datetime.now)
     end_date = models.DateTimeField(default=datetime.now)
-    board = models.ForeignKey(Board)
+    board = models.ForeignKey(Board, null=True)
     team = models.ForeignKey(Team)
 
 
@@ -55,8 +55,7 @@ class Card(models.Model):
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
     completion_date = models.DateTimeField(default=datetime.now, null=True)
-    development_start_date = models.DateTimeField(default=datetime.now,
-                                                  null=True)
+    development_start_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)
