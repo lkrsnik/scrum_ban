@@ -33,10 +33,8 @@ class ColumnViewSet(viewsets.ModelViewSet):
     queryset = Column.objects.all()
 
     def list(self, request, pk=None):
-        userTeamQS = UserTeam.objects.filter(user=request.user)
-        projectQS = Project.objects.filter(team__in=userTeamQS.values('team'))
-        boardQS = Board.objects.filter(id__in=projectQS.values('board'))
-        serializer = self.serializer_class(boardQS, many=True)
+        columnQS = Column.objects.filter(board=request.QUERY_PARAMS['boardId'])
+        serializer = self.serializer_class(columnQS, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

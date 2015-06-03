@@ -28,8 +28,9 @@
                     $scope.boards = data;
                 });
 
-            BoardService.getColumns()
+            BoardService.getColumns($routeParams.boardId)
                 .success(function (data) {
+                    console.log(data);
                     $scope.allCols = data;
                     $scope.rootCols = $scope.getRootCols($scope.allCols);
                     $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);
