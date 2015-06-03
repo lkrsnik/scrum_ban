@@ -111,114 +111,145 @@
 
             $scope.editTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
-                TeamService.updateTeam(team)
-                    .success(function () {
-                        var i = 0,
-                            completedRT = [],
-                            completedUT = [];
-                        for (i = 0; i < $scope.rTeams.length; i = i + 1) {
-                            completedRT.push(TeamService.deleteRoleTeam($scope.rTeams[i]));
-                        }
-                        $q.all(completedRT).then(function () {
-                            for (i = 0; i < $scope.uTeams.length; i = i + 1) {
-                                completedUT.push(TeamService.deleteUserTeam($scope.uTeams[i]));
+                $scope.allPreviousUsers = Underscore.union($scope.previousSelectedTM, [$scope.previousSelectedSM], [$scope.previousSelectedPO]);
+                console.log($scope.allPreviousUsers);
+                $scope.allNewUsers = Underscore.union([productOwner], [scrumMaster], members);
+                console.log($scope.allNewUsers);
+                $scope.newlyAdded = Underscore.difference($scope.allNewUsers, $scope.allPreviousUsers);
+                $scope.deactivated = Underscore.difference($scope.allPreviousUsers, $scope.allNewUsers);
+                console.log($scope.newlyAdded);
+                console.log($scope.deactivated);
+                var cnt = 0,
+                    completedAct = [],
+                    newAct = {},
+                    oldAct = {};
+                for (cnt = 0; cnt < $scope.newlyAdded.length; cnt = cnt + 1) {
+                    newAct =
+                        {
+                            "team": team.id,
+                            "user": $scope.newlyAdded[cnt].id
+                        };
+                    completedAct.push(TeamService.createUserTeamActivity(newAct));
+                }
+                for (cnt = 0; cnt < $scope.deactivated.length; cnt = cnt + 1) {
+                    oldAct =
+                        {
+                            "team": team.id,
+                            "user": $scope.deactivated[cnt].id,
+                            "activated": false
+                        };
+                    completedAct.push(TeamService.createUserTeamActivity(oldAct));
+                }
+                $q.all(completedAct).then(function () {
+                    TeamService.updateTeam(team)
+                        .success(function () {
+                            var i = 0,
+                                completedRT = [],
+                                completedUT = [];
+                            for (i = 0; i < $scope.rTeams.length; i = i + 1) {
+                                completedRT.push(TeamService.deleteRoleTeam($scope.rTeams[i]));
                             }
-                            $q.all(completedUT).then(function () {
-                                var newPO =
-                                    {
-                                        "team": team.id,
-                                        "user": productOwner.id,
-                                        "is_active": true
-                                    },
-                                    newSM =
-                                    {
-                                        "team": team.id,
-                                        "user": scrumMaster.id,
-                                        "is_active": true
-                                    };
-                                TeamService.createUserTeam(newPO)
-                                    .success(function (data) {
-                                        newRoleTeam =
-                                            {
-                                                "user_team": data.id,
-                                                "role": $scope.productOwnerR[0].id
-                                            };
-                                        $scope.userteamPO = data;
-                                        createFirstRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam)
-                                            .success(function (data) {
-                                                if (scrumMaster === productOwner) {
-                                                    newRoleTeam =
-                                                        {
-                                                            "user_team": data.id,
-                                                            "role": $scope.scrumMasterR[0].id
-                                                        };
-                                                    $scope.userteamSM = data;
-                                                    createSecondUserTeamPromise = createFirstRoleTeamPromise;
-                                                    createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
+                            $q.all(completedRT).then(function () {
+                                for (i = 0; i < $scope.uTeams.length; i = i + 1) {
+                                    completedUT.push(TeamService.deleteUserTeam($scope.uTeams[i]));
+                                }
+                                $q.all(completedUT).then(function () {
+                                    var newPO =
+                                        {
+                                            "team": team.id,
+                                            "user": productOwner.id,
+                                            "is_active": true
+                                        },
+                                        newSM =
+                                        {
+                                            "team": team.id,
+                                            "user": scrumMaster.id,
+                                            "is_active": true
+                                        };
+                                    TeamService.createUserTeam(newPO)
+                                        .success(function (data) {
+                                            newRoleTeam =
+                                                {
+                                                    "user_team": data.id,
+                                                    "role": $scope.productOwnerR[0].id
+                                                };
+                                            $scope.userteamPO = data;
+                                            createFirstRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam)
+                                                .success(function (data) {
+                                                    if (scrumMaster === productOwner) {
+                                                        newRoleTeam =
+                                                            {
+                                                                "user_team": data.id,
+                                                                "role": $scope.scrumMasterR[0].id
+                                                            };
+                                                        $scope.userteamSM = data;
+                                                        createSecondUserTeamPromise = createFirstRoleTeamPromise;
+                                                        createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
 
-                                                } else {
-                                                    createSecondUserTeamPromise = TeamService.createUserTeam(newSM)
-                                                        .success(function (data) {
-                                                            newRoleTeam =
-                                                                {
-                                                                    "user_team": data.id,
-                                                                    "role": $scope.scrumMasterR[0].id
-                                                                };
-                                                            $scope.userteamSM = data;
-                                                            createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
-                                                        });
-                                                }
-                                                createFirstRoleTeamPromise.then(function () {
-                                                    createSecondUserTeamPromise.then(function () {
-                                                        createRoleTeamPromise.then(function () {
-                                                            var newTM,
-                                                                created = [],
-                                                                createUserTeamSuccessFun = function (data) {
-                                                                    newRoleTeamTeamMember =
-                                                                        {
-                                                                            "user_team": data.id,
-                                                                            "role": $scope.teamMemberR[0].id
-                                                                        };
-                                                                    created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
-                                                                };
-                                                            for (i = 0; i < members.length; i = i + 1) {
-                                                                if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                                    newTM =
-                                                                        {
-                                                                            "team": team.id,
-                                                                            "user": members[i].id,
-                                                                            "is_active": true
-                                                                        };
-                                                                    TeamService.createUserTeam(newTM)
-                                                                        .success(createUserTeamSuccessFun);
-                                                                } else {
-                                                                    if (members[i] === scrumMaster) {
+                                                    } else {
+                                                        createSecondUserTeamPromise = TeamService.createUserTeam(newSM)
+                                                            .success(function (data) {
+                                                                newRoleTeam =
+                                                                    {
+                                                                        "user_team": data.id,
+                                                                        "role": $scope.scrumMasterR[0].id
+                                                                    };
+                                                                $scope.userteamSM = data;
+                                                                createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
+                                                            });
+                                                    }
+                                                    createFirstRoleTeamPromise.then(function () {
+                                                        createSecondUserTeamPromise.then(function () {
+                                                            createRoleTeamPromise.then(function () {
+                                                                var newTM,
+                                                                    created = [],
+                                                                    createUserTeamSuccessFun = function (data) {
                                                                         newRoleTeamTeamMember =
                                                                             {
-                                                                                "user_team": $scope.userteamSM.id,
+                                                                                "user_team": data.id,
                                                                                 "role": $scope.teamMemberR[0].id
                                                                             };
+                                                                        created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
+                                                                    };
+                                                                for (i = 0; i < members.length; i = i + 1) {
+                                                                    if (members[i] !== scrumMaster && members[i] !== productOwner) {
+                                                                        newTM =
+                                                                            {
+                                                                                "team": team.id,
+                                                                                "user": members[i].id,
+                                                                                "is_active": true
+                                                                            };
+                                                                        TeamService.createUserTeam(newTM)
+                                                                            .success(createUserTeamSuccessFun);
                                                                     } else {
-                                                                        newRoleTeamTeamMember =
-                                                                            {
-                                                                                "user_team": $scope.userteamPO.id,
-                                                                                "role": $scope.teamMemberR[0].id
-                                                                            };
+                                                                        if (members[i] === scrumMaster) {
+                                                                            newRoleTeamTeamMember =
+                                                                                {
+                                                                                    "user_team": $scope.userteamSM.id,
+                                                                                    "role": $scope.teamMemberR[0].id
+                                                                                };
+                                                                        } else {
+                                                                            newRoleTeamTeamMember =
+                                                                                {
+                                                                                    "user_team": $scope.userteamPO.id,
+                                                                                    "role": $scope.teamMemberR[0].id
+                                                                                };
+                                                                        }
+                                                                        created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
                                                                     }
-                                                                    created.push(TeamService.createRoleTeam(newRoleTeamTeamMember));
                                                                 }
-                                                            }
-                                                            $q.all(created).then(function () {
-                                                                $location.path('/teams/');
+                                                                $q.all(created).then(function () {
+                                                                    $location.path('/teams/');
+                                                                });
                                                             });
                                                         });
                                                     });
                                                 });
-                                            });
-                                    });
+                                        });
+                                });
                             });
                         });
-                    });
+                });
             };
         }]);
 }());

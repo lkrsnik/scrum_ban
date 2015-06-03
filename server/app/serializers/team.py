@@ -24,5 +24,5 @@ class RoleTeamSerializer(serializers.ModelSerializer):
 class UserTeamActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserTeamActivity
-        fields = ('id', 'user_team', 'date', 'activated')
+        fields = ('id', 'user', 'team', 'date', 'activated')
         read_only_fields = ('id', )

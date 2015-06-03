@@ -99,24 +99,26 @@
 
             $scope.getDetails = function (team) {
                 console.log(team);
-                TeamService.getUserTeams()
-                    .success(function (data) {
-                        $scope.allUsers = Underscore.where(data, {team: team.id});
-                        UserService.getUsers()
-                            .success(function (userdata) {
-                                TeamService.getUserTeamActivity()
-                                    .success(function (data) {
-                                        var i;
-                                        for (i = 0; i < $scope.allUsers.length; i += 1) {
-                                            $scope.allUsers[i].activities = Underscore.where(data, {user_team: $scope.allUsers[i].id});
-                                            $scope.allUsers[i].user = Underscore.where(userdata, {id: $scope.allUsers[i].user});
-                                        }
-                                        ngDialog.openConfirm({
-                                            template: '/static/html/team/details.html',
-                                            className: 'ngdialog-theme-plain',
-                                            scope: $scope
-                                        });
-                                    });
+                UserService.getUsers()
+                    .success(function (userdata) {
+                        TeamService.getUserTeamActivity()
+                            .success(function (data) {
+                                $scope.allUsers = Underscore.where(data, {team: team.id});
+                                var i;
+                                for (i = 0; i < $scope.allUsers.length; i += 1) {
+                                    $scope.allUsers[i].activities = Underscore.where(data, {user: $scope.allUsers[i].user});
+                                    $scope.allUsers[i].user = Underscore.find(userdata, {id: $scope.allUsers[i].user});
+                                    $scope.allUsers[i].fullname = $scope.allUsers[i].user.first_name + " " + $scope.allUsers[i].user.last_name;
+                                }
+                                $scope.allUsers = Underscore.uniq($scope.allUsers, function (u) {
+                                    return u.user;
+                                });
+                                console.log($scope.allUsers);
+                                ngDialog.openConfirm({
+                                    template: '/static/html/team/details.html',
+                                    className: 'ngdialog-theme-plain',
+                                    scope: $scope
+                                });
                             });
                     });
             };

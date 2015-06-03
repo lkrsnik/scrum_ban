@@ -49,7 +49,8 @@
                             .success(function (data) {
                                 var newAct =
                                     {
-                                        "user_team": data.id
+                                        "user": data.user,
+                                        "team": data.team
                                     };
                                 TeamService.createUserTeamActivity(newAct);
                                 newRoleTeam =
@@ -75,7 +76,8 @@
                                                 .success(function (data) {
                                                     newAct =
                                                         {
-                                                            "user_team": data.id
+                                                            "user": data.user,
+                                                            "team": data.team
                                                         };
                                                     TeamService.createUserTeamActivity(newAct);
                                                     newRoleTeam =
@@ -96,7 +98,8 @@
                                                         createUserTeamSuccessFun = function (data) {
                                                             newAct =
                                                                 {
-                                                                    "user_team": data.id
+                                                                    "user": data.user,
+                                                                    "team": data.team
                                                                 };
                                                             TeamService.createUserTeamActivity(newAct);
                                                             newRoleTeamTeamMember =

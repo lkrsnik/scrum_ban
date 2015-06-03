@@ -19,7 +19,8 @@ class UserTeam(models.Model):
     is_active = models.BooleanField(default=True)
 
 class UserTeamActivity(models.Model):
-    user_team = models.ForeignKey(UserTeam)
+    user = models.ForeignKey(User)
+    team = models.ForeignKey(Team)
     date = models.DateTimeField(default=datetime.now)
     activated = models.BooleanField(default=True)
 
