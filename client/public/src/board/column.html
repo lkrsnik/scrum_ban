@@ -7,10 +7,10 @@
 
     
     <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects" class="project-row" 
-        ng-style="getProjectStyle(col, $first, $last)"></div>
+        ng-style="getProjectStyle(col, $first, $last)">
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)">
 
-          <div class="panel panel-info">
+            <div class="panel panel-info">
                 <div class="panel-heading">{{card.name}}</div>
                 <div class="panel-body">
                    <p> {{card.content}}</p>

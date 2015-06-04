@@ -45,6 +45,8 @@
                 };
 
                 $scope.getColumnProjectCards = function (projectId, columnId) {
+                    console.log(projectId);
+                    console.log(columnId);
                     return Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
 
                 };
