@@ -16,11 +16,16 @@
                     $scope.redirectNonAuthenticated('/');
                 }
 
+                $scope.COL_DIM = COL_DIM;
                 $scope.rootCols = [];
                 $scope.allCols = [];
 
+                $scope.board = {
+                    projects: []
+                };
+
                 $scope.getProjects = function () {
-                    ProjectService.getProjects()
+                    $scope.promises.projectsPromise = ProjectService.getProjects()
                         .success(function (data) {
                             $scope.allProjects = data;
                             $scope.nullProjects = Underscore.filter(data, function (proj) {
@@ -30,15 +35,13 @@
                 };
 
                 $scope.getBoardProjects = function (boardId) {
-                    var tmp;
-                    if (!$scope.allProjects) {
-                        $scope.getProjects();
-                    }
-
-                    tmp = Underscore.filter($scope.allProjects, function (proj) {
-                        return proj.board === boardId;
-                    });
-                    return (tmp === undefined) ? [] : tmp;
+                    $scope.promises.projectsPromise
+                        .then(function () {
+                            var tmp = Underscore.filter($scope.allProjects, function (proj) {
+                                return proj.board === boardId;
+                            });
+                            $scope.board.projects = (tmp === undefined) ? [] : tmp;
+                        });
                 };
 
                 $scope.getProjects();
@@ -46,7 +49,7 @@
                 BoardService.getBoard($routeParams.boardId)
                     .success(function (data) {
                         $scope.board = data;
-                        $scope.board.projects = $scope.getBoardProjects($scope.board.id);
+                        $scope.getBoardProjects($scope.board.id);
                     });
 
                 BoardService.getBoards()
@@ -247,7 +250,10 @@
                     var kumWidth = 0,
                         i,
                         col,
-                        subCols;
+                        subCols,
+                        numProjects = $scope.board.projects ? $scope.board.projects.length : 1;
+
+                    numProjects = (numProjects < 1) ? 1 : numProjects;
 
                     for (i = 0; i < cols.length; i += 1) {
                         col = cols[i];
@@ -256,13 +262,25 @@
                         col.style = {
                             'width': $scope.getColsWidth(subCols, depth + 1),
                             'left': kumWidth,
-                            'min-height': COL_DIM.height - (depth * COL_DIM.headerHeight) // Offset the column height according to column depth
+                            'min-height': (numProjects * COL_DIM.height) - (depth * COL_DIM.headerHeight) // Offset the column height according to column depth
                         };
+
+                        col.isLeafCol = col.style.width === COL_DIM.width; // If it has the same width as basic column it's a leaf column
                         kumWidth += col.style.width;
                     }
 
                     // This here we specify width for single column
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
+                };
+
+                $scope.getBoardStyle = function () {
+                    var boardWidth = $scope.getColsWidth($scope.rootCols, 0) + 'px',
+                        boardHeight = ($scope.rootCols.length > 0 ? $scope.rootCols[0].style['min-height'] : COL_DIM.height) + 20 + 'px';
+
+                    return {
+                        'width': boardWidth,
+                        'margin-bottom': boardHeight
+                    };
                 };
 
             }]);

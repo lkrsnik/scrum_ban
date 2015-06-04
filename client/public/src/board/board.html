@@ -12,7 +12,8 @@
             </span>
         </div>
     </div>
-    <div class="col-md-12 board-col-line" ng-style="{'width': getColsWidth(rootCols, 0)}">
+    <div class="col-md-12 board-col-line" 
+        ng-style="getBoardStyle()">
 
         <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" 
             ng-include="'/static/html/board/column.html'"

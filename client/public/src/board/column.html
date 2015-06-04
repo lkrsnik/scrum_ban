@@ -1,9 +1,12 @@
 <div class="panel-heading">
     {{col.name}}
-    <span ng-show="getSubCols(col.id).length == 0" ng-click="deleteColumn(col)"  class="glyphicon glyphicon-trash handcursor"></span>
+    <span ng-show="col.isLeafCol" ng-click="deleteColumn(col)"  
+        class="glyphicon glyphicon-trash handcursor"></span>
 </div>
-<div class="panel-body" ng-repeat="proj in getProjectsIfLeafColumn(col.id, board)">
-    {{proj}}
+<div class="panel-body column-body">
+    
+    <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects"></div>
+
     <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
 </div>
