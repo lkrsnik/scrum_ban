@@ -206,10 +206,8 @@
                 };
 
                 $scope.proccessSavedColumn = function (col) {
-                    if (col.parent_column === null) {
-                        $scope.rootCols.push(col);
-                    }
                     $scope.allCols.push(col);
+                    $scope.rootCols = $scope.getSubCols(null);
                 };
 
                 $scope.calculateColLocation = function (col) {
