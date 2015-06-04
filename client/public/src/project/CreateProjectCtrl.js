@@ -5,7 +5,7 @@
         ['$scope', '$filter', 'ProjectService', 'TeamService', '$location', function ($scope, $filter, ProjectService, TeamService, $location) {
 
             if (!$scope.session) {
-                $scope.updateSessionView()
+                $scope.promises.sessionPromise
                     .then(function () {
                         $scope.redirectNonScrumMaster('/');
                     });
@@ -23,7 +23,7 @@
             $scope.today = $filter('date')(new Date(), 'yyyy-MM-dd');
 
             $scope.validateStartDate = function () {
-                if ($scope.project.start_date <= $scope.today) {
+                if ($filter('date')($scope.project.start_date, 'yyyy-MM-ddTHH:mm') <= $scope.today) {
                     $scope.createProjectForm.start_date.$setValidity('startBeforeToday', true);
                 } else {
                     $scope.createProjectForm.start_date.$setValidity('startBeforeToday', false);
@@ -32,7 +32,9 @@
             };
 
             $scope.validateEndDate = function () {
-                if ($scope.project.end_date < $scope.project.start_date || $scope.project.end_date < $scope.today) {
+                var endDate = $filter('date')($scope.project.end_date, 'yyyy-MM-ddTHH:mm'),
+                    startDate = $filter('date')($scope.project.start_date, 'yyyy-MM-ddTHH:mm');
+                if (endDate < startDate || endDate < $scope.today) {
                     $scope.createProjectForm.end_date.$setValidity('finishBeforeStart', false);
                 } else {
                     $scope.createProjectForm.end_date.$setValidity('finishBeforeStart', true);

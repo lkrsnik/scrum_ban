@@ -5,7 +5,7 @@
         ['$scope', 'TeamService', 'UserService', 'ngDialog', function ($scope, TeamService, UserService, ngDialog) {
 
             if (!$scope.session) {
-                $scope.updateSessionView()
+                $scope.promises.sessionPromise
                     .then(function () {
                         $scope.redirectNonScrumMaster('/');
                     });

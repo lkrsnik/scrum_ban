@@ -16,8 +16,8 @@
         <td> {{ project.code }} </td>
         <td> {{ project.name }} </td>
         <td> {{ project.client }} </td>
-        <td> {{ project.start_date | date: 'yyyy-MM-dd' }} </td>
-        <td> {{ project.end_date | date: 'yyyy-MM-dd' }} </td>
+        <td> {{ project.start_date }} </td>
+        <td> {{ project.end_date }} </td>
         <td> {{ project.team_name }} </td>
         <td> 
             <a ng-href="#/projects/{{project.id}}/edit" class="btn btn-primary">

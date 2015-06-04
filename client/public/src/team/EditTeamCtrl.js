@@ -5,7 +5,7 @@
         ['$scope', '$q', 'TeamService', 'UserService', '$routeParams',  '$location', function ($scope, $q, TeamService, UserService, $routeParams, $location) {
 
             if (!$scope.session) {
-                $scope.updateSessionView()
+                $scope.promises.sessionPromise
                     .then(function () {
                         $scope.redirectNonScrumMaster('/');
                     });
