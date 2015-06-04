@@ -38,7 +38,6 @@
                     .success(function (data) {
                         $scope.allCols = data;
                         $scope.rootCols = $scope.getSubCols(null);
-                        $scope.maxColDepth = $scope.getMaxColDepth($scope.rootCols);
                     });
 
                 UserService.getUsers()
