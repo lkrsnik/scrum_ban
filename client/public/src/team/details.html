@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Details about users</div>
+  <div class="panel-body">
+      <input type="search" class="form-group" ng-model="q" placeholder="filter users..." aria-label="filter users" />
+      <ul class="example-animate-container">
+        <li class="animate-repeat" ng-repeat="user in filtered = (allUsers | filter: {'fullname': q})">
+             <h3>{{ user.fullname }}</h3>
+             <p ng-if="user.user.is_active"> status: active </p>
+             <p ng-if="!user.user.is_active"> status: non active </p>
+             <h4> HISTORY: </h4>
+             <ul>
+                <li ng-repeat="act in user.activities">
+                    <p ng-if="act.activated"> <strong>activated:</strong> {{act.date | date: 'yyyy-MM-dd'}}</p>
+                    <p ng-if="!act.activated"> <strong>deactivated:</strong> {{act.date | date: 'yyyy-MM-dd'}}</p>                 
+                </li>
+             </ul>
+        </li>
+        <li class="animate-repeat" ng-if="filtered.length == 0">
+          <strong>No results found...</strong>
+        </li>
+      </ul>
+  </div>
+</div>

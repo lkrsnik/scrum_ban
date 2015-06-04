@@ -18,6 +18,11 @@ class UserTeam(models.Model):
     team = models.ForeignKey(Team)
     is_active = models.BooleanField(default=True)
 
+class UserTeamActivity(models.Model):
+    user = models.ForeignKey(User)
+    team = models.ForeignKey(Team)
+    date = models.DateTimeField(default=datetime.now)
+    activated = models.BooleanField(default=True)
 
 class Board(models.Model):
     name = models.CharField(max_length=100, default="")
@@ -27,10 +32,11 @@ class Project(models.Model):
     code = models.IntegerField()
     name = models.CharField(max_length=100, default="")
     client = models.CharField(max_length=500, default="")
-    start_date = models.DateTimeField(default=datetime.now)
-    end_date = models.DateTimeField(default=datetime.now)
-    board = models.ForeignKey(Board, null=True)
+    start_date = models.fields.DateTimeField(default=datetime.now)
+    end_date = models.fields.DateTimeField(default=datetime.now)
+    board = models.ForeignKey(Board, blank=True, null=True)
     team = models.ForeignKey(Team)
+    is_active = models.BooleanField(default=True)
 
 
 class Column(models.Model):
@@ -55,7 +61,7 @@ class Card(models.Model):
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
     completion_date = models.DateTimeField(default=datetime.now, null=True)
-    development_start_date = models.DateTimeField(null=True)
+    development_start_date = models.DateTimeField(default=datetime.now, null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)

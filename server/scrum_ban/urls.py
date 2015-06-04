@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from rest_framework import routers
-from app.views import user, auth, board
+from app.views import user, auth, team, project, board
 from django.contrib import admin
 
 router = routers.DefaultRouter()
@@ -9,8 +9,13 @@ router.register(r'users', user.UserViewSet)
 router.register(r'groups', user.GroupViewSet)
 router.register(r'boards', board.BoardViewSet)
 router.register(r'columns', board.ColumnViewSet)
-router.register(r'cards', board.ColumnViewSet)
+router.register(r'cards', board.CardViewSet)
 router.register(r'session', auth.SessionViewSet, 'session')
+router.register(r'teams', team.TeamViewSet)
+router.register(r'user-teams', team.UserTeamViewSet)
+router.register(r'role-teams', team.RoleTeamViewSet)
+router.register(r'projects', project.ProjectViewSet)
+router.register(r'user-team-activities', team.UserTeamActivityViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

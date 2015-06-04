@@ -14,6 +14,7 @@
                             thisSession.authenticated = (data.authenticated !== false);
                             thisSession.username = data.username;
                             thisSession.roles = data.groups;
+                            thisSession.userid = data.id;
                         })
                         .error(function () {
                             thisSession.authenticated = false;
