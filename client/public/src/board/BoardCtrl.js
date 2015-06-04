@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'TeamService',
-            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService, TeamService) {
+        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService',
+            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService) {
 
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
@@ -20,6 +20,12 @@
                 $scope.rootCols = [];
                 $scope.allCols = [];
                 $scope.columnCards = [];
+                $scope.yourProjects = [];
+                $scope.yourOwnedSMProjects = [];
+                $scope.yourOwnedPOProjects = [];
+                $scope.userOwnsProjects = false;
+                $scope.isSM = false;
+                $scope.isPO = false;
                 $scope.board = {
                     projects: []
                 };
@@ -45,8 +51,6 @@
                 };
 
                 $scope.getColumnProjectCards = function (projectId, columnId) {
-                    console.log(projectId);
-                    console.log(columnId);
                     return Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
 
                 };
@@ -57,6 +61,30 @@
                     .success(function (data) {
                         $scope.board = data;
                         $scope.getBoardProjects($scope.board.id);
+                        ProjectService.getProjectbyBoardUser($scope.board.id)
+                            .success(function (data) {
+                                $scope.yourProjects = data;
+                            });
+                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ScrumMaster")
+                            .success(function (data) {
+                                data.yourRole = "ScrumMaster";
+                                if (data.length > 0) {
+                                    $scope.yourOwnedSMProjects.push(data);
+                                    $scope.userOwnsProjects = true;
+                                    $scope.isSM = true;
+                                    $scope.yourOwnedSMProjects = Underscore.flatten($scope.yourOwnedSMProjects, true);
+                                }
+                            });
+                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ProductOwner")
+                            .success(function (data) {
+                                data.yourRole = "ProductOwner";
+                                if (data.length > 0) {
+                                    $scope.yourOwnedPOProjects.push(data);
+                                    $scope.userOwnsProjects = true;
+                                    $scope.isPO = true;
+                                    $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
+                                }
+                            });
                     });
 
                 BoardService.getBoards()
@@ -79,6 +107,8 @@
                     .success(function (data) {
                         $scope.allUsers = data;
                     });
+
+
 
                 $scope.createColumn = function () {
                     $scope.newColumn = {
@@ -110,24 +140,25 @@
                     $scope.rootCols = $scope.getSubCols(null);
                 };
 
-                $scope.change = function () {
+                $scope.onProjectSelectionChange = function (type) {
                     $scope.showCreateCardForm = true;
-                    console.log($scope.newCard.project.team);
-                    TeamService.getRoleTeamByTeam($scope.newCard.project.team)
-                        .success(function (data) {
-                            console.log(data);
-                        });
+                    if (type === 'ProductOwner') {
+                        $scope.type = 'newFunctionality';
+                        $scope.cardColumn = $scope.firstColumn;
+                    }
+                    if (type === 'ScrumMaster') {
+                        $scope.type = 'silverBullet';
+                        $scope.cardColumn = $scope.highPriorityColumn;
+                    }
                 };
 
                 $scope.createCard = function () {
                     $scope.showCreateCardForm = false;
-                    var highPriorityColumn, firstColumn;
-                    $scope.type = '';
                     $scope.cardColumn = null;
-                    highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                    firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
+                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                    $scope.firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
                     //Alerts for non validate board
-                    if (highPriorityColumn.length < 1) {
+                    if ($scope.highPriorityColumn.length < 1) {
                         alert("Column with high priority is missing. Add one!");
                         return;
                     }
@@ -135,22 +166,10 @@
                         alert("There is no projects on the table. Add one!");
                         return;
                     }
-
-                    if ($scope.session && Underscore.contains($scope.session.roles, 'ProductOwner')) {
-                        $scope.type = 'newFunctionality';
-                        $scope.cardColumn = firstColumn;
-                    }
-                    if ($scope.session && Underscore.contains($scope.session.roles, 'ScrumMaster')) {
-                        $scope.type = 'silverBullet';
-                        $scope.cardColumn = highPriorityColumn;
-                    }
-
                     $scope.newCard = {
                         completion_date: null,
                         development_start_date: null,
-                        is_active: true,
-                        type: $scope.type,
-                        column: $scope.cardColumn[0].id
+                        is_active: true
                     };
                     ngDialog.openConfirm({
                         template: '/static/html/board/createEditCard.html',
@@ -159,6 +178,8 @@
                     })
                         .then(function () {
                             $scope.newCard.project = $scope.newCard.project.id;
+                            $scope.newCard.column = $scope.cardColumn[0].id;
+                            $scope.newCard.type = $scope.type;
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
                                     console.log(data);

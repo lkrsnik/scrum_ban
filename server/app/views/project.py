@@ -19,3 +19,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request):
+        if request.QUERY_PARAMS.get('boardId'):
+            if request.QUERY_PARAMS.get('role'):
+                groupQS = Group.objects.filter(name = request.QUERY_PARAMS['role'] )
+                roleTeamQS = RoleTeam.objects.filter(role__in=groupQS.values('id'));
+                userTeamQS = UserTeam.objects.filter(user=request.user, id__in=roleTeamQS.values('user_team'))
+            else:
+                userTeamQS = UserTeam.objects.filter(user=request.user)
+            projectQS = Project.objects.filter(board=request.QUERY_PARAMS['boardId'], 
+                                    team__in=userTeamQS.values('team'))
+            serializer = self.serializer_class(projectQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
