@@ -153,7 +153,7 @@
                 return Underscore.sortBy(result, 'location');
             };
 
-            $scope.getMaxColDepth = function (cols) {
+            /*$scope.getMaxColDepth = function (cols) {
                 var maxDepth = 0,
                     tmp,
                     i;
@@ -177,7 +177,7 @@
                     }
                 }
                 return maxSubColsLen;
-            };
+            };*/
 
             // Function return the kumulative width of given columns and while calculating it
             // sets the style settings for every column
