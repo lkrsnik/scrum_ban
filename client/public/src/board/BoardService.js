@@ -24,7 +24,11 @@
                     return $http.get(API_URL + 'columns/', {
                         params: { boardId: boardId }
                     });
-                }/*,
+                },
+                createCard: function (card) {
+                    return $http.post(API_URL + 'cards/', card);
+                }
+                /*,
                 getBoard: function (boardId) {
                     return $http.get(API_URL + 'boards/' + boardId + '/');
                 },*/

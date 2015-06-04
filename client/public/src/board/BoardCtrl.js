@@ -1,4 +1,4 @@
-/*global angular, console, Underscore */
+/*global angular, console, Underscore, alert */
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
@@ -99,20 +99,36 @@
                 };
 
                 $scope.createCard = function () {
-                    //var type;
+                    var highPriorityColumn, firstColumn;
                     $scope.type = '';
+                    $scope.cardColumn = null;
+                    highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                    firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
+                    //Alerts for non validate board
+                    if (highPriorityColumn.length < 1) {
+                        alert("Column with high priority is missing. Add one!");
+                        return;
+                    }
+                    if ($scope.board.projects.length < 1) {
+                        alert("There is no projects on the table. Add one!");
+                        return;
+                    }
+
                     if ($scope.session && Underscore.contains($scope.session.roles, 'ProductOwner')) {
                         $scope.type = 'newFunctionality';
+                        $scope.cardColumn = firstColumn;
                     }
                     if ($scope.session && Underscore.contains($scope.session.roles, 'ScrumMaster')) {
                         $scope.type = 'silverBullet';
+                        $scope.cardColumn = highPriorityColumn;
                     }
+
                     $scope.newCard = {
                         completion_date: null,
                         development_start_date: null,
                         is_active: true,
-                        user: null,
-                        type: $scope.type
+                        type: $scope.type,
+                        column: $scope.cardColumn[0].id
                     };
                     ngDialog.openConfirm({
                         template: '/static/html/board/createEditCard.html',
@@ -120,13 +136,11 @@
                         scope: $scope
                     })
                         .then(function () {
-                            console.log($scope.newCard);
-                            /*if (type === 'newFunctionality') {
-                                column = Underscore.filter($scope.allCols, function (col) {
-                                    return (col.is_high_priority === true && project);
-                                    }                        
+                            BoardService.createCard($scope.newCard)
+                                .success(function (data) {
+                                    console.log(data);
                                 });
-                            }*/
+                            console.log($scope.newCard);
                         });
                 };
 

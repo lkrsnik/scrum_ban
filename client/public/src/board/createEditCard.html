@@ -21,10 +21,10 @@
             Please enter card content.</p>
         </div> 
         <div class="form-group"
-            ng-class="{ 'has-error' : cardForm.project.$invalid && CardForm.project.$dirty }" }>
+            ng-class="{ 'has-error' : cardForm.project.$invalid && cardForm.project.$dirty }" }>
             <label>Select project</label>
-            <select class="form-control" required
-                ng-model="cardForm.project" ng-options="p as p.name for p in allProjects" name="project"></select>
+            <select class="form-control" 
+                ng-model="newCard.project" ng-options="p.id as p.name for p in board.projects" name="project" required></select>
             <p ng-show="cardForm.project.$error.required && cardForm.project.$dirty" class="help-block">
             Please choose cards project.</p>
         </div>    
@@ -32,7 +32,7 @@
             ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
             <label>Select responsible user</label>
             <select class="form-control" 
-                ng-model="cardForm.user" ng-options="u as u.first_name for u in allUsers" name="user"></select>
+                ng-model="newCard.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
         </div>
                  
         <button class="btn btn-primary" ng-disabled="cardForm.$invalid"
