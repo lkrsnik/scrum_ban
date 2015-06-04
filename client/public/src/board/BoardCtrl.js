@@ -349,13 +349,15 @@
 
 
                 $scope.onDragComplete = function (data, from_column) {
+                    console.log(from_column);
+                    console.log(data);
                     var i = Underscore.indexOf(from_column, data);
                     from_column.splice(i, 1);
 
                 };
 
                 $scope.onDropComplete = function (data, to_column) {
-                    console.log($scope.draggableObjects);
+                    console.log(to_column);
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);
                     $scope.draggableObjects[index] = obj;
