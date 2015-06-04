@@ -5,12 +5,15 @@
 </div>
 <div class="panel-body column-body">
 
-    
     <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)">
-        <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)">
+        <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)" ng-drop="true" 
+            ng-drop-success="onDropComplete($data, getColumnProjectCards(proj.id, col.id))"
+            class="card">
 
-            <div class="panel panel-info">
+            <div class="panel panel-info" ng-drag="true" ng-drag-data="obj" 
+                ng-drag-success="onDragComplete($data, getColumnProjectCards(proj.id, col.id))" 
+                data-allow-transform="true">
                 <div class="panel-heading">{{card.name}}</div>
                 <div class="panel-body">
                    <p> {{card.content}}</p>
