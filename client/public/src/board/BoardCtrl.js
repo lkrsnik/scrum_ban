@@ -301,7 +301,7 @@
                             'min-height': (numProjects * COL_DIM.height) - (depth * (COL_DIM.headerHeight + 2)) // Offset the column height according to column depth
                         };
 
-                        col.isLeafCol = col.style.width === COL_DIM.width; // If it has the same width as basic column it's a leaf column
+                        col.isLeafCol = subCols.length === 0; // If it has the same width as basic column it's a leaf column
                         kumWidth += col.style.width;
                     }
 
