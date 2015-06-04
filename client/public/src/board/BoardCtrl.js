@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService',
-            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService) {
+        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'TeamService',
+            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService, TeamService) {
 
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
@@ -19,7 +19,7 @@
                 $scope.COL_DIM = COL_DIM;
                 $scope.rootCols = [];
                 $scope.allCols = [];
-
+                $scope.columnCards = [];
                 $scope.board = {
                     projects: []
                 };
@@ -44,6 +44,11 @@
                         });
                 };
 
+                $scope.getColumnProjectCards = function (projectId, columnId) {
+                    return Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
+
+                };
+
                 $scope.getProjects();
 
                 BoardService.getBoard($routeParams.boardId)
@@ -61,6 +66,11 @@
                     .success(function (data) {
                         $scope.allCols = data;
                         $scope.rootCols = $scope.getSubCols(null);
+                    });
+
+                BoardService.getCards()
+                    .success(function (data) {
+                        $scope.allCards = data;
                     });
 
                 UserService.getUsers()
@@ -98,7 +108,17 @@
                     $scope.rootCols = $scope.getSubCols(null);
                 };
 
+                $scope.change = function () {
+                    $scope.showCreateCardForm = true;
+                    console.log($scope.newCard.project.team);
+                    TeamService.getRoleTeamByTeam($scope.newCard.project.team)
+                        .success(function (data) {
+                            console.log(data);
+                        });
+                };
+
                 $scope.createCard = function () {
+                    $scope.showCreateCardForm = false;
                     var highPriorityColumn, firstColumn;
                     $scope.type = '';
                     $scope.cardColumn = null;
@@ -136,9 +156,11 @@
                         scope: $scope
                     })
                         .then(function () {
+                            $scope.newCard.project = $scope.newCard.project.id;
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
                                     console.log(data);
+                                    $scope.allCards.push(data);
                                 });
                             console.log($scope.newCard);
                         });
