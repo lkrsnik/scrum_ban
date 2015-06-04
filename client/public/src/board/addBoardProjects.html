@@ -10,7 +10,7 @@
             <label>Add projects to board (hold Ctrl to select multiple projects):</label>
             <select class="form-control" 
                 ng-model="board.projects" multiple ng-multiple="true" 
-                ng-options="p as p.name for p in nullProjects">
+                ng-options="p as p.name for p in allProjects">
                 <option value="">-- choose board projects --</option>
             </select>
         </div>

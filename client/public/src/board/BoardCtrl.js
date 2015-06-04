@@ -276,7 +276,7 @@
                         col.style = {
                             'width': $scope.getColsWidth(subCols, depth + 1),
                             'left': kumWidth,
-                            'min-height': (numProjects * COL_DIM.height) - (depth * COL_DIM.headerHeight) // Offset the column height according to column depth
+                            'min-height': (numProjects * COL_DIM.height) - (depth * (COL_DIM.headerHeight + 2)) // Offset the column height according to column depth
                         };
 
                         col.isLeafCol = col.style.width === COL_DIM.width; // If it has the same width as basic column it's a leaf column
@@ -295,6 +295,22 @@
                         'width': boardWidth,
                         'margin-bottom': boardHeight
                     };
+                };
+
+                $scope.getProjectStyle = function (col, isFirst, isLast) {
+                    var projStyle = {
+                        'min-height': COL_DIM.height
+                    },
+                        numProjects = $scope.board.projects ? $scope.board.projects.length : 1;
+                    if (isFirst) {
+                        projStyle['min-height'] = col.style['min-height'] - ((numProjects - 1) * COL_DIM.height);
+                    }
+                    if (isLast) {
+                        projStyle['min-height'] -= 42;
+                        projStyle['border-bottom'] = 'none';
+                    }
+
+                    return projStyle;
                 };
 
             }]);
