@@ -7,6 +7,9 @@
             <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
                 <span class="glyphicon glyphicon-plus"></span> Card
             </span>
+            <span ng-click="addProject()" class="btn btn-success handcursor" title="Add project to board">
+                <span class="glyphicon glyphicon-plus"></span> Project
+            </span>
         </div>
     </div>
     <div class="col-md-12 board-col-line" ng-style="{'width': getColsWidth(rootCols, 0)}">
@@ -25,3 +28,5 @@
 </div>
 
 <p>{{allProjects}}</p>
+<p>{{nullProjects}}</p>
+<p>{{board}}</p>

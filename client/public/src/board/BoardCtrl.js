@@ -19,19 +19,39 @@
                 $scope.rootCols = [];
                 $scope.allCols = [];
 
+                $scope.getProjects = function () {
+                    ProjectService.getProjects()
+                        .success(function (data) {
+                            $scope.allProjects = data;
+                            $scope.nullProjects = Underscore.filter(data, function (proj) {
+                                return proj.board === null;
+                            });
+                        });
+                };
+
+                $scope.getBoardProjects = function (boardId) {
+                    var tmp;
+                    if (!$scope.allProjects) {
+                        $scope.getProjects();
+                    }
+
+                    tmp = Underscore.filter($scope.allProjects, function (proj) {
+                        return proj.board === boardId;
+                    });
+                    return (tmp === undefined) ? [] : tmp;
+                };
+
+                $scope.getProjects();
+
                 BoardService.getBoard($routeParams.boardId)
                     .success(function (data) {
                         $scope.board = data;
+                        $scope.board.projects = $scope.getBoardProjects($scope.board.id);
                     });
 
                 BoardService.getBoards()
                     .success(function (data) {
                         $scope.boards = data;
-                    });
-
-                ProjectService.getProjects()
-                    .success(function (data) {
-                        $scope.allProjects = data;
                     });
 
                 BoardService.getColumns($routeParams.boardId)
@@ -105,6 +125,43 @@
                                 });
                             }*/
                         });
+                };
+
+                $scope.addProject = function () {
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/addBoardProjects.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            $scope.addBoardProjects($scope.board);
+                        });
+                };
+
+                $scope.addBoardProjects = function (board) {
+                    var proj,
+                        projects = angular.copy(board.projects),
+                        i,
+                        updateProjectSuccessFunction = function (data) {
+                            $scope.board.projects.push(data);
+                        };
+
+                    $scope.board.projects = [];
+                    // Update projects
+                    for (i = 0; i < projects.length; i += 1) {
+                        // Add board id to all projects
+                        proj = projects[i];
+                        proj.board = board.id;
+                        ProjectService.updateProject(proj)
+                            .success(updateProjectSuccessFunction);
+                    }
+                };
+
+                $scope.getProjectsIfLeafColumn = function (colId, board) {
+                    if ($scope.getSubCols(colId).length > 0) {
+                        return board.projects.length > 0 ? [board.projects[0]] : [{ 'name': 'fake' }];
+                    }
+                    return board.projects;
                 };
 
                 $scope.proccessSavedColumn = function (col) {
