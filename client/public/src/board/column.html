@@ -4,8 +4,18 @@
         class="glyphicon glyphicon-trash handcursor"></span>
 </div>
 <div class="panel-body column-body">
-    
-    <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects"></div>
+    <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects">
+        <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)">
+
+          <div>
+            <div class="thumbnail">                
+                <h3>{{card.name}}</h3>
+                <p>{{card.content}}</p>
+            </div>
+          </div>
+
+        </div>
+    </div>
 
     <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>

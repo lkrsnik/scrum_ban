@@ -27,6 +27,9 @@
                 },
                 createCard: function (card) {
                     return $http.post(API_URL + 'cards/', card);
+                },
+                getCards: function () {
+                    return $http.get(API_URL + 'cards/');
                 }
                 /*,
                 getBoard: function (boardId) {

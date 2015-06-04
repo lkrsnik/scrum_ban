@@ -45,6 +45,18 @@ class RoleTeamViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, pk=None):
+        if request.QUERY_PARAMS.get('teamId'):
+            userTeamQS = UserTeam.objects.filter(team=request.QUERY_PARAMS['teamId'], 
+                                    user=request.user)
+            roleTeamQS = RoleTeam.objects.filter(user_team__in=userTeamQS.values('id'))
+            serializer = self.serializer_class(roleTeamQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class UserTeamActivityViewSet(viewsets.ModelViewSet):
     """
