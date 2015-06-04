@@ -71,8 +71,8 @@
             };
 
             $scope.createCard = function () {
-                var type;
-                $scope.type;
+                //var type;
+                $scope.type = '';
                 $scope.allProjects = null;
                 if ($scope.session && Underscore.contains($scope.session.roles, 'ProductOwner')) {
                     $scope.type = 'newFunctionality';
