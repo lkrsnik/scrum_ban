@@ -50,6 +50,15 @@
                             console.log(error);
                         });
                 },
+                getRoleTeamByTeam: function (teamId) {
+                    return $http.get(API_URL + 'role-teams/', {
+                        params: { teamId: teamId }
+                    })
+                        .error(function (error, status) {
+                            console.log('Error in retrieving role teams: ' + status);
+                            console.log(error);
+                        });
+                },
                 getTeam: function (teamId) {
                     return $http.get(API_URL + 'teams/' + teamId + '/')
                         .error(function (error, status) {

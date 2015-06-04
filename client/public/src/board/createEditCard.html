@@ -1,10 +1,18 @@
 <div class="panel panel-default">
-    <div class="panel-heading">{{type === "newFunctionality" ? "Creating a new functionality card: " : "Creating a silverbullet card: "}}
+    <div class="panel-heading">Create new card
     </div>
     <div class="panel-body">
     <form name="cardForm" class="create-card-form" role="form" 
         ng-submit="confirm()" novalidate>
-        <div class="form-group" 
+        <div class="form-group"
+            ng-class="{ 'has-error' : cardForm.project.$invalid && cardForm.project.$dirty }" }>
+            <label>Select project</label>
+            <select class="form-control" 
+                ng-model="newCard.project" ng-options="p as p.name for p in board.projects" name="project" ng-change="change()" required></select>
+            <p ng-show="cardForm.project.$error.required && cardForm.project.$dirty" class="help-block">
+            Please choose cards project.</p>
+        </div>  
+        <div class="form-group" ng-show="showCreateCardForm"
             ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
             <label>Card name</label>
             <input ng-model="newCard.name" type="text" name="name" 
@@ -12,7 +20,7 @@
             <p ng-show="cardForm.name.$error.required && cardForm.name.$dirty" 
                 class="help-block">Please enter card name.</p>
         </div>   
-        <div class="form-group" 
+        <div class="form-group" ng-show="showCreateCardForm"
             ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
             <label>Card content</label>
             <input ng-model="newCard.content" type="text" name="name" 
@@ -20,19 +28,11 @@
             <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
             Please enter card content.</p>
         </div> 
-        <div class="form-group"
-            ng-class="{ 'has-error' : cardForm.project.$invalid && CardForm.project.$dirty }" }>
-            <label>Select project</label>
-            <select class="form-control" required
-                ng-model="cardForm.project" ng-options="p as p.name for p in allProjects" name="project"></select>
-            <p ng-show="cardForm.project.$error.required && cardForm.project.$dirty" class="help-block">
-            Please choose cards project.</p>
-        </div>    
-        <div class="form-group"
+        <div class="form-group" ng-show="showCreateCardForm"
             ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
             <label>Select responsible user</label>
             <select class="form-control" 
-                ng-model="cardForm.user" ng-options="u as u.first_name for u in allUsers" name="user"></select>
+                ng-model="newCard.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
         </div>
                  
         <button class="btn btn-primary" ng-disabled="cardForm.$invalid"
