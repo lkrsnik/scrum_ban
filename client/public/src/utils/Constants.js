@@ -50,5 +50,12 @@
             'height': 800,
             'headerHeight': 40
         })
-        .constant('API_URL', 'api/');
+        .constant('API_URL', 'api/')
+        .constant('DOCS', [{
+            title : 'Test',
+            chapter: [{
+                header: 'Head',
+                content: 'Tabula rasa'
+            }]
+        }]);
 }());

@@ -15,7 +15,8 @@ var Underscore;
         'ngRoute',
         'underscore',
         'ngStorage',
-        'ngDialog'
+        'ngDialog',
+        'ngDraggable'
     ]).
         config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
             $routeProvider

@@ -81,7 +81,8 @@ gulp.task('concat-libs-js', function () {
             './public/libs/angular-underscore-module/angular-underscore-module.js',
             './public/libs/bootstrap/dist/js/bootstrap.min.js',
             './public/libs/ngstorage/ngStorage.js',
-            './public/libs/ngDialog/js/ngDialog.js'
+            './public/libs/ngDialog/js/ngDialog.js',
+            './public/libs/ngDraggable/ngDraggable.js'
             ])
         .pipe(concat('libs.js'))
         .pipe(gulp.dest('dist/libs'));

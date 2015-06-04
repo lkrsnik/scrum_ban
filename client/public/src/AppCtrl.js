@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('AppCtrl',
-        ['$scope', '$q', 'Session', '$location', '$localStorage', function ($scope, $q, Session, $location, $localStorage) {
+        ['$scope', '$q', 'Session', '$location', '$localStorage', 'ngDialog', 'DOCS', function ($scope, $q, Session, $location, $localStorage, ngDialog, DOCS) {
             $scope.promises = {
                 sessionPromise: $q.defer().promise
             };
@@ -49,6 +49,15 @@
                 delete $localStorage.token;
                 $scope.updateSessionView();
                 $scope.redirect("/");
+            };
+
+            $scope.getDocs = function () {
+                $scope.DOCS = DOCS;
+                ngDialog.openConfirm({
+                    template: '/static/html/wireframe/documentation.html',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope
+                });
             };
         }]);
 }());
