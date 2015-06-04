@@ -2,14 +2,17 @@
 
 .panel-column {
     display: inline-block !important;
+    * {
+        z-index: 1;
+    }
     position: absolute;
-    overflow: hidden;
+    //overflow: hidden;
+
 
     .panel-body {
         padding: 0;
     }
 }
-
 .board-col-line {
     display: inline-block;
     margin-bottom: @board-col-line-heigth + 20; // Done to move the objects after this div under it
@@ -20,4 +23,9 @@
 
 .panel-heading {
     padding: 2px;
+}
+
+.card {
+    position: relative;
+    //z-index: 1000;
 }

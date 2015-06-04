@@ -227,10 +227,8 @@
                 };
 
                 $scope.proccessSavedColumn = function (col) {
-                    if (col.parent_column === null) {
-                        $scope.rootCols.push(col);
-                    }
                     $scope.allCols.push(col);
+                    $scope.rootCols = $scope.getSubCols(null);
                 };
 
                 $scope.calculateColLocation = function (col) {
@@ -324,7 +322,7 @@
                             'min-height': (numProjects * COL_DIM.height) - (depth * (COL_DIM.headerHeight + 2)) // Offset the column height according to column depth
                         };
 
-                        col.isLeafCol = col.style.width === COL_DIM.width; // If it has the same width as basic column it's a leaf column
+                        col.isLeafCol = subCols.length === 0; // If it has the same width as basic column it's a leaf column
                         kumWidth += col.style.width;
                     }
 
@@ -358,5 +356,36 @@
                     return projStyle;
                 };
 
+                //$scope.obj = "test";
+                var eachProduct = [
+                    {
+                        "name": "ime1"
+                    }, {
+                        "name": "ime2"
+                    }, {
+                        "name": "ime3"
+                    }];
+                $scope.draggableObjects = eachProduct;
+                $scope.wasDragged = [{
+                    "name": "ime5"
+                }];
+
+
+                $scope.onDragComplete = function (data, from_column) {
+                    console.log(from_column);
+                    console.log(data);
+                    var i = Underscore.indexOf(from_column, data);
+                    from_column.splice(i, 1);
+
+                };
+
+                $scope.onDropComplete = function (data, to_column) {
+                    console.log(to_column);
+                    /*var otherObj = $scope.draggableObjects[index];
+                    var otherIndex = $scope.draggableObjects.indexOf(obj);
+                    $scope.draggableObjects[index] = obj;
+                    $scope.draggableObjects[otherIndex] = otherObj;*/
+                    to_column.push(data);
+                };
             }]);
 }());
