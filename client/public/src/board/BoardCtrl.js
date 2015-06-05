@@ -110,11 +110,6 @@
                         $scope.allCards = data;
                     });
 
-                UserService.getUsers()
-                    .success(function (data) {
-                        $scope.allUsers = data;
-                    });
-
 
 
                 $scope.createColumn = function () {
