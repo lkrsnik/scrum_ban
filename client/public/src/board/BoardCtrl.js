@@ -15,7 +15,6 @@
                 } else {
                     $scope.redirectNonAuthenticated('/');
                 }
-
                 $scope.COL_DIM = COL_DIM;
                 $scope.rootCols = [];
                 $scope.allCols = [];
@@ -53,7 +52,16 @@
                 };
 
                 $scope.getColumnProjectCards = function (projectId, columnId) {
-                    return Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
+                    var cards;
+                    cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
+                    cards.forEach(function (entry) {
+                        if (entry.type === "silverBullet") {
+                            entry.cardClass = "panel-success";
+                        } else {
+                            entry.cardClass = "panel-danger";
+                        }
+                    });
+                    return cards;
 
                 };
 

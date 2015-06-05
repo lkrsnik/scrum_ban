@@ -9,7 +9,7 @@
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
             ng-drop-success="onDropComplete($data, proj, col)">
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
-            class="card panel panel-info"
+            class="card panel {{card.cardClass}}"
             ng-drag="true" ng-drag-data="card"
             ng-drag-success="onDragComplete(card)">
             <div class="panel-heading card-heading">{{card.name}}</div>
