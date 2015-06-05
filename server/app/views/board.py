@@ -7,7 +7,7 @@ from app.models import Board, Column, Card, Project, UserTeam, Team, Group
 
 class BoardViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows boards to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardSerializer
@@ -26,7 +26,7 @@ class BoardViewSet(viewsets.ModelViewSet):
 
 class ColumnViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows columns to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ColumnSerializer
@@ -40,7 +40,7 @@ class ColumnViewSet(viewsets.ModelViewSet):
 
 class CardViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows cards to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CardSerializer

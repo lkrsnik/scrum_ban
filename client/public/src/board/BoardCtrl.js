@@ -387,7 +387,7 @@
                     //to_column.push(data);
                     data.project = proj.id;
                     data.column = col.id;
-                    console.log(data);
+                    BoardService.updateCard(data);
                 };
             }]);
 }());
