@@ -1,22 +1,15 @@
 <div class="panel panel-default">
   <div class="panel-heading">User documentation</div>
   <div class="panel-body">
-      <input type="search" class="form-group" ng-model="q" placeholder="filter documentation..." aria-label="filter documentation" />
-      <ul class="example-animate-container">
-        <li class="animate-repeat" ng-repeat="section in DOCS | filter: q">
-             {{section}}
-             <h3>{{ section.title }}</h3>
-             <h4> HISTORY: </h4>
-             <ul class="ul-no-bullet">
-                <li ng-repeat="act in user.activities">
-                    <p ng-if="act.activated"> <strong>activated:</strong> {{act.date | date: 'yyyy-MM-dd'}}</p>
-                    <p ng-if="!act.activated"> <strong>deactivated:</strong> {{act.date | date: 'yyyy-MM-dd'}}</p>                 
-                </li>
-             </ul>
-        </li>
-        <li class="animate-repeat" ng-if="filtered.length == 0">
-          <strong>No results found...</strong>
-        </li>
-      </ul>
+    <input type="search" class="form-group" 
+      ng-model="q" placeholder="filter documentation..." aria-label="filter documentation" />
+    <div class="animate-repeat" ng-repeat="section in DOCS | filter: q">
+      <h4>{{ section.title }}</h4>
+      <div ng-repeat="chapter in section.chapters | filter: q">
+        <label>{{chapter.header}}</label>
+        <p>{{chapter.content}}</p>
+      </div>
+      <hr />
+    </div>
   </div>
 </div>

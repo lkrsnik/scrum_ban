@@ -4,7 +4,7 @@
             <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
                 <span class="glyphicon glyphicon-plus"></span> Column
             </span>
-            <span ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
+            <span ng-show="userOwnsProjects" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
                 <span class="glyphicon glyphicon-plus"></span> Card
             </span>
             <span ng-click="addProject()" class="btn btn-success handcursor" title="Add project to board">
@@ -27,6 +27,13 @@
         </div>-->
     </div>
 </div>
+
+this is what you own:
+<p>{{yourOwnedPOProjects}}</p>
+<p>{{yourOwnedSMProjects}}</p>
+end of owned
+<p>{{yourProjects}}</p>
+konc
 <p>{{allCards}}</p>
 ads
 <p>{{allProjects}}</p>

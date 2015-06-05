@@ -16,6 +16,7 @@ router.register(r'user-teams', team.UserTeamViewSet)
 router.register(r'role-teams', team.RoleTeamViewSet)
 router.register(r'projects', project.ProjectViewSet)
 router.register(r'user-team-activities', team.UserTeamActivityViewSet)
+router.register(r'moves', board.MoveViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

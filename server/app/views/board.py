@@ -1,13 +1,13 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.board import BoardSerializer, ColumnSerializer, \
-                                    CardSerializer
-from app.models import Board, Column, Card, Project, UserTeam, Team
+                                    CardSerializer, MoveSerializer
+from app.models import Board, Column, Card, Project, UserTeam, Team, Group, Move
 
 
 class BoardViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows boards to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = BoardSerializer
@@ -26,7 +26,7 @@ class BoardViewSet(viewsets.ModelViewSet):
 
 class ColumnViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows columns to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ColumnSerializer
@@ -40,8 +40,16 @@ class ColumnViewSet(viewsets.ModelViewSet):
 
 class CardViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows cards to be viewed or edited.
     """
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CardSerializer
     queryset = Card.objects.all()
+
+class MoveViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows teams to be viewed or edited.
+    """
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = MoveSerializer
+    queryset = Move.objects.all()

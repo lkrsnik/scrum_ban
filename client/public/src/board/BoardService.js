@@ -28,8 +28,14 @@
                 createCard: function (card) {
                     return $http.post(API_URL + 'cards/', card);
                 },
+                updateCard: function (card) {
+                    return $http.put(API_URL + 'cards/' + card.id + '/', card);
+                },
                 getCards: function () {
                     return $http.get(API_URL + 'cards/');
+                },
+                createMove: function (move) {
+                    return $http.post(API_URL + 'moves/', move);
                 }
                 /*,
                 getBoard: function (boardId) {

@@ -1,4 +1,4 @@
-from app.models import Board, Column, Card
+from app.models import Board, Column, Card, Move
 from django.db import models
 from rest_framework import serializers
 
@@ -24,4 +24,11 @@ class CardSerializer(serializers.ModelSerializer):
         fields = ('id', 'type', 'name', 'content', 'creation_date',
                   'completion_date', 'development_start_date', 'is_active',
                   'column', 'project', 'user')
+        read_only_fields = ('id',)
+
+class MoveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Move
+        fields = ('id', 'date', 'is_legal', 'description', 'card',
+                  'user', 'from_position')
         read_only_fields = ('id',)
