@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.board import BoardSerializer, ColumnSerializer, \
                                     CardSerializer
-from app.models import Board, Column, Card, Project, UserTeam, Team
+from app.models import Board, Column, Card, Project, UserTeam, Team, Group
 
 
 class BoardViewSet(viewsets.ModelViewSet):
