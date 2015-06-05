@@ -251,8 +251,7 @@
                 };
 
                 $scope.calculateColLocation = function (col) {
-                    var tmpCols,
-                        leftCol,
+                    var leftCol,
                         rightCol,
                         parentCol;
                     // First column ever
@@ -434,8 +433,9 @@
                 };
 
                 $scope.onDropComplete = function (data, proj, col) {
-                    //$scope.countCards(data);
-                    //console.log(to_column);
+
+                    $scope.countCards(data);
+                    console.log(data);
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);
                     $scope.draggableObjects[index] = obj;
@@ -443,6 +443,13 @@
                     //to_column.push(data);
                     data.project = proj.id;
                     data.column = col.id;
+                    var move;
+                    move = {
+                        card: data.id,
+                        user: $scope.session.userid,
+                        from_position: data.column
+                    };
+                    BoardService.createMove(move);
                     BoardService.updateCard(data);
                 };
             }]);
