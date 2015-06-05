@@ -60,7 +60,7 @@
                 },
                 {
                     header: 'List users',
-                    content: 'This is how you list all users.'
+                    content: 'Here you can list all users, view and edit their information. You can also deactivate a certain user.'
                 }]
         }]);
 }());

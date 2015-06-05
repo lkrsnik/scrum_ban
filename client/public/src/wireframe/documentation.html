@@ -4,7 +4,6 @@
     <input type="search" class="form-group" 
       ng-model="q" placeholder="filter documentation..." aria-label="filter documentation" />
     <div class="animate-repeat" ng-repeat="section in DOCS | filter: q">
-      {{section}}
       <h4>{{ section.title }}</h4>
       <div ng-repeat="chapter in section.chapters | filter: q">
         <label>{{chapter.header}}</label>
