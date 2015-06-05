@@ -242,6 +242,7 @@
                 };
 
                 $scope.updateCols = function () {
+                    $scope.allCols = Underscore.sortBy($scope.allCols, 'location');
                     $scope.rootCols = $scope.getSubCols(null);
                     // Set leaf columns values
                     $scope.getColsWidth($scope.rootCols, 0);
@@ -258,9 +259,17 @@
                     if ($scope.allCols.length === 0) {
                         return 100;
                     }
+                    // First sub column
+                    if (col.left === undefined && col.right === undefined && col.parent_column !== null) {
+                        parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
+                        col.left = $scope.getLeftLeafCol(parentCol);
+                        col.right = $scope.getRightLeafCol(parentCol);
+
+                        return $scope.calculateColLocation(col);
+                    }
                     // Most right column between siblings - search for right leaf col
                     if (col.right === undefined) {
-                        rightCol = $scope.getRightLeafCol(col);
+                        rightCol = $scope.getRightLeafCol(col.left);
                         if (rightCol) {
                             return (col.left.location + rightCol.location) / 2;
                         }
@@ -269,22 +278,13 @@
                     }
                     // Most left column between siblings - search for left leaf col
                     if (col.left === undefined) {
-                        leftCol = $scope.getLeftLeafCol(col);
+                        leftCol = $scope.getLeftLeafCol(col.right);
                         if (leftCol) {
                             return (leftCol.location + col.right.location) / 2;
                         }
                         // Most left column between leaf cols
                         return col.right.location - 1;
                     }
-                    // First sub column
-                    if (col.left === undefined && col.right === undefined && col.parent_column !== null) {
-                        parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
-                        col.left = $scope.getLeftCol(parentCol);
-                        col.right = $scope.getRightCol(parentCol);
-
-                        return $scope.calculateColLocation(col);
-                    }
-                    // This here should never happen :)
                     return (col.left.location + col.right.location) / 2;
                 };
 
