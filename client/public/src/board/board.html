@@ -45,13 +45,13 @@ ads
 </div>-->
 
 <div class="draglist">
-    <div  ng-repeat="obj in draggableObjects" ng-drop="true" ng-drop-success="onDropComplete($data, draggableObjects)">
+    <div  ng-repeat="obj in draggableObjects" ng-drop="true" ng-drop-success="onDropComplete(draggableObjects)">
         <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, draggableObjects)" data-allow-transform="true"> {{obj.name}} </div>
     </div>
 </div>
 -------------------------------------------------------
 <div class="draglist">
-    <div  ng-repeat="obj in wasDragged" ng-drop="true" ng-drop-success="onDropComplete($data, wasDragged)">
+    <div  ng-repeat="obj in wasDragged" ng-drop="true" ng-drop-success="onDropComplete(wasDragged)">
         <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, wasDragged)" data-allow-transform="true"> {{obj.name}} </div>
     </div>
 </div>

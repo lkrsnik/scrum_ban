@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService',
-            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService) {
+        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService',
+            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService) {
 
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
@@ -27,6 +27,8 @@
                 $scope.userOwnsProjects = false;
                 $scope.isSM = false;
                 $scope.isPO = false;
+                $scope.violationDescription = "";
+                $scope.silverBullet = false;
                 $scope.board = {
                     projects: []
                 };
@@ -84,6 +86,11 @@
                                     $scope.userOwnsProjects = true;
                                     $scope.isPO = true;
                                     $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
+                                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn.id });
+                                    if ($scope.silverBullet.length > 0) {
+                                        $scope.silverBullet = true;
+                                    }
                                 }
                             });
                     });
@@ -102,11 +109,6 @@
                 BoardService.getCards()
                     .success(function (data) {
                         $scope.allCards = data;
-                    });
-
-                UserService.getUsers()
-                    .success(function (data) {
-                        $scope.allUsers = data;
                     });
 
 
@@ -154,6 +156,7 @@
                 };
 
                 $scope.createCard = function () {
+                    var move;
                     $scope.showCreateCardForm = false;
                     $scope.cardColumn = null;
                     $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
@@ -185,6 +188,12 @@
                                 .success(function (data) {
                                     console.log(data);
                                     $scope.allCards.push(data);
+                                    move = {
+                                        card: data.id,
+                                        user: $scope.session.userid,
+                                        from_position: null
+                                    };
+                                    BoardService.createMove(move);
                                 });
                             console.log($scope.newCard);
                         });
@@ -411,15 +420,21 @@
                     "name": "ime5"
                 }];
 
-                /*$scope.onDragComplete = function (data, from_column) {
-                    //console.log(from_column);
-                    //console.log(data);
-                    //var i = Underscore.indexOf(from_column, data);
-                    //from_column.splice(i, 1);
-
-                };*/
+                $scope.countCards = function (column) {
+                    if (column.isLeafCol) {
+                        return Underscore.where($scope.allCards, {'column': column.id}).length;
+                    }
+                    var cols = Underscore.where($scope.allCols, {'parent_column': column.id}),
+                        i,
+                        sum = 0;
+                    for (i = 0; i < cols.length; i += 1) {
+                        sum += $scope.countCards(cols[i]);
+                    }
+                    return sum;
+                };
 
                 $scope.onDropComplete = function (data, proj, col) {
+                    //$scope.countCards(data);
                     //console.log(to_column);
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);

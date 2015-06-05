@@ -74,7 +74,7 @@ class Move(models.Model):
     description = models.TextField(max_length=1500, default="")
     card = models.ForeignKey(Card)
     user = models.ForeignKey(User)
-    from_position = models.ForeignKey(Column)
+    from_position = models.ForeignKey(Column, null=True)
 
 
 class Task(models.Model):

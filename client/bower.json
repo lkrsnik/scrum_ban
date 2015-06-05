@@ -19,7 +19,7 @@
     "bootstrap": "~3.3.4",
     "font-awesome": "~4.3.0",
     "ngDialog": "~0.4.0",
-    "ngDraggable": "0.0.3.1" // has to be version 0.0.3.1 otherwise dragged card hides behind other columns
+    "ngDraggable": "0.0.3.1"
   },
   "resolutions": {
     "angular": "1.2.x"
