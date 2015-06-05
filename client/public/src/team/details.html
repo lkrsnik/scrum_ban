@@ -6,7 +6,7 @@
         <li class="animate-repeat" ng-repeat="user in filtered = (allUsers | filter: {'fullname': q})">
              <h3>{{ user.fullname }}</h3>
              <p ng-if="user.user.is_active"> status: active </p>
-             <p ng-if="!user.user.is_active"> status: non active </p>
+             <p ng-if="!user.user.is_active"> status: not active </p>
              <h4> HISTORY: </h4>
              <ul>
                 <li ng-repeat="act in user.activities">

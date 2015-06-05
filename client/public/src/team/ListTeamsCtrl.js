@@ -104,11 +104,15 @@
                         TeamService.getUserTeamActivity()
                             .success(function (data) {
                                 $scope.allUsers = Underscore.where(data, {team: team.id});
-                                var i;
+                                var i,
+                                    activitiesFunction = function (act) {
+                                        return act.team === team.id;
+                                    };
                                 for (i = 0; i < $scope.allUsers.length; i += 1) {
                                     $scope.allUsers[i].activities = Underscore.where(data, {user: $scope.allUsers[i].user});
                                     $scope.allUsers[i].user = Underscore.find(userdata, {id: $scope.allUsers[i].user});
                                     $scope.allUsers[i].fullname = $scope.allUsers[i].user.first_name + " " + $scope.allUsers[i].user.last_name;
+                                    $scope.allUsers[i].activities = Underscore.filter($scope.allUsers[i].activities, activitiesFunction);
                                 }
                                 $scope.allUsers = Underscore.uniq($scope.allUsers, function (u) {
                                     return u.user;
