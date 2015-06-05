@@ -26,6 +26,8 @@
                 $scope.userOwnsProjects = false;
                 $scope.isSM = false;
                 $scope.isPO = false;
+                $scope.violationDescription = "";
+                $scope.silverBullet = false;
                 $scope.board = {
                     projects: []
                 };
@@ -83,6 +85,11 @@
                                     $scope.userOwnsProjects = true;
                                     $scope.isPO = true;
                                     $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
+                                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn.id });
+                                    if ($scope.silverBullet.length > 0) {
+                                        $scope.silverBullet = true;
+                                    }
                                 }
                             });
                     });
@@ -153,6 +160,7 @@
                 };
 
                 $scope.createCard = function () {
+                    var move;
                     $scope.showCreateCardForm = false;
                     $scope.cardColumn = null;
                     $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
@@ -184,6 +192,12 @@
                                 .success(function (data) {
                                     console.log(data);
                                     $scope.allCards.push(data);
+                                    move = {
+                                        card: data.id,
+                                        user: $scope.session.userid,
+                                        from_position: null
+                                    };
+                                    BoardService.createMove(move);
                                 });
                             console.log($scope.newCard);
                         });

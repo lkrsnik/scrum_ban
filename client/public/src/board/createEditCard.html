@@ -4,7 +4,8 @@
     <div class="panel-body">
     <form name="cardForm" class="create-card-form" role="form" 
         ng-submit="confirm()" novalidate>
-        <div class="form-group" ng-show="isPO"
+        <p ng-show="isPO && silverBullet" >You can not create cards as Product owner because there is already one silverbullet in first column.</p>
+        <div class="form-group" ng-show="isPO && !silverBullet" 
             ng-class="{ 'has-error' : cardForm.project.$invalid && cardForm.project.$dirty }" }>
             <label>Dear product owner, select project to create silverbullet: </label>
             <select class="form-control" 
