@@ -7,7 +7,7 @@
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
-            ng-drop-success="onDropComplete($data, getColumnProjectCards(proj.id, col.id))">
+            ng-drop-success="onDropComplete(getColumnProjectCards(proj.id, col.id))">
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
             class="card">
 

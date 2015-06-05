@@ -341,7 +341,8 @@
                         "name": "ime2"
                     }, {
                         "name": "ime3"
-                    }];
+                    }],
+                    card = null;
                 $scope.draggableObjects = eachProduct;
                 $scope.wasDragged = [{
                     "name": "ime5"
@@ -349,20 +350,23 @@
 
 
                 $scope.onDragComplete = function (data, from_column) {
+                    console.log("DRAG");
                     console.log(from_column);
-                    console.log(data);
+                    card = data;
                     var i = Underscore.indexOf(from_column, data);
                     from_column.splice(i, 1);
 
                 };
 
-                $scope.onDropComplete = function (data, to_column) {
+                $scope.onDropComplete = function (to_column) {
+                    console.log("DROP");
                     console.log(to_column);
+                    console.log(card);
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);
                     $scope.draggableObjects[index] = obj;
                     $scope.draggableObjects[otherIndex] = otherObj;*/
-                    to_column.push(data);
+                    to_column.push(card);
                 };
             }]);
 }());
