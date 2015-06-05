@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'TeamService',
-            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService, TeamService) {
+        ['$scope', 'BoardService', 'UserService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'TeamService', '$rootElement',
+            function ($scope, BoardService, UserService, $routeParams, ngDialog, COL_DIM, ProjectService, TeamService, $rootElement) {
 
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
@@ -347,22 +347,24 @@
                     "name": "ime5"
                 }];
 
+                /*$scope.onDragComplete = function (data, from_column) {
+                    //console.log(from_column);
+                    //console.log(data);
+                    //var i = Underscore.indexOf(from_column, data);
+                    //from_column.splice(i, 1);
 
-                $scope.onDragComplete = function (data, from_column) {
-                    console.log(from_column);
-                    console.log(data);
-                    var i = Underscore.indexOf(from_column, data);
-                    from_column.splice(i, 1);
+                };*/
 
-                };
-
-                $scope.onDropComplete = function (data, to_column) {
-                    console.log(to_column);
+                $scope.onDropComplete = function (data, proj, col) {
+                    //console.log(to_column);
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);
                     $scope.draggableObjects[index] = obj;
                     $scope.draggableObjects[otherIndex] = otherObj;*/
-                    to_column.push(data);
+                    //to_column.push(data);
+                    data.project = proj.id;
+                    data.column = col.id;
+                    console.log(data);
                 };
             }]);
 }());

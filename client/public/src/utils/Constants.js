@@ -52,10 +52,15 @@
         })
         .constant('API_URL', 'api/')
         .constant('DOCS', [{
-            title : 'Test',
-            chapter: [{
-                header: 'Head',
-                content: 'Tabula rasa'
-            }]
+            title : 'Users',
+            chapters: [
+                {
+                    header: 'Create user',
+                    content: 'This is how you create a user.'
+                },
+                {
+                    header: 'List users',
+                    content: 'This is how you list all users.'
+                }]
         }]);
 }());

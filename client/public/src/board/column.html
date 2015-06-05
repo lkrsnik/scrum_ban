@@ -7,20 +7,15 @@
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in board.projects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
-            ng-drop-success="onDropComplete($data, getColumnProjectCards(proj.id, col.id))">
+            ng-drop-success="onDropComplete($data, proj, col)">
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
-            class="card">
-
-            <div class="panel panel-info" ng-drag="true" ng-drag-data="obj" 
-                ng-drag-success="onDragComplete(card, getColumnProjectCards(proj.id, col.id))" 
-                data-allow-transform="true">
-                <div class="panel-heading">{{card.name}}</div>
-                <div class="panel-body">
-                   <p> {{card.content}}</p>
-                </div>
+            class="card panel panel-info"
+            ng-drag="true" ng-drag-data="card"
+            ng-drag-success="onDragComplete(card)">
+            <div class="panel-heading card-heading">{{card.name}}</div>
+            <div class="panel-body">
+               <p>{{card.content}}</p>
             </div>
-
-
         </div>
     </div>
 
