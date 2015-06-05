@@ -18,6 +18,7 @@
 
                 $scope.COL_DIM = COL_DIM;
                 $scope.rootCols = [];
+                $scope.leafCols = [];
                 $scope.allCols = [];
                 $scope.columnCards = [];
                 $scope.yourProjects = [];
@@ -95,7 +96,7 @@
                 BoardService.getColumns($routeParams.boardId)
                     .success(function (data) {
                         $scope.allCols = data;
-                        $scope.rootCols = $scope.getSubCols(null);
+                        $scope.updateCols();
                     });
 
                 BoardService.getCards()
@@ -137,7 +138,7 @@
                     BoardService.deleteColumn(column.id);
 
                     $scope.allCols = Underscore.without($scope.allCols, column);
-                    $scope.rootCols = $scope.getSubCols(null);
+                    $scope.updateCols();
                 };
 
                 $scope.onProjectSelectionChange = function (type) {
@@ -228,43 +229,83 @@
 
                 $scope.proccessSavedColumn = function (col) {
                     $scope.allCols.push(col);
+                    $scope.updateCols();
+                };
+
+                $scope.updateCols = function () {
                     $scope.rootCols = $scope.getSubCols(null);
+                    // Set leaf columns values
+                    $scope.getColsWidth($scope.rootCols, 0);
+                    $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
+                        return c.isLeafCol;
+                    }), 'location');
                 };
 
                 $scope.calculateColLocation = function (col) {
-                    var tmpCols;
-                    if (col.left === undefined && col.right === undefined) {
+                    var tmpCols,
+                        leftCol,
+                        rightCol,
+                        parentCol;
+                    // First column ever
+                    if ($scope.allCols.length === 0) {
                         return 100;
                     }
+                    // Most right column between siblings - search for right leaf col
                     if (col.right === undefined) {
-                        tmpCols = $scope.getSubColsRightOf(col.parent_column, col.left);
-                        if (tmpCols && tmpCols.length > 0) {
-                            return (col.left + tmpCols[0].location) / 2;
+                        rightCol = $scope.getRightLeafCol(col);
+                        if (rightCol) {
+                            return (col.left.location + rightCol.location) / 2;
                         }
-                        return col.left + 1;
+                        // Most right column between leaf cols
+                        return col.left.location + 1;
                     }
+                    // Most left column between siblings - search for left leaf col
                     if (col.left === undefined) {
-                        tmpCols = $scope.getSubColsLeftOf(col.parent_column, col.right);
-                        if (tmpCols && tmpCols.length > 0) {
-                            return (col.right + tmpCols[0].location) / 2;
+                        leftCol = $scope.getLeftLeafCol(col);
+                        if (leftCol) {
+                            return (leftCol.location + col.right.location) / 2;
                         }
-                        return col.right - 1;
+                        // Most left column between leaf cols
+                        return col.right.location - 1;
                     }
-                    return (col.left + col.right) / 2;
+                    // First sub column
+                    if (col.left === undefined && col.right === undefined && col.parent_column !== null) {
+                        parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
+                        col.left = $scope.getLeftCol(parentCol);
+                        col.right = $scope.getRightCol(parentCol);
+
+                        return $scope.calculateColLocation(col);
+                    }
+                    // This here should never happen :)
+                    return (col.left.location + col.right.location) / 2;
                 };
 
-                $scope.getSubColsLeftOf = function (parentColId, rightColLocation) {
-                    var result = Underscore.filter($scope.allCols, function (col) {
-                        return col.parent_column === parentColId && (rightColLocation === null || col.location < rightColLocation);
+                $scope.getLeftCols = function (col, cols) {
+                    var result = Underscore.filter(cols, function (c) {
+                        return c.location < col.location;
                     });
                     return Underscore.sortBy(result, 'location');
                 };
+                $scope.getLeftLeafCol = function (col) {
+                    var leftCols = $scope.getLeftCols(col, $scope.leafCols);
+                    return leftCols.pop(); // Returns last element and returns undefined if array is empty
+                };
+                $scope.getLeftSyblingCols = function (col) {
+                    return $scope.getLeftCols(col, $scope.getSubCols(col.parent_column));
+                };
 
-                $scope.getSubColsRightOf = function (parentColId, leftColLocation) {
-                    var result = Underscore.filter($scope.allCols, function (col) {
-                        return col.parent_column === parentColId && (leftColLocation === null || col.location > leftColLocation);
+                $scope.getRightCols = function (col, cols) {
+                    var result = Underscore.filter(cols, function (c) {
+                        return c.location > col.location;
                     });
                     return Underscore.sortBy(result, 'location');
+                };
+                $scope.getRightLeafCol = function (col) {
+                    var rightCols = $scope.getRightCols(col, $scope.leafCols);
+                    return rightCols.shift(); // Returns first element and returns undefined if array is empty
+                };
+                $scope.getRightSyblingCols = function (col) {
+                    return $scope.getRightCols(col, $scope.getSubCols(col.parent_column));
                 };
 
                 $scope.getSubCols = function (parentColId) {

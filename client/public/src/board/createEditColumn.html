@@ -28,7 +28,7 @@
             <label>Select left column:</label>
             <select class="form-control" 
                 ng-model="newColumn.left" 
-                ng-options="c.location as c.name for c in getSubCols(newColumn.parent_column)"
+                ng-options="c as c.name for c in getSubCols(newColumn.parent_column)"
                 ng-required="newColumn.right === undefined && getSubCols(newColumn.parent_column).length > 0">
                 <option value="">-- choose left column --</option>
             </select>
@@ -39,7 +39,7 @@
             <label>Select right column:</label>
             <select class="form-control" 
                 ng-model="newColumn.right" 
-                ng-options="c.location as c.name for c in getSubCols(newColumn.parent_column)"
+                ng-options="c as c.name for c in getSubCols(newColumn.parent_column)"
                 ng-required="newColumn.left === undefined && getSubCols(newColumn.parent_column).length > 0">
                 <option value="">-- choose right column --</option>
             </select>
