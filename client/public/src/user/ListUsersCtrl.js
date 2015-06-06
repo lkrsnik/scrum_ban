@@ -23,7 +23,6 @@
             $scope.getUsers = function () {
                 UserService.getUsers()
                     .success(function (data) {
-                        console.log(data);
                         $scope.users = data;
                         //$scope.users = Underscore.filter(data, function (user) { return user.is_active; });
                     });
@@ -34,8 +33,6 @@
             $scope.getGroups = function () {
                 UserService.getGroups()
                     .success(function (data) {
-                        console.log(data);
-                        //$scope.users = data;
                         $scope.groups = data;
                     });
             };
