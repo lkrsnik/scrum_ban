@@ -15,7 +15,8 @@ class BoardViewSet(viewsets.ModelViewSet):
 
     def list(self, request, pk=None):
         if (request.user.is_staff):
-            serializer = self.serializer_class(self.queryset, many=True)
+            queryset = Board.objects.all()
+            serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         userTeamQS = UserTeam.objects.filter(user=request.user)
         projectQS = Project.objects.filter(team__in=userTeamQS.values('team'))

@@ -32,5 +32,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
                                     team__in=userTeamQS.values('team'))
             serializer = self.serializer_class(projectQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        serializer = self.serializer_class(self.queryset, many=True)
+        queryset = Project.objects.all() 
+        serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

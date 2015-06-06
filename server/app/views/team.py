@@ -53,8 +53,8 @@ class RoleTeamViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(roleTeamQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-        serializer = self.serializer_class(self.queryset, many=True)
+        queryset = RoleTeam.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
