@@ -26,7 +26,7 @@
             <label>Email</label>
             <input ng-model="user.email" type="email" name="email" 
                 class="form-control" placeholder="Email" 
-                ng-change="resetUsernameValidity()" 
+                ng-change="resetEmailValidity()" 
                 ng-minlength="3" required>
             <p ng-show="createUserForm.email.$error.required && createUserForm.email.$dirty" 
                 class="help-block">Please enter users email.</p>
