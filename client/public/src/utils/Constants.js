@@ -46,7 +46,7 @@
             }
         ])
         .constant('COL_DIM', {
-            'width': 200,
+            'width': 250,
             'height': 600,
             'headerHeight': 40
         })

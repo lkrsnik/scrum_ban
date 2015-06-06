@@ -119,7 +119,7 @@ gulp.task('watch', function () {
     gulp.watch(['./public/src/less/*.less', './public/src/*.less', './public/src/**/*.less'], ['recess', 'minify-css']);
     gulp.watch(['./public/src/*.html', './public/src/**/*.html'], ['copy-html-files']);
     gulp.watch(['./public/index.html'], ['copy-index', 'build']);
-    gulp.watch(['./gulpfile.js'], ['default', 'build']);
+    gulp.watch(['./gulpfile.js'], ['build']);
 });
 
 // default task
