@@ -59,8 +59,10 @@
                     cards.forEach(function (entry) {
                         if (entry.type === "silverBullet") {
                             entry.cardClass = "panel-danger";
-                        } else {
+                        } else if (entry.type === "newFunctionality") {
                             entry.cardClass = "panel-success";
+                        } else if (entry.type === "rejected") {
+                            entry.cardClass = "panel-warning";
                         }
                     });
                     return cards;
@@ -458,18 +460,17 @@
                 $scope.onDropComplete = function (data, proj, col) {
 
                     $scope.countCards(data);
-                    console.log(data);
-                    console.log(col);
-                    //console.log(.acceptance_test);
-                    console.log(col.is_high_priority);
                     var right = $scope.getRightLeafCol(col),
                         left = $scope.getLeftLeafCol(col),
                         move,
-                        prevCol = Underscore.where($scope.allCols, {'id': data.column})[0];
+                        prevCol = Underscore.where($scope.allCols, {'id': data.column})[0],
+                        highestPriorityCol = Underscore.where($scope.allCols, {'is_high_priority': true})[0],
+                        colsLeftOfHighPriColumn = $scope.getLeftCols(highestPriorityCol, $scope.leafCols);
 
                     // when card is not moved one place right, one left or on the same column
+                    // and when card isn't moved from acceptance test column to one before or on high priority column
                     if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
-                            !prevCol.acceptance_test) {
+                            !(prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) && $scope.isPO)) {
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
@@ -480,17 +481,17 @@
                         BoardService.createMove(move);
                         return;
                     }
-                    /*var otherObj = $scope.draggableObjects[index];
-                    var otherIndex = $scope.draggableObjects.indexOf(obj);
-                    $scope.draggableObjects[index] = obj;
-                    $scope.draggableObjects[otherIndex] = otherObj;*/
-                    //to_column.push(data);
                     move = {
                         card: data.id,
                         user: $scope.session.userid,
                         from_position: data.column,
                         to_position: col.id
                     };
+                    if (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) {
+                        if (data.type !== 'silverBullet') {
+                            data.type = 'rejected';
+                        }
+                    }
                     data.project = proj.id;
                     data.column = col.id;
                     BoardService.createMove(move);
