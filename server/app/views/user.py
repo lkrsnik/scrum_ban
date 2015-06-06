@@ -9,22 +9,29 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+
     permission_classes = (IsAdminOrScrumMasterGroup,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
     def create(self, request):
         user_groups = request.DATA.pop('groups')
+        is_staff = False
+        if request.QUERY_PARAMS.get('is_staff'):
+            is_staff = request.DATA.pop('is_staff')
         request.DATA['groups'] = []
-        print(request.DATA)
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
             user = serializer.save()
-
+            if is_staff:
+                user.is_staff = True
+                user.save()
+            else:
+                user.is_staff = False
+                user.save()
             for group in user_groups:
                 g = Group.objects.get(id=group['id'])
                 g.user_set.add(user)
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -40,13 +47,21 @@ class UserViewSet(viewsets.ModelViewSet):
         Updates a single user with specified id
         """
         user = User.objects.filter(id=pk)
+        is_staff = False
+        if request.DATA.get('is_staff'):
+            is_staff = request.DATA.pop('is_staff')
         if len(user) > 0:
             user_obj = user.first()  # user object
             user_data = request.DATA  # user data as dictionary
             serializer = self.get_serializer(user_obj, data=user_data)
             if serializer.is_valid():
                 user = serializer.save()
-
+                if is_staff:
+                    user.is_staff = True
+                    user.save()
+                else:
+                    user.is_staff = False
+                    user.save()
                 for group in Group.objects.all():
                     group.user_set.remove(user)
 
