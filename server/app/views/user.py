@@ -16,7 +16,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         user_groups = request.DATA.pop('groups')
-        is_staff = request.DATA.pop('is_staff')
+        is_staff = False
+        if 'is_staff' in request.DATA:
+            is_staff = request.DATA.pop('is_staff')
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
             user = serializer.save()
@@ -41,8 +43,12 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         user = User.objects.filter(id=pk)
         user_groups = request.DATA.pop('groups')
-        is_staff = request.DATA.pop('is_staff')
-        is_active = request.DATA.pop('is_active')
+        is_staff = user.is_staff
+        if 'is_staff' in request.DATA:
+            is_staff = request.DATA.pop('is_staff')
+        is_active = user.is_active
+        if 'is_active' in request.DATA:
+            is_active = request.DATA.pop('is_active')
         if len(user) > 0:
             user_obj = user.first()  # user object
             user_data = request.DATA  # user data as dictionary
