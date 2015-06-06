@@ -34,7 +34,7 @@
             };
 
             $scope.redirectNonScrumMaster = function (link) {
-                if ($scope.session && !Underscore.contains($scope.session.roles, 'ScrumMaster') && !$scope.session.is_staff) {
+                if ($scope.session && !$scope.session.is_scrum_master && !$scope.session.is_staff) {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $location.path(link);
                 }

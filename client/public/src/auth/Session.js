@@ -1,4 +1,4 @@
-/*global angular, console */
+/*global angular, console, Underscore */
 (function () {
     'use strict';
 
@@ -16,6 +16,8 @@
                             thisSession.roles = data.groups;
                             thisSession.userid = data.id;
                             thisSession.is_staff = data.is_staff;
+                            thisSession.is_scrum_master = Underscore.contains(data.groups, 'ScrumMaster');
+                            thisSession.is_product_owner = Underscore.contains(data.groups, 'ProductOwner');
                         })
                         .error(function () {
                             thisSession.authenticated = false;
