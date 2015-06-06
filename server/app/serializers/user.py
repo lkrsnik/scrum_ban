@@ -29,12 +29,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def create(self, validated_data):
         # for user registration password
-        # don't touch this!!!
         user = User.objects.create_user(**validated_data)
         return user
 
     def update(self, instance, validated_data):
-        instance.set_password(validated_data.get('password',
-                                                 instance.password))
+        new_password = validated_data.get('password')
+        if new_password != None:
+            instance.set_password(new_password)
         instance.save()
         return instance

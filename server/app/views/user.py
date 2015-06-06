@@ -16,19 +16,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         user_groups = request.DATA.pop('groups')
-        is_staff = False
-        if request.QUERY_PARAMS.get('is_staff'):
-            is_staff = request.DATA.pop('is_staff')
-        request.DATA['groups'] = []
+        is_staff = request.DATA.pop('is_staff')
         serializer = self.get_serializer(data=request.DATA)
         if serializer.is_valid():
             user = serializer.save()
-            if is_staff:
-                user.is_staff = True
-                user.save()
-            else:
-                user.is_staff = False
-                user.save()
+            user.is_staff = is_staff
+            user.save()
             for group in user_groups:
                 g = Group.objects.get(id=group['id'])
                 g.user_set.add(user)
@@ -47,26 +40,22 @@ class UserViewSet(viewsets.ModelViewSet):
         Updates a single user with specified id
         """
         user = User.objects.filter(id=pk)
-        is_staff = False
-        if request.DATA.get('is_staff'):
-            is_staff = request.DATA.pop('is_staff')
+        user_groups = request.DATA.pop('groups')
+        is_staff = request.DATA.pop('is_staff')
+        is_active = request.DATA.pop('is_active')
         if len(user) > 0:
             user_obj = user.first()  # user object
             user_data = request.DATA  # user data as dictionary
             serializer = self.get_serializer(user_obj, data=user_data)
             if serializer.is_valid():
                 user = serializer.save()
-                if is_staff:
-                    user.is_staff = True
-                    user.save()
-                else:
-                    user.is_staff = False
-                    user.save()
+
+                user.is_staff = is_staff
+                user.is_active = is_active
+                user.save()
+
                 for group in Group.objects.all():
                     group.user_set.remove(user)
-
-                user_groups = request.DATA.pop('groups')
-                print(user_groups)
                 for group in user_groups:
                     g = Group.objects.get(name=group)
                     g.user_set.add(user)
