@@ -33,7 +33,6 @@
 
                 UserService.createUser(user)
                     .success(function () {
-                        //console.log('User created');
                         $location.path('/users/');
                     })
                     .error(function (error, status) {
@@ -54,18 +53,14 @@
                 user.username = user.email;
                 user.groups = Underscore.filter($scope.groups, function (group) { return group.selected; });
                 // Save only group names
-                user.groups = Underscore.map(user.groups, function (group) { return group.name; });
+                user.groups = Underscore.pluck(user.groups, 'name');
 
                 if (user.password === '') {
                     delete user.password;
-                    console.log(user);
                 }
-                //console.log('Updating user:');
-                console.log(user);
 
                 UserService.updateUser(user)
                     .success(function () {
-                        //console.log('User updated');
                         $location.path('/users/');
                     });
             };
