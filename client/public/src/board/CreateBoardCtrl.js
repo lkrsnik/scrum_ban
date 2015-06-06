@@ -7,15 +7,15 @@
             if (!$scope.session) {
                 $scope.promises.sessionPromise
                     .then(function () {
-                        $scope.redirectNonAdmin('/');
+                        $scope.redirectNonScrumMaster('/');
                         $scope.redirectNonAuthenticated('/');
                     }, function () { // In case session promise fails
-                        $scope.redirectNonAdmin('/');
+                        $scope.redirectNonScrumMaster('/');
                         $scope.redirectNonAuthenticated('/');
                     });
             } else {
                 $scope.redirectNonAuthenticated('/');
-                $scope.redirectNonAdmin('/');
+                $scope.redirectNonScrumMaster('/');
             }
 
             $scope.resetEmailValidity = function () {
