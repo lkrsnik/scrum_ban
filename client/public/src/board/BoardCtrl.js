@@ -450,14 +450,16 @@
                     $scope.countCards(data);
                     console.log(data);
                     console.log(col);
-                    console.log(Underscore.where($scope.allCols, {'id': data.column})[0].acceptance_test);
+                    //console.log(.acceptance_test);
+                    console.log(col.is_high_priority);
                     var right = $scope.getRightLeafCol(col),
                         left = $scope.getLeftLeafCol(col),
-                        move;
+                        move,
+                        prevCol = Underscore.where($scope.allCols, {'id': data.column})[0];
 
                     // when card is not moved one place right, one left or on the same column
                     if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
-                            !Underscore.where($scope.allCols, {'id': data.column})[0].acceptance_test) {
+                            !prevCol.acceptance_test) {
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
