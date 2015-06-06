@@ -32,8 +32,8 @@
         <div class="form-group" ng-show="showCreateCardForm"
             ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
             <label>Card content</label>
-            <input ng-model="newCard.content" type="text" name="name" 
-                class="form-control" placeholder="Card content" required autofocus>
+            <textarea ng-model="newCard.content" type="text-area" rows="8" name="name" 
+                class="form-control" placeholder="Card content" required autofocus></textarea>
             <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
             Please enter card content.</p>
         </div> 

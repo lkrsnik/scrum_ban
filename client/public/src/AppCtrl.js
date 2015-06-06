@@ -27,14 +27,14 @@
             };
 
             $scope.redirectNonAdmin = function (link) {
-                if ($scope.session && !Underscore.contains($scope.session.roles, 'Admin')) {
+                if ($scope.session && !$scope.session.is_staff) {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $scope.redirect(link);
                 }
             };
 
             $scope.redirectNonScrumMaster = function (link) {
-                if ($scope.session && !Underscore.contains($scope.session.roles, 'ScrumMaster') && !Underscore.contains($scope.session.roles, 'Admin')) {
+                if ($scope.session && !Underscore.contains($scope.session.roles, 'ScrumMaster') && !$scope.session.is_staff) {
                     //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $location.path(link);
                 }

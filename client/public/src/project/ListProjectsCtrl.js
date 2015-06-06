@@ -19,6 +19,8 @@
                     .success(function (data) {
                         console.log(data);
                         $scope.projects = data;
+                        console.log("HE");
+                        console.log(data);
                         $scope.getTeams();
                     });
             };

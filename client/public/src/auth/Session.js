@@ -15,6 +15,7 @@
                             thisSession.username = data.username;
                             thisSession.roles = data.groups;
                             thisSession.userid = data.id;
+                            thisSession.is_staff = data.is_staff;
                         })
                         .error(function () {
                             thisSession.authenticated = false;
