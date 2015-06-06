@@ -50,6 +50,6 @@ class MoveViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows teams to be viewed or edited.
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = MoveSerializer
     queryset = Move.objects.all()

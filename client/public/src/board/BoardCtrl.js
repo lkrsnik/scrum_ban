@@ -436,19 +436,38 @@
 
                     $scope.countCards(data);
                     console.log(data);
+                    console.log(col);
+                    console.log(Underscore.where($scope.allCols, {'id': data.column})[0].acceptance_test);
+                    var right = $scope.getRightLeafCol(col),
+                        left = $scope.getLeftLeafCol(col),
+                        move;
+
+                    // when card is not moved one place right, one left or on the same column
+                    if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
+                            !Underscore.where($scope.allCols, {'id': data.column})[0].acceptance_test) {
+                        move = {
+                            card: data.id,
+                            user: $scope.session.userid,
+                            from_position: data.column,
+                            to_position: col.id,
+                            is_legal: false
+                        };
+                        BoardService.createMove(move);
+                        return;
+                    }
                     /*var otherObj = $scope.draggableObjects[index];
                     var otherIndex = $scope.draggableObjects.indexOf(obj);
                     $scope.draggableObjects[index] = obj;
                     $scope.draggableObjects[otherIndex] = otherObj;*/
                     //to_column.push(data);
-                    data.project = proj.id;
-                    data.column = col.id;
-                    var move;
                     move = {
                         card: data.id,
                         user: $scope.session.userid,
-                        from_position: data.column
+                        from_position: data.column,
+                        to_position: col.id
                     };
+                    data.project = proj.id;
+                    data.column = col.id;
                     BoardService.createMove(move);
                     BoardService.updateCard(data);
                 };

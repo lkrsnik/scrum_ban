@@ -30,5 +30,5 @@ class MoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Move
         fields = ('id', 'date', 'is_legal', 'description', 'card',
-                  'user', 'from_position')
+                  'user', 'from_position', 'to_position')
         read_only_fields = ('id',)
