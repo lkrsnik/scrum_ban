@@ -26,6 +26,7 @@ class CardSerializer(serializers.ModelSerializer):
                   'column', 'project', 'user')
         read_only_fields = ('id',)
 
+
 class MoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Move

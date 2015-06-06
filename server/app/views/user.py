@@ -50,7 +50,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 is_staff = request.DATA.pop('is_staff')
             is_active = user_obj.is_active
             if 'is_active' in request.DATA:
-                is_active = request.DATA.pop('is_active')   
+                is_active = request.DATA.pop('is_active')
             user_data = request.DATA  # user data as dictionary
             serializer = self.get_serializer(user_obj, data=user_data)
             if serializer.is_valid():

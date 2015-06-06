@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.board import BoardSerializer, ColumnSerializer, \
-                                    CardSerializer, MoveSerializer
-from app.models import Board, Column, Card, Project, UserTeam, Team, Group, Move
+                                  CardSerializer, MoveSerializer
+from app.models import Board, Column, Card, Project, UserTeam, Team, \
+                       Group, Move
 
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -46,6 +47,7 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CardSerializer
     queryset = Card.objects.all()
+
 
 class MoveViewSet(viewsets.ModelViewSet):
     """

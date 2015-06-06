@@ -3,7 +3,8 @@ from django.test import RequestFactory
 from app.models import Team, RoleTeam, UserTeam, RoleTeam, Project
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers.project import  ProjectSerializer
+from app.serializers.project import ProjectSerializer
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -23,15 +24,20 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def list(self, request):
         if request.QUERY_PARAMS.get('boardId'):
             if request.QUERY_PARAMS.get('role'):
-                groupQS = Group.objects.filter(name = request.QUERY_PARAMS['role'] )
-                roleTeamQS = RoleTeam.objects.filter(role__in=groupQS.values('id'));
-                userTeamQS = UserTeam.objects.filter(user=request.user, id__in=roleTeamQS.values('user_team'))
+                groupQS = Group.objects.filter(
+                    name=request.QUERY_PARAMS['role'])
+                roleTeamQS = RoleTeam.objects.filter(
+                    role__in=groupQS.values('id'))
+                userTeamQS = UserTeam.objects.filter(
+                    user=request.user,
+                    id__in=roleTeamQS.values('user_team'))
             else:
                 userTeamQS = UserTeam.objects.filter(user=request.user)
-            projectQS = Project.objects.filter(board=request.QUERY_PARAMS['boardId'], 
-                                    team__in=userTeamQS.values('team'))
+            projectQS = Project.objects.filter(
+                board=request.QUERY_PARAMS['boardId'],
+                team__in=userTeamQS.values('team'))
             serializer = self.serializer_class(projectQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        queryset = Project.objects.all() 
+        queryset = Project.objects.all()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

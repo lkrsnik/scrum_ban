@@ -1,6 +1,7 @@
 from app.models import Team, RoleTeam, UserTeam, RoleTeam, UserTeamActivity
 from rest_framework import serializers
 
+
 class TeamSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Team
@@ -20,6 +21,7 @@ class RoleTeamSerializer(serializers.ModelSerializer):
         model = RoleTeam
         fields = ('id', 'user_team', 'role')
         read_only_fields = ('id', )
+
 
 class UserTeamActivitySerializer(serializers.ModelSerializer):
     class Meta:

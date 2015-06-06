@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User, Group
 from django.test import RequestFactory
-from app.models import Team, RoleTeam, UserTeam, RoleTeam, Project, UserTeamActivity
+from app.models import Team, RoleTeam, UserTeam, RoleTeam, Project, \
+                       UserTeamActivity
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from app.serializers.team import TeamSerializer, UserTeamSerializer, RoleTeamSerializer, UserTeamActivitySerializer
+from app.serializers.team import TeamSerializer, UserTeamSerializer, \
+                                 RoleTeamSerializer, UserTeamActivitySerializer
+
 
 class TeamViewSet(viewsets.ModelViewSet):
     """
@@ -47,9 +50,11 @@ class RoleTeamViewSet(viewsets.ModelViewSet):
 
     def list(self, request, pk=None):
         if request.QUERY_PARAMS.get('teamId'):
-            userTeamQS = UserTeam.objects.filter(team=request.QUERY_PARAMS['teamId'], 
-                                    user=request.user)
-            roleTeamQS = RoleTeam.objects.filter(user_team__in=userTeamQS.values('id'))
+            userTeamQS = UserTeam.objects.filter(
+                team=request.QUERY_PARAMS['teamId'],
+                user=request.user)
+            roleTeamQS = RoleTeam.objects.filter(
+                user_team__in=userTeamQS.values('id'))
             serializer = self.serializer_class(roleTeamQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 

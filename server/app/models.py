@@ -18,11 +18,13 @@ class UserTeam(models.Model):
     team = models.ForeignKey(Team)
     is_active = models.BooleanField(default=True)
 
+
 class UserTeamActivity(models.Model):
     user = models.ForeignKey(User)
     team = models.ForeignKey(Team)
     date = models.DateTimeField(default=datetime.now)
     activated = models.BooleanField(default=True)
+
 
 class Board(models.Model):
     name = models.CharField(max_length=100, default="")
@@ -60,8 +62,10 @@ class Card(models.Model):
     name = models.TextField(max_length=100, default="")
     content = models.TextField(max_length=1500, default="")
     creation_date = models.DateTimeField(default=datetime.now)
-    completion_date = models.DateTimeField(default=datetime.now, null=True)
-    development_start_date = models.DateTimeField(default=datetime.now, null=True)
+    completion_date = models.DateTimeField(default=datetime.now,
+                                           null=True)
+    development_start_date = models.DateTimeField(default=datetime.now,
+                                                  null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)
@@ -74,9 +78,9 @@ class Move(models.Model):
     description = models.TextField(max_length=1500, default="")
     card = models.ForeignKey(Card)
     user = models.ForeignKey(User)
-    from_position = models.ForeignKey(Column, null=True, 
-                                    related_name="from_position")
-    to_position = models.ForeignKey(Column, 
+    from_position = models.ForeignKey(Column, null=True,
+                                      related_name="from_position")
+    to_position = models.ForeignKey(Column,
                                     related_name="to_position",
                                     default=None,
                                     null=True)
