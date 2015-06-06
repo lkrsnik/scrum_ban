@@ -5,6 +5,8 @@
         ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService',
             function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService) {
 
+                //////////////////////////////////////// INIT ////////////////////////////////////////
+
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
                         .then(function () {
@@ -16,120 +18,56 @@
                     $scope.redirectNonAuthenticated('/');
                 }
 
+                // Board init
+                $scope.board = {
+                    projects: []
+                };
+
+                // Columns init
                 $scope.COL_DIM = COL_DIM;
                 $scope.rootCols = [];
                 $scope.leafCols = [];
                 $scope.allCols = [];
-                $scope.columnCards = [];
+
+                // Projects init
                 $scope.yourProjects = [];
                 $scope.yourOwnedSMProjects = [];
                 $scope.yourOwnedPOProjects = [];
                 $scope.userOwnsProjects = false;
                 $scope.isSM = false;
                 $scope.isPO = false;
+
+                // Cards init
+                $scope.columnCards = [];
                 $scope.violationDescription = "";
                 $scope.silverBullet = false;
                 $scope.WIPErr = false;
-                $scope.board = {
-                    projects: []
-                };
 
-                $scope.getProjects = function () {
-                    $scope.promises.projectsPromise = ProjectService.getProjects()
-                        .success(function (data) {
-                            $scope.allProjects = data;
-                            $scope.nullProjects = Underscore.filter(data, function (proj) {
-                                return proj.board === null;
-                            });
-                        });
-                };
 
-                $scope.getBoardProjects = function (boardId) {
-                    $scope.promises.projectsPromise
-                        .then(function () {
-                            var tmp = Underscore.filter($scope.allProjects, function (proj) {
-                                return proj.board === boardId;
-                            });
-                            $scope.board.projects = (tmp === undefined) ? [] : tmp;
-                        });
-                };
+                //////////////////////////////////////// BOARD /////////////////////////////////////////
 
-                $scope.getColumnProjectCards = function (projectId, columnId) {
-                    var cards;
-                    cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
-                    cards.forEach(function (entry) {
-                        if (entry.type === "silverBullet") {
-                            entry.cardClass = "panel-danger";
-                        } else if (entry.type === "newFunctionality") {
-                            entry.cardClass = "panel-success";
-                        } else if (entry.type === "rejected") {
-                            entry.cardClass = "panel-warning";
-                        }
-                    });
-                    return cards;
-                };
-
-                $scope.getProjects();
-
-                BoardService.getBoard($routeParams.boardId)
+                $scope.promises.boardPromise = BoardService.getBoard($routeParams.boardId)
                     .success(function (data) {
                         $scope.board = data;
-                        $scope.getBoardProjects($scope.board.id);
-                        ProjectService.getProjectbyBoardUser($scope.board.id)
-                            .success(function (data) {
-                                $scope.yourProjects = data;
-                            });
-                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ScrumMaster")
-                            .success(function (data) {
-                                data.yourRole = "ScrumMaster";
-                                if (data.length > 0) {
-                                    $scope.yourOwnedSMProjects.push(data);
-                                    $scope.userOwnsProjects = true;
-                                    $scope.isSM = true;
-                                    $scope.yourOwnedSMProjects = Underscore.flatten($scope.yourOwnedSMProjects, true);
-                                }
-                            });
-                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ProductOwner")
-                            .success(function (data) {
-                                data.yourRole = "ProductOwner";
-                                if (data.length > 0) {
-                                    $scope.yourOwnedPOProjects.push(data);
-                                    $scope.userOwnsProjects = true;
-                                    $scope.isPO = true;
-                                    $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
-                                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
-                                    if ($scope.silverBullet.length > 0) {
-                                        $scope.silverBullet = true;
-                                    } else {
-                                        $scope.silverBullet = false;
-                                    }
-                                }
-                            });
                     });
 
-                BoardService.getBoards()
-                    .success(function (data) {
-                        $scope.boards = data;
-                    });
+                $scope.getBoardStyle = function () {
+                    var boardWidth = $scope.getColsWidth($scope.rootCols, 0) + 'px',
+                        boardHeight = ($scope.rootCols.length > 0 ? $scope.rootCols[0].style['min-height'] : COL_DIM.height) + 20 + 'px';
+
+                    return {
+                        'width': boardWidth,
+                        'margin-bottom': boardHeight
+                    };
+                };
+
+                //////////////////////////////////////// COLUMNS /////////////////////////////////////////
 
                 BoardService.getColumns($routeParams.boardId)
                     .success(function (data) {
                         $scope.allCols = data;
                         $scope.updateCols();
                     });
-
-                BoardService.getCards()
-                    .success(function (data) {
-                        $scope.allCards = data;
-                    });
-
-                UserService.getUsers()
-                    .success(function (data) {
-                        $scope.allUsers = data;
-                    });
-
-
 
                 $scope.createColumn = function () {
                     $scope.newColumn = {
@@ -158,109 +96,6 @@
 
                     $scope.allCols = Underscore.without($scope.allCols, column);
                     $scope.updateCols();
-                };
-
-                $scope.onProjectSelectionChange = function (type) {
-                    $scope.showCreateCardForm = true;
-                    if (type === 'ProductOwner') {
-                        $scope.type = 'silverBullet';
-                        $scope.cardColumn = $scope.firstColumn;
-                    }
-                    if (type === 'ScrumMaster') {
-                        $scope.type = 'newFunctionality';
-                        $scope.cardColumn = $scope.highPriorityColumn;
-                    }
-                    if ($scope.wipError($scope.cardColumn[0])) {
-                        $scope.WIPErr = true;
-                        alert("You are going to violate WIP!");
-                    }
-                };
-
-                $scope.createCard = function () {
-                    var move;
-                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
-                    if ($scope.silverBullet.length > 0) {
-                        $scope.silverBullet = true;
-                    } else {
-                        $scope.silverBullet = false;
-                    }
-                    $scope.showCreateCardForm = false;
-                    $scope.cardColumn = null;
-                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                    $scope.firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
-                    //Alerts for non validate board
-                    if ($scope.highPriorityColumn.length < 1) {
-                        alert("Column with high priority is missing. Add one!");
-                        return;
-                    }
-                    if ($scope.board.projects.length < 1) {
-                        alert("There is no projects on the table. Add one!");
-                        return;
-                    }
-                    $scope.newCard = {
-                        completion_date: null,
-                        development_start_date: null,
-                        is_active: true
-                    };
-                    ngDialog.openConfirm({
-                        template: '/static/html/board/createEditCard.html',
-                        className: 'ngdialog-theme-plain',
-                        scope: $scope
-                    })
-                        .then(function () {
-                            $scope.newCard.project = $scope.newCard.project.id;
-                            $scope.newCard.column = $scope.cardColumn[0].id;
-                            $scope.newCard.type = $scope.type;
-                            BoardService.createCard($scope.newCard)
-                                .success(function (data) {
-                                    $scope.allCards.push(data);
-                                    move = {
-                                        card: data.id,
-                                        user: $scope.session.userid,
-                                        from_position: null,
-                                        is_legal: false
-                                    };
-                                    BoardService.createMove(move);
-                                });
-                        });
-                };
-
-                $scope.addProject = function () {
-                    ngDialog.openConfirm({
-                        template: '/static/html/board/addBoardProjects.html',
-                        className: 'ngdialog-theme-plain',
-                        scope: $scope
-                    })
-                        .then(function () {
-                            $scope.addBoardProjects($scope.board);
-                        });
-                };
-
-                $scope.addBoardProjects = function (board) {
-                    var proj,
-                        projects = angular.copy(board.projects),
-                        i,
-                        updateProjectSuccessFunction = function (data) {
-                            $scope.board.projects.push(data);
-                        };
-
-                    $scope.board.projects = [];
-                    // Update projects
-                    for (i = 0; i < projects.length; i += 1) {
-                        // Add board id to all projects
-                        proj = projects[i];
-                        proj.board = board.id;
-                        ProjectService.updateProject(proj)
-                            .success(updateProjectSuccessFunction);
-                    }
-                };
-
-                $scope.getProjectsIfLeafColumn = function (colId, board) {
-                    if ($scope.getSubCols(colId).length > 0) {
-                        return board.projects.length > 0 ? [board.projects[0]] : [{ 'name': 'fake' }];
-                    }
-                    return board.projects;
                 };
 
                 $scope.proccessSavedColumn = function (col) {
@@ -350,32 +185,6 @@
                     return Underscore.sortBy(result, 'location');
                 };
 
-                /*$scope.getMaxColDepth = function (cols) {
-                    var maxDepth = 0,
-                        tmp,
-                        i;
-                    for (i = 0; i < cols.length; i += 1) {
-                        tmp = 1 + $scope.getMaxColDepth($scope.getSubCols(cols[i].id));
-                        if (tmp > maxDepth) {
-                            maxDepth = tmp;
-                        }
-                    }
-                    return maxDepth;
-                };
-
-                $scope.getMaxSubColsLen = function (cols) {
-                    var maxSubColsLen = cols.length,
-                        tmp,
-                        i;
-                    for (i = 0; i < cols.length; i += 1) {
-                        tmp = $scope.getMaxSubColsLen($scope.getSubCols(cols[i].id));
-                        if (tmp > maxSubColsLen) {
-                            maxSubColsLen = tmp;
-                        }
-                    }
-                    return maxSubColsLen;
-                };*/
-
                 // Function return the kumulative width of given columns and while calculating it
                 // sets the style settings for every column
                 // When called with $scope.rootCols it will return board width
@@ -406,14 +215,102 @@
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
                 };
 
-                $scope.getBoardStyle = function () {
-                    var boardWidth = $scope.getColsWidth($scope.rootCols, 0) + 'px',
-                        boardHeight = ($scope.rootCols.length > 0 ? $scope.rootCols[0].style['min-height'] : COL_DIM.height) + 20 + 'px';
 
-                    return {
-                        'width': boardWidth,
-                        'margin-bottom': boardHeight
-                    };
+
+                //////////////////////////////////////// PROJECTS ////////////////////////////////////////
+
+                $scope.getProjects = function () {
+                    $scope.promises.projectsPromise = ProjectService.getProjects()
+                        .success(function (data) {
+                            $scope.allProjects = data;
+                            $scope.nullProjects = Underscore.filter(data, function (proj) {
+                                return proj.board === null;
+                            });
+                        });
+                };
+                $scope.getProjects();
+
+                $scope.getBoardProjects = function (boardId) {
+                    $scope.promises.projectsPromise
+                        .then(function () {
+                            var tmp = Underscore.filter($scope.allProjects, function (proj) {
+                                return proj.board === boardId;
+                            });
+                            $scope.board.projects = (tmp === undefined) ? [] : tmp;
+                        });
+                };
+
+                $scope.promises.boardPromise
+                    .then(function () {
+                        $scope.getBoardProjects($scope.board.id);
+                        ProjectService.getProjectbyBoardUser($scope.board.id)
+                            .success(function (data) {
+                                $scope.yourProjects = data;
+                            });
+                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ScrumMaster")
+                            .success(function (data) {
+                                data.yourRole = "ScrumMaster";
+                                if (data.length > 0) {
+                                    $scope.yourOwnedSMProjects.push(data);
+                                    $scope.userOwnsProjects = true;
+                                    $scope.isSM = true;
+                                    $scope.yourOwnedSMProjects = Underscore.flatten($scope.yourOwnedSMProjects, true);
+                                }
+                            });
+                        ProjectService.getProjectbyBoardUserRole($scope.board.id, "ProductOwner")
+                            .success(function (data) {
+                                data.yourRole = "ProductOwner";
+                                if (data.length > 0) {
+                                    $scope.yourOwnedPOProjects.push(data);
+                                    $scope.userOwnsProjects = true;
+                                    $scope.isPO = true;
+                                    $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
+                                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
+                                    if ($scope.silverBullet.length > 0) {
+                                        $scope.silverBullet = true;
+                                    } else {
+                                        $scope.silverBullet = false;
+                                    }
+                                }
+                            });
+                    });
+
+                $scope.addProject = function () {
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/addBoardProjects.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            $scope.addBoardProjects($scope.board);
+                        });
+                };
+
+                $scope.addBoardProjects = function (board) {
+                    var proj,
+                        projects = angular.copy(board.projects),
+                        i,
+                        updateProjectSuccessFunction = function (data) {
+                            $scope.board.projects.push(data);
+                        };
+
+                    $scope.board.projects = [];
+                    // Update projects
+                    for (i = 0; i < projects.length; i += 1) {
+                        // Add board id to all projects
+                        proj = projects[i];
+                        proj.board = board.id;
+                        ProjectService.updateProject(proj)
+                            .success(updateProjectSuccessFunction);
+                    }
+                };
+
+                $scope.getProjectsIfLeafColumn = function (colId, board) {
+                    if ($scope.getSubCols(colId).length > 0) {
+                        return board.projects.length > 0 ? [board.projects[0]] : [{ 'name': 'fake' }];
+                    }
+                    return board.projects;
                 };
 
                 $scope.getProjectStyle = function (col, isFirst, isLast) {
@@ -432,19 +329,98 @@
                     return projStyle;
                 };
 
-                //$scope.obj = "test";
-                var eachProduct = [
-                    {
-                        "name": "ime1"
-                    }, {
-                        "name": "ime2"
-                    }, {
-                        "name": "ime3"
-                    }];
-                $scope.draggableObjects = eachProduct;
-                $scope.wasDragged = [{
-                    "name": "ime5"
-                }];
+                //////////////////////////////////////// CARDS ///////////////////////////////////////////
+
+                BoardService.getCards()
+                    .success(function (data) {
+                        $scope.allCards = data;
+                    });
+
+                UserService.getUsers()
+                    .success(function (data) {
+                        $scope.allUsers = data;
+                    });
+
+                $scope.getColumnProjectCards = function (projectId, columnId) {
+                    var cards;
+                    cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
+                    cards.forEach(function (entry) {
+                        if (entry.type === "silverBullet") {
+                            entry.cardClass = "panel-danger";
+                        } else if (entry.type === "newFunctionality") {
+                            entry.cardClass = "panel-success";
+                        } else if (entry.type === "rejected") {
+                            entry.cardClass = "panel-warning";
+                        }
+                    });
+                    return cards;
+                };
+
+                $scope.onProjectSelectionChange = function (type) {
+                    $scope.showCreateCardForm = true;
+                    if (type === 'ProductOwner') {
+                        $scope.type = 'silverBullet';
+                        $scope.cardColumn = $scope.firstColumn;
+                    }
+                    if (type === 'ScrumMaster') {
+                        $scope.type = 'newFunctionality';
+                        $scope.cardColumn = $scope.highPriorityColumn;
+                    }
+                    if ($scope.wipError($scope.cardColumn[0])) {
+                        $scope.WIPErr = true;
+                        alert("You are going to violate WIP!");
+                    }
+                };
+
+                $scope.createCard = function () {
+                    var move;
+                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
+                    if ($scope.silverBullet.length > 0) {
+                        $scope.silverBullet = true;
+                    } else {
+                        $scope.silverBullet = false;
+                    }
+                    $scope.showCreateCardForm = false;
+                    $scope.cardColumn = null;
+                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                    $scope.firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
+                    //Alerts for non validate board
+                    if ($scope.highPriorityColumn.length < 1) {
+                        alert("Column with high priority is missing. Add one!");
+                        return;
+                    }
+                    if ($scope.board.projects.length < 1) {
+                        alert("There is no projects on the table. Add one!");
+                        return;
+                    }
+                    $scope.newCard = {
+                        completion_date: null,
+                        development_start_date: null,
+                        is_active: true
+                    };
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/createEditCard.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            $scope.newCard.project = $scope.newCard.project.id;
+                            $scope.newCard.column = $scope.cardColumn[0].id;
+                            $scope.newCard.type = $scope.type;
+                            BoardService.createCard($scope.newCard)
+                                .success(function (data) {
+                                    $scope.allCards.push(data);
+                                    move = {
+                                        card: data.id,
+                                        user: $scope.session.userid,
+                                        from_position: null,
+                                        is_legal: false
+                                    };
+                                    BoardService.createMove(move);
+                                });
+                        });
+                };
 
                 $scope.countCards = function (column) {
                     if (column.isLeafCol) {
@@ -511,5 +487,31 @@
                     BoardService.createMove(move);
                     BoardService.updateCard(data);
                 };
+
+                /*$scope.getMaxColDepth = function (cols) {
+                    var maxDepth = 0,
+                        tmp,
+                        i;
+                    for (i = 0; i < cols.length; i += 1) {
+                        tmp = 1 + $scope.getMaxColDepth($scope.getSubCols(cols[i].id));
+                        if (tmp > maxDepth) {
+                            maxDepth = tmp;
+                        }
+                    }
+                    return maxDepth;
+                };
+
+                $scope.getMaxSubColsLen = function (cols) {
+                    var maxSubColsLen = cols.length,
+                        tmp,
+                        i;
+                    for (i = 0; i < cols.length; i += 1) {
+                        tmp = $scope.getMaxSubColsLen($scope.getSubCols(cols[i].id));
+                        if (tmp > maxSubColsLen) {
+                            maxSubColsLen = tmp;
+                        }
+                    }
+                    return maxSubColsLen;
+                };*/
             }]);
 }());
