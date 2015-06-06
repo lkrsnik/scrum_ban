@@ -95,9 +95,12 @@
                                     $scope.isPO = true;
                                     $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
                                     $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn.id });
+                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
+                                    console.log($scope.silverBullet);
                                     if ($scope.silverBullet.length > 0) {
                                         $scope.silverBullet = true;
+                                    } else {
+                                        $scope.silverBullet = false;
                                     }
                                 }
                             });
@@ -170,6 +173,13 @@
 
                 $scope.createCard = function () {
                     var move;
+                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
+                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
+                    if ($scope.silverBullet.length > 0) {
+                        $scope.silverBullet = true;
+                    } else {
+                        $scope.silverBullet = false;
+                    }
                     $scope.showCreateCardForm = false;
                     $scope.cardColumn = null;
                     $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
