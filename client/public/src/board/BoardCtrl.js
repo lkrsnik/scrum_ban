@@ -29,6 +29,7 @@
                 $scope.isPO = false;
                 $scope.violationDescription = "";
                 $scope.silverBullet = false;
+                $scope.WIPErr = false;
                 $scope.board = {
                     projects: []
                 };
@@ -169,6 +170,10 @@
                         $scope.type = 'newFunctionality';
                         $scope.cardColumn = $scope.highPriorityColumn;
                     }
+                    if ($scope.wipError($scope.cardColumn[0])) {
+                        $scope.WIPErr = true;
+                        alert("You are going to violate WIP!");
+                    }
                 };
 
                 $scope.createCard = function () {
@@ -189,6 +194,7 @@
                         alert("Column with high priority is missing. Add one!");
                         return;
                     }
+                    console.log($scope.board.projects);
                     if ($scope.board.projects.length < 1) {
                         alert("There is no projects on the table. Add one!");
                         return;
@@ -214,7 +220,8 @@
                                     move = {
                                         card: data.id,
                                         user: $scope.session.userid,
-                                        from_position: null
+                                        from_position: null,
+                                        is_legal: false
                                     };
                                     BoardService.createMove(move);
                                 });
@@ -453,6 +460,18 @@
                         sum += $scope.countCards(cols[i]);
                     }
                     return sum;
+                };
+
+                $scope.wipError = function (column) {
+                    var current;
+                    current = column;
+                    while (current) {
+                        if (($scope.countCards(current) + 1) > current.wip) {
+                            return true;
+                        }
+                        current = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
+                    }
+                    return false;
                 };
 
                 $scope.onDropComplete = function (data, proj, col) {
