@@ -21,7 +21,6 @@
                 BoardService.getBoards()
                     .success(function (data) {
                         $scope.boards = data;
-                        console.log($scope.boards);
                         //$scope.users = Underscore.filter(data, function (user) { return user.is_active; });
                     });
             };

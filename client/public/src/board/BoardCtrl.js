@@ -99,7 +99,6 @@
                                     $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
                                     $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
                                     $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
-                                    console.log($scope.silverBullet);
                                     if ($scope.silverBullet.length > 0) {
                                         $scope.silverBullet = true;
                                     } else {
@@ -147,7 +146,6 @@
                             delete $scope.newColumn.left;
                             delete $scope.newColumn.right;
 
-                            console.log($scope.newColumn);
                             BoardService.createColumn($scope.newColumn)
                                 .success(function (data) {
                                     $scope.proccessSavedColumn(data);
@@ -196,7 +194,6 @@
                         alert("Column with high priority is missing. Add one!");
                         return;
                     }
-                    console.log($scope.board.projects);
                     if ($scope.board.projects.length < 1) {
                         alert("There is no projects on the table. Add one!");
                         return;
@@ -217,7 +214,6 @@
                             $scope.newCard.type = $scope.type;
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
-                                    console.log(data);
                                     $scope.allCards.push(data);
                                     move = {
                                         card: data.id,
@@ -227,7 +223,6 @@
                                     };
                                     BoardService.createMove(move);
                                 });
-                            console.log($scope.newCard);
                         });
                 };
 

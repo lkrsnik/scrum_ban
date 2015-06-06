@@ -112,13 +112,9 @@
             $scope.editTeam = function (team, productOwner, scrumMaster, members) {
                 $scope.getRoles();
                 $scope.allPreviousUsers = Underscore.union($scope.previousSelectedTM, [$scope.previousSelectedSM], [$scope.previousSelectedPO]);
-                console.log($scope.allPreviousUsers);
                 $scope.allNewUsers = Underscore.union([productOwner], [scrumMaster], members);
-                console.log($scope.allNewUsers);
                 $scope.newlyAdded = Underscore.difference($scope.allNewUsers, $scope.allPreviousUsers);
                 $scope.deactivated = Underscore.difference($scope.allPreviousUsers, $scope.allNewUsers);
-                console.log($scope.newlyAdded);
-                console.log($scope.deactivated);
                 var cnt = 0,
                     completedAct = [],
                     newAct = {},

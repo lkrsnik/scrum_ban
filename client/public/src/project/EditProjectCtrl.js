@@ -55,17 +55,13 @@
 
             $scope.getTeams();
             $scope.editProject = function (project) {
-                console.log(project);
                 project.team = project.team.id;
                 project.board = null;
-                console.log(project.start_date);
                 project.start_date = $filter('date')(project.start_date, 'yyyy-MM-ddTHH:mm');
-                console.log(project.start_date);
                 project.end_date = $filter('date')(project.end_date, 'yyyy-MM-ddTHH:mm');
                 project.is_active = $scope.project.is_active;
                 ProjectService.updateProject(project)
-                    .success(function (dataTeam) {
-                        console.log(dataTeam);
+                    .success(function () {
                         $location.path('/projects/');
                     });
             };

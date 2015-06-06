@@ -15,11 +15,9 @@
             var scteams = null;
             //map of role id => role name
             $scope.roleNames = {};
-            //console.log('List teams');
             $scope.getTeams = function () {
                 TeamService.getTeams()
                     .success(function (data) {
-                        console.log(data);
                         scteams = data;
                         //$scope.users = Underscore.filter(data, function (user) { return user.is_active; });
                         $scope.getUserTeams();
@@ -33,7 +31,6 @@
                         $scope.userTeams = data;
                         //if($scope.session.username !== "admin") {
                             //$scope.userTeams = Underscore.filter(data, function(userTeam) { return userTeam.user == $scope.session.userid});
-                        console.log($scope.userTeams);
                         $scope.getRoleTeams();
                         //}
                     });
@@ -49,7 +46,6 @@
                         $scope.roleTeams = data;
                        // $scope.roleTeams = Underscore.filter(data, function(roleTeam) {                                                   
                         //                                                return Underscore.where($scope.userTeams, {'id': roleTeam.user_team}).length > 0; });
-                        console.log($scope.roleTeams);
 
                         //merge userTeams with roles
                         for (i = 0; i < $scope.userTeams.length; i += 1) {
@@ -92,13 +88,11 @@
                                     scteams[i].teamMembers = teamMembers;
                                 }
                                 $scope.teams = scteams;
-                                console.log($scope.teams);
                             });
                     });
             };
 
             $scope.getDetails = function (team) {
-                console.log(team);
                 UserService.getUsers()
                     .success(function (userdata) {
                         TeamService.getUserTeamActivity()
@@ -117,7 +111,6 @@
                                 $scope.allUsers = Underscore.uniq($scope.allUsers, function (u) {
                                     return u.user;
                                 });
-                                console.log($scope.allUsers);
                                 ngDialog.openConfirm({
                                     template: '/static/html/team/details.html',
                                     className: 'ngdialog-theme-plain',
@@ -134,7 +127,6 @@
                         for (i = 0; i < data.length; i += 1) {
                             $scope.roleNames[data[i].id] = data[i].name;
                         }
-                        console.log($scope.roleNames);
                         $scope.getTeams();
                     });
             };

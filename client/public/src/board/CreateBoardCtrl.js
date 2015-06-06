@@ -23,10 +23,8 @@
             };
 
             $scope.createBoard = function (board) {
-                console.log(board);
                 BoardService.createBoard(board)
                     .success(function () {
-                        //console.log('User created');
                         $location.path('/');
                     })
                     .error(function (error, status) {

@@ -17,10 +17,7 @@
             $scope.getProjects = function () {
                 ProjectService.getProjects()
                     .success(function (data) {
-                        console.log(data);
                         $scope.projects = data;
-                        console.log("HE");
-                        console.log(data);
                         $scope.getTeams();
                     });
             };
@@ -33,7 +30,6 @@
                                 return t.id === p.team;
                             }).name;
                         });
-                        console.log($scope.projects);
 
                     });
             };

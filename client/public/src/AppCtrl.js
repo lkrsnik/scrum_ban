@@ -28,15 +28,13 @@
 
             $scope.redirectNonAdmin = function (link) {
                 if ($scope.session && !$scope.session.is_staff) {
-                    //console.log('Nimate ustreznih pooblastil za ogled te strani.');
                     $scope.redirect(link);
                 }
             };
 
             $scope.redirectNonScrumMaster = function (link) {
                 if ($scope.session && !$scope.session.is_scrum_master && !$scope.session.is_staff) {
-                    //console.log('Nimate ustreznih pooblastil za ogled te strani.');
-                    $location.path(link);
+                    $scope.redirect(link);
                 }
             };
             $scope.redirectNonAuthenticated = function (link) {

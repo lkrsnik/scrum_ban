@@ -111,7 +111,6 @@
                                                         };
                                                     for (i = 0; i < members.length; i = i + 1) {
                                                         if (members[i] !== scrumMaster && members[i] !== productOwner) {
-                                                            console.log("they're not equal");
                                                             newTM =
                                                                 {
                                                                     "team": dataTeam.id,
@@ -121,7 +120,6 @@
                                                             TeamService.createUserTeam(newTM)
                                                                 .success(createUserTeamSuccessFun);
                                                         } else {
-                                                            console.log("they equal");
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {
