@@ -23,24 +23,24 @@
             </select>
         </div>
 
-        <div class="form-group" ng-if="newColumn.right === undefined && getSubCols(newColumn.parent_column).length > 0" 
+        <div class="form-group" ng-if="newColumn.right === undefined && leafCols.length > 0" 
             ng-class="{ 'has-error' : columnForm.left.$invalid && columnForm.left.$dirty }" }>
             <label>Select left column:</label>
             <select class="form-control" 
                 ng-model="newColumn.left" 
-                ng-options="c as c.name for c in getSubCols(newColumn.parent_column)"
-                ng-required="newColumn.right === undefined && getSubCols(newColumn.parent_column).length > 0">
+                ng-options="c as c.name for c in leafCols"
+                ng-required="newColumn.right === undefined && leafCols.length > 0">
                 <option value="">-- choose left column --</option>
             </select>
         </div>
 
-        <div class="form-group" ng-if="newColumn.left === undefined && getSubCols(newColumn.parent_column).length > 0" 
+        <div class="form-group" ng-if="newColumn.left === undefined && leafCols.length > 0" 
             ng-class="{ 'has-error' : columnForm.right.$invalid && columnForm.right.$dirty }" }>
             <label>Select right column:</label>
             <select class="form-control" 
                 ng-model="newColumn.right" 
-                ng-options="c as c.name for c in getSubCols(newColumn.parent_column)"
-                ng-required="newColumn.left === undefined && getSubCols(newColumn.parent_column).length > 0">
+                ng-options="c as c.name for c in leafCols"
+                ng-required="newColumn.left === undefined && leafCols.length > 0">
                 <option value="">-- choose right column --</option>
             </select>
         </div>
