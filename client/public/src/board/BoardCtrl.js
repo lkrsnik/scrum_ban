@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService',
-            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService) {
+        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService',
+            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService) {
 
                 if (!$scope.session) {
                     $scope.promises.sessionPromise
@@ -54,8 +54,16 @@
                 };
 
                 $scope.getColumnProjectCards = function (projectId, columnId) {
-                    return Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
-
+                    var cards;
+                    cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
+                    cards.forEach(function (entry) {
+                        if (entry.type === "silverBullet") {
+                            entry.cardClass = "panel-danger";
+                        } else {
+                            entry.cardClass = "panel-success";
+                        }
+                    });
+                    return cards;
                 };
 
                 $scope.getProjects();
@@ -111,6 +119,11 @@
                         $scope.allCards = data;
                     });
 
+                UserService.getUsers()
+                    .success(function (data) {
+                        $scope.allUsers = data;
+                    });
+
 
 
                 $scope.createColumn = function () {
@@ -146,11 +159,11 @@
                 $scope.onProjectSelectionChange = function (type) {
                     $scope.showCreateCardForm = true;
                     if (type === 'ProductOwner') {
-                        $scope.type = 'newFunctionality';
+                        $scope.type = 'silverBullet';
                         $scope.cardColumn = $scope.firstColumn;
                     }
                     if (type === 'ScrumMaster') {
-                        $scope.type = 'silverBullet';
+                        $scope.type = 'newFunctionality';
                         $scope.cardColumn = $scope.highPriorityColumn;
                     }
                 };
