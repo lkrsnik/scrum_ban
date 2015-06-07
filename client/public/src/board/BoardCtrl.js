@@ -584,13 +584,15 @@
                 };
 
                 $scope.wipError = function (column) {
-                    var current;
-                    current = column;
-                    while (current) {
-                        if (($scope.countCards(current) + 1) > current.wip) {
-                            return true;
-                        }
-                        current = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
+                    if ($scope.countCards(column) >= column.wip) {
+                        return true;
+                    }
+                    if (!column.parent_column) {
+                        return false;
+                    }
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    if (parentColumn) {
+                        return $scope.wipError(parentColumn);
                     }
                     return false;
                 };
@@ -609,6 +611,15 @@
                     // and when card isn't moved from acceptance test column to one before or on high priority column
                     if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
                             !(prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) && $scope.isPO)) {
+                        $scope.notify('Error', 'This move is forbidden!');
+                        return;
+                    }
+                    if (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) {
+                        if (data.type !== 'silverBullet') {
+                            data.type = 'rejected';
+                        }
+                    }
+                    if ($scope.wipError(col) && col.id !== data.column) {
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
@@ -616,25 +627,26 @@
                             to_position: col.id,
                             is_legal: false
                         };
+                        $scope.notify('Warning', 'You have exceeded WIP limit! Do you want to move your card anyway?', true)
+                            .then(function () {
+                                data.project = proj.id;
+                                data.column = col.id;
+                                BoardService.createMove(move);
+                                BoardService.updateCard(data);
+                            });
+                    } else {
+                        move = {
+                            card: data.id,
+                            user: $scope.session.userid,
+                            from_position: data.column,
+                            to_position: col.id
+                        };
+                        data.project = proj.id;
+                        data.column = col.id;
                         BoardService.createMove(move);
-                        $scope.notify('Error', 'This move is forbidden!');
-                        return;
+                        BoardService.updateCard(data);
                     }
-                    move = {
-                        card: data.id,
-                        user: $scope.session.userid,
-                        from_position: data.column,
-                        to_position: col.id
-                    };
-                    if (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) {
-                        if (data.type !== 'silverBullet') {
-                            data.type = 'rejected';
-                        }
-                    }
-                    data.project = proj.id;
-                    data.column = col.id;
-                    BoardService.createMove(move);
-                    BoardService.updateCard(data);
+                    
                 };
 
                 /*$scope.getMaxColDepth = function (cols) {
