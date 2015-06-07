@@ -19,9 +19,24 @@ class BoardViewSet(viewsets.ModelViewSet):
             queryset = Board.objects.all()
             serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # Get all projects and their boards
+        allProjectsQS = Project.objects.all()
+        notNullBoardsQS = Board.objects.filter(id__in=allProjectsQS.values('board'))
+
+        # Get all boards
+        allBoardsQS = Board.objects.all()
+
+        # Null boards are diff between second and first set
+        nullBoardsQS = allBoardsQS.exclude(id__in=notNullBoardsQS.values('id'))
+
+        # Get user boards
         userTeamQS = UserTeam.objects.filter(user=request.user)
         projectQS = Project.objects.filter(team__in=userTeamQS.values('team'))
-        boardQS = Board.objects.filter(id__in=projectQS.values('board'))
+        userBoardQS = Board.objects.filter(id__in=projectQS.values('board'))
+
+        # Concatenate null boards with user boards
+        boardQS = nullBoardsQS | userBoardQS
         serializer = self.serializer_class(boardQS, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Add projects to board</div>
+  <div class="panel-body">
+    <form name="addBoardProject" class="create-column-form" role="form" 
+        ng-submit="confirm()" novalidate>
+
+        <div class="form-group" ng-if="allCols.length > 0" 
+            ng-class="{ 'has-error' : addBoardProject.projects.$invalid && 
+                                      addBoardProject.projects.$dirty }" }>
+            <label>
+              Add projects to board:<br />
+              <small>hold Ctrl to select multiple projects</small>
+            </label>
+            <select class="form-control" 
+                ng-model="editedProjects.added" multiple ng-multiple="true" 
+                ng-options="p as p.name for p in yourNullProjects">
+                <option value="">-- choose board projects --</option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-if="allCols.length > 0" 
+            ng-class="{ 'has-error' : addBoardProject.projects.$invalid && 
+                                      addBoardProject.projects.$dirty }" }>
+            <label>
+              Remove projects from board:<br />
+              <small>hold Ctrl to select multiple projects</small><br />
+              <small>you can only remove projects with no cards</small>
+            </label>
+            <select class="form-control" 
+                ng-model="editedProjects.removed" multiple ng-multiple="true" 
+                ng-options="p as p.name for p in projectsToRemove">
+                <option value="">-- choose board projects --</option>
+            </select>
+        </div>
+        
+        <button class="btn btn-primary" ng-disabled="addBoardProject.$invalid"
+            type="submit">Save board projects</button>
+    </form>
+  </div>
+</div>

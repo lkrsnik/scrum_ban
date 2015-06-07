@@ -27,8 +27,8 @@
                 if ($scope.boardS === null || $scope.boardS === undefined) {
                     // create new board
                     BoardService.createBoard(board)
-                        .success(function () {
-                            $location.path('/');
+                        .success(function (data) {
+                            $location.path('/boards/' + data.id);
                         })
                         .error(function (error, status) {
                             switch (status) {
@@ -100,7 +100,7 @@
                                                     complChild.push(BoardService.updateColumn(newChild));
                                                 }
                                                 $q.all(complChild).then(function () {
-                                                    $location.path('/');
+                                                    $location.path('/boards');
                                                 });
                                             });
 
