@@ -667,7 +667,7 @@
                 };
 
                 $scope.onDropComplete = function (data, proj, col) {
-                    if (col.id === data.column) {
+                    if (col.id === data.column && ) {
                         return;
                     }
                     $scope.countCards(data);
@@ -700,7 +700,7 @@
                         };
                         $scope.notify('Warning', 'You have exceeded WIP limit! Do you want to move your card anyway?', true)
                             .then(function () {
-                                data.project = proj.id;
+                                //data.project = proj.id;
                                 data.column = col.id;
                                 BoardService.createMove(move);
                                 BoardService.updateCard(data);
@@ -712,7 +712,7 @@
                             from_position: data.column,
                             to_position: col.id
                         };
-                        data.project = proj.id;
+                        //data.project = proj.id;
                         data.column = col.id;
                         BoardService.createMove(move);
                         BoardService.updateCard(data);
