@@ -623,22 +623,6 @@
                         });
                 };
 
-                $scope.editCard = function (card) {
-                    console.log(card);
-                    $scope.card = card;
-                    ngDialog.openConfirm({
-                        template: '/static/html/board/editCard.html',
-                        className: 'ngdialog-theme-plain',
-                        scope: $scope
-                    })
-                        .then(function () {
-                            BoardService.updateCard($scope.card)
-                                .success(function () {
-                                    console.log("YEEAAAA");
-                                });
-                        });
-                };
-
                 $scope.countCards = function (column) {
                     if (column.isLeafCol) {
                         return Underscore.where($scope.allCards, {'column': column.id}).length;
@@ -667,9 +651,7 @@
                 };
 
                 $scope.onDropComplete = function (data, proj, col) {
-                    if (col.id === data.column && ) {
-                        return;
-                    }
+
                     $scope.countCards(data);
                     var right = $scope.getRightLeafCol(col),
                         left = $scope.getLeftLeafCol(col),
@@ -680,17 +662,17 @@
 
                     // when card is not moved one place right, one left or on the same column
                     // and when card isn't moved from acceptance test column to one before or on high priority column
-                    if (!((right && right.id === data.column) || (left && left.id === data.column)) &&
+                    if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
                             !(prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) && $scope.isPO)) {
                         $scope.notify('Error', 'This move is forbidden!');
                         return;
                     }
-                    if (prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col))) {
+                    if (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) {
                         if (data.type !== 'silverBullet') {
                             data.type = 'rejected';
                         }
                     }
-                    if ($scope.wipError(col)) {
+                    if ($scope.wipError(col) && col.id !== data.column) {
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
@@ -700,7 +682,7 @@
                         };
                         $scope.notify('Warning', 'You have exceeded WIP limit! Do you want to move your card anyway?', true)
                             .then(function () {
-                                //data.project = proj.id;
+                                data.project = proj.id;
                                 data.column = col.id;
                                 BoardService.createMove(move);
                                 BoardService.updateCard(data);
@@ -712,7 +694,7 @@
                             from_position: data.column,
                             to_position: col.id
                         };
-                        //data.project = proj.id;
+                        data.project = proj.id;
                         data.column = col.id;
                         BoardService.createMove(move);
                         BoardService.updateCard(data);
