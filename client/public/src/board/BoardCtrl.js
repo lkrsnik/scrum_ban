@@ -183,7 +183,7 @@
                     }
 
                     // If high priority column changed reset old high priority column
-                    if (oldHighPriorityCol && (($scope.specialCols.highPriorityCol === null) || (oldHighPriorityCol.id !== $scope.specialCols.highPriorityCol.id))) {
+                    if (oldHighPriorityCol && ((!$scope.specialCols.highPriorityCol) || (oldHighPriorityCol.id !== $scope.specialCols.highPriorityCol.id))) {
                         oldHighPriorityCol.is_high_priority = false;
                         BoardService.updateColumn(oldHighPriorityCol);
                     }
