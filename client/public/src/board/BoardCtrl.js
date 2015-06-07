@@ -646,7 +646,6 @@
                         BoardService.createMove(move);
                         BoardService.updateCard(data);
                     }
-                    
                 };
 
                 /*$scope.getMaxColDepth = function (cols) {
