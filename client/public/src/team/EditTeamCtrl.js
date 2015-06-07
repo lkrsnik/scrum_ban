@@ -175,7 +175,7 @@
                                                     if (scrumMaster === productOwner) {
                                                         newRoleTeam =
                                                             {
-                                                                "user_team": data.id,
+                                                                "user_team": data.user_team,
                                                                 "role": $scope.scrumMasterR[0].id
                                                             };
                                                         $scope.userteamSM = data;
@@ -191,11 +191,11 @@
                                                                         "role": $scope.scrumMasterR[0].id
                                                                     };
                                                                 $scope.userteamSM = data;
-                                                                createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
                                                             });
                                                     }
                                                     createFirstRoleTeamPromise.then(function () {
                                                         createSecondUserTeamPromise.then(function () {
+                                                            createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
                                                             createRoleTeamPromise.then(function () {
                                                                 var newTM,
                                                                     created = [],
@@ -221,7 +221,7 @@
                                                                         if (members[i] === scrumMaster) {
                                                                             newRoleTeamTeamMember =
                                                                                 {
-                                                                                    "user_team": $scope.userteamSM.id,
+                                                                                    "user_team": $scope.userteamSM.user_team,
                                                                                     "role": $scope.teamMemberR[0].id
                                                                                 };
                                                                         } else {

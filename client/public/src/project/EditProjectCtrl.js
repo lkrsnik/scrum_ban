@@ -47,7 +47,7 @@
             };
 
             $scope.validateStartDate = function () {
-                if ($scope.project.start_date <= $scope.today) {
+                if ($filter('date')($scope.project.start_date, 'yyyy-MM-dd') <= ($scope.today)) {
                     $scope.createProjectForm.start_date.$setValidity('startBeforeToday', true);
                 } else {
                     $scope.createProjectForm.start_date.$setValidity('startBeforeToday', false);
