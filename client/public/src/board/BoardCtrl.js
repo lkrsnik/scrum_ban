@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService',
-            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService) {
+        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService', '$location',
+            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService, $location) {
 
                 //////////////////////////////////////// INIT ////////////////////////////////////////
 
@@ -47,6 +47,11 @@
                 $scope.violationDescription = "";
                 $scope.silverBullet = false;
                 $scope.WIPErr = false;
+
+                // Redirect init
+                $scope.go = function (path) {
+                    $location.path($location.path() + path);
+                };
 
 
                 //////////////////////////////////////// BOARD /////////////////////////////////////////
@@ -487,9 +492,7 @@
                     var move;
                     if ($scope.specialCols.highPriorityCol) {
                         $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.specialCols.highPriorityCol.id });
-                        console.log($scope.silverBullet);
                         $scope.silverBullet = $scope.silverBullet.length > 0;
-                        console.log($scope.silverBullet);
                     }
                     $scope.showCreateCardForm = false;
                     $scope.cardColumn = null;

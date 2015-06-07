@@ -27,6 +27,7 @@ var Underscore;
                 .when('/boards', { templateUrl: '/static/html/board/listBoards.html', controller: 'ListBoardsCtrl' })
                 .when('/boards/create', { templateUrl: '/static/html/board/createBoard.html', controller: 'CreateBoardCtrl' })
                 .when('/boards/:boardId', { templateUrl: '/static/html/board/board.html', controller: 'BoardCtrl' })
+                .when('/boards/:boardId/analytics', { templateUrl: '/static/html/board/boardAnalytics.html', controller: 'BoardAnalyticsCtrl' })
 
                 .when('/login', { templateUrl: '/static/html/auth/login.html', controller: 'LoginCtrl'})
                 .when('/teams', { templateUrl: '/static/html/team/listTeams.html', controller: 'ListTeamsCtrl'})

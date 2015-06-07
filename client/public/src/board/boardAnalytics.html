@@ -1,0 +1,76 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Board analytics: {{board.name}} </div>
+    <div class="panel-body">
+    <form name="analyticsForm" class="create-board-form" role="form" 
+        ng-submit="showAnalytics(subset)" novalidate>
+        <label>Select subset of cards: </label>
+        <div class="form-group" 
+            ng-class="{ 'has-error' : analyticsForm.project.$invalid && analyticsForm.project.$dirty }">
+            <label>PROJECT: </label>
+            <select class="form-control" 
+                ng-model="subset.project" ng-options="p.id as p.name for p in yourOwnedSMProjects" name="project" autofocus></select>
+        </div>        
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.create_start_date.$invalid && analyticsForm.create_start_date.$dirty }" }> 
+            <label>CREATED: </label>
+            <label>from</label>
+            <input ng-model="subset.create_start_date" type="date" name="create_start_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.create_end_date.$invalid && analyticsForm.create_end_date.$dirty }" }> 
+            <label>to</label>
+            <input ng-model="subset.create_end_date" type="date" name="create_end_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>        
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.finished_start_date.$invalid && analyticsForm.finished_start_date.$dirty }" }> 
+           <label>FINISHED: </label>
+            <label>from</label>
+            <input ng-model="subset.finished_start_date" type="date" name="finished_start_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.finished_end_date.$invalid && analyticsForm.finished_end_date.$dirty }" }> 
+            <label>to</label>
+            <input ng-model="subset.finished_end_date" type="date" name="finished_end_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.development_start_date.$invalid && analyticsForm.development_start_date.$dirty }" }> 
+            <label>DEVELOPMENT: </label>
+            <label>from</label>
+            <input ng-model="subset.development_start_date" type="date" name="development_start_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.development_end_date.$invalid && analyticsForm.development_end_date.$dirty }" }> 
+            <label>to</label>
+            <input ng-model="subset.development_end_date" type="date" name="development_end_date" 
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.points_from.$invalid && analyticsForm.points_from.$dirty }" }> 
+            <label>POINTS: </label>
+            <label>from</label>
+            <input ng-model="subset.points_from" type="number" name="points_from" 
+                class="form-control" placeholder="0">
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.points_to.$invalid && analyticsForm.points_to.$dirty }" }> 
+            <label>to</label>
+            <input ng-model="subset.points_to" type="number" name="points_to" 
+                class="form-control" placeholder="0">
+        </div>
+        <div class="form-group">
+            <label>TYPE: </label>
+            <select class="form-control" 
+                ng-model="subset.type" ng-options="p for p in types" name="type"></select>
+        </div>
+        <div class="form-group">
+        <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"
+            type="submit">Select</button>
+        </div>
+    </form>
+  </div>
+</div>
