@@ -1,26 +1,44 @@
 <div class="row board-container">
-    <div class="col-md-12 panel panel-default board-cmd-line">
+    <div class="col-md-12 panel panel-default board-cmd-line padless">
+        <div class="panel-heading">{{board.name}}</div>
         <div class="panel-body">
+            <span ng-show="allCols.length > 0" ng-click="editBoardProjects()" class="btn btn-primary handcursor" title="Add or remove board projects">
+                <span class="glyphicon glyphicon-pencil"></span> Projects
+            </span>
             <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
                 <span class="glyphicon glyphicon-plus"></span> Column
             </span>
-            <span ng-show="userOwnsProjects" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
+            <span ng-show="userOwnsProjects && (specialCols.borderCols.length >= 2 && specialCols.highPriorityCol &&  specialCols.acceptanceTestCol)" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
                 <span class="glyphicon glyphicon-plus"></span> Card
             </span>
-            <span ng-click="addProject()" class="btn btn-success handcursor" title="Add project to board">
-                <span class="glyphicon glyphicon-plus"></span> Project
-            </span>
-            <span ng-click="go('/analytics')" class="btn btn-success handcursor" title="Board analytics">
+			<span ng-click="go('/analytics')" class="btn btn-success handcursor" title="Board analytics">
                Analytics
             </span>
         </div>
+        <div class="alert alert-warning" ng-show="specialCols.borderCols.length < 2">
+            Board must have exactly 2 border columns.
+        </div>
+        <div class="alert alert-warning" ng-show="!specialCols.highPriorityCol">
+            Board must have a high priority column. Create one by creating at least one border column.
+        </div>
+        <div class="alert alert-warning" ng-show="!specialCols.acceptanceTestCol">
+            Board must have an acceptance test column.
+        </div>
+        <div class="alert alert-warning" ng-show="board.projects.length < 1">
+            There is no projects on the table. Add one!
+        </div>
     </div>
-    <div class="col-md-12 board-col-line" 
-        ng-style="getBoardStyle()">
-
-        <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" 
-            ng-include="'/static/html/board/column.html'"
-            ng-style="col.style"></div>
+        
+    <div class="col-md-12 board-col-container padless">
+        <div class="project-names">
+            <div class="vertical-text project-name" ng-repeat="proj in yourBoardProjects" ng-style="{ 'height': COL_DIM.height }">{{proj.name}}</div>
+        </div>
+        <div class="col-md-12 board-col-line" 
+            ng-style="getBoardStyle()">
+            <div class="panel panel-default panel-column panel-root-column" ng-repeat="col in rootCols" 
+                ng-include="'/static/html/board/column.html'"
+                ng-style="col.style"></div>
+        </div>
         <!--<div class="col" ng-repeat="rCol in rootCols">
             <h1>{{rCol.name}}</h1>
             <div class="sub-col" ng-repeat="col in getSubCols(rCol.id)">
@@ -30,35 +48,3 @@
         </div>-->
     </div>
 </div>
-
-this is what you own:
-<p>{{yourOwnedPOProjects}}</p>
-<p>{{yourOwnedSMProjects}}</p>
-end of owned
-<p>{{yourProjects}}</p>
-konc
-<p>{{allCards}}</p>
-ads
-<p>{{allProjects}}</p>
-<p>{{nullProjects}}</p>
-<p>{{board}}</p>
-
-<!--<div ng-drag="true" ng-drag-data="{obj}" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
-  Draggable div
-</div>-->
-
-<div class="draglist">
-    <div  ng-repeat="obj in draggableObjects" ng-drop="true" ng-drop-success="onDropComplete(draggableObjects)">
-        <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, draggableObjects)" data-allow-transform="true"> {{obj.name}} </div>
-    </div>
-</div>
--------------------------------------------------------
-<div class="draglist">
-    <div  ng-repeat="obj in wasDragged" ng-drop="true" ng-drop-success="onDropComplete(wasDragged)">
-        <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, wasDragged)" data-allow-transform="true"> {{obj.name}} </div>
-    </div>
-</div>
-All cols
-<p>{{allCols}}</p>
-Root cols
-<p>{{rootCols}}</p>

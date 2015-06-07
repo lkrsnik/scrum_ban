@@ -57,5 +57,39 @@
                     scope: $scope
                 });
             };
+
+            $scope.notify = function (type, content, feedback) {
+                $scope.notification = {
+                    panelClass: 'panel-default',
+                    type: '',
+                    content: ''
+                };
+                switch (type) {
+                case ('Warning'):
+                    $scope.notification.panelClass = 'panel-warning';
+                    break;
+                case ('Error'):
+                    $scope.notification.panelClass = 'panel-danger';
+                    break;
+                case ('Success'):
+                    $scope.notification.panelClass = 'panel-success';
+                    break;
+                case ('Information'):
+                    $scope.notification.panelClass = 'panel-info';
+                    break;
+                }
+                if (feedback) {
+                    $scope.notification.feedback = true;
+                } else {
+                    $scope.notification.feedback = false;
+                }
+                $scope.notification.type = type;
+                $scope.notification.content = content;
+                return ngDialog.openConfirm({
+                    template: '/static/html/utils/notification.html',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope
+                });
+            };
         }]);
 }());

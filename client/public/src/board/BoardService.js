@@ -14,6 +14,11 @@
                 getBoards: function () {
                     return $http.get(API_URL + 'boards/');
                 },
+                getNullBoards: function () {
+                    return $http.get(API_URL + 'boards/', {
+                        params: { nullBoards: true }
+                    });
+                },
                 createColumn: function (column) {
                     return $http.post(API_URL + 'columns/', column);
                 },

@@ -1,0 +1,14 @@
+<div class="panel {{notification.panelClass}}">
+    <div class="panel-heading">{{ notification.type }}</div>
+    <div class="panel-body">
+        {{notification.content}}
+    </div>
+    <div class="row" ng-if="notification.feedback">
+        <button class="col-xs-3 col-xs-offset-3 btn btn-primary button-notification" ng-click="confirm()">Confirm</button>
+        <button class="col-xs-3 btn btn-primary button-notification" ng-click="closeThisDialog()">Cancel</button>
+    </div>
+    <div class="row" ng-if="!notification.feedback">
+        <button class="col-xs-4 col-xs-offset-4 btn btn-primary button-notification" ng-click="confirm()">OK</button>
+    </div>
+
+</div>
