@@ -2,7 +2,7 @@
     <div class="col-md-12 panel panel-default board-cmd-line padless">
         <div class="panel-heading">{{board.name}}</div>
         <div class="panel-body">
-            <span ng-click="editBoardProjects()" class="btn btn-primary handcursor" title="Add or remove board projects">
+            <span ng-show="allCols.length > 0" ng-click="editBoardProjects()" class="btn btn-primary handcursor" title="Add or remove board projects">
                 <span class="glyphicon glyphicon-pencil"></span> Projects
             </span>
             <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
