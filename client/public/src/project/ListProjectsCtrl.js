@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('ListProjectsCtrl',
-        ['$scope', 'TeamService', 'ProjectService', function ($scope, TeamService, ProjectService) {
+        ['$scope', 'TeamService', 'ProjectService', 'BoardService', function ($scope, TeamService, ProjectService, BoardService) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -36,16 +36,20 @@
             $scope.getProjects();
 
             $scope.deleteProject = function (project) {
-                /* TODO_: ČE OBSTAJAJO KARTICE ZA PROJEKT, SE TA LE DEAKTIVIRA, NE IZBRIŠE!!!
-
-                project.is_active = false;
-                ProjectService.updateProject(project);
-                */
-
-                $scope.projects = Underscore.without($scope.projects, project);
-
-                ProjectService.deleteProject(project);
-
+                BoardService.getCards()
+                    .success(function (data) {
+                        var cards;
+                        cards = Underscore.filter(data, function (c) {
+                            return c.project === project.id;
+                        });
+                        if (cards.length > 0) {
+                            project.is_active = false;
+                            ProjectService.updateProject(project);
+                        } else {
+                            $scope.projects = Underscore.without($scope.projects, project);
+                            ProjectService.deleteProject(project);
+                        }
+                    });
             };
 
             $scope.activateProject = function (project) {
