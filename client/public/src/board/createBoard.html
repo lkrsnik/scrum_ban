@@ -12,6 +12,14 @@
                 class="help-block">Please enter board name.</p>
         </div>
         
+        <div class="form-group">
+            <label>Select board to copy (leave blank to create a new board)</label>
+            <select class="form-control" 
+                ng-model="boardS" ng-options="b as b.name for b in boards" name="board">
+                <option value="" selected="selected"></option>
+            </select>
+        </div>
+
         <button class="btn btn-primary" ng-disabled="createBoardForm.$invalid"
             type="submit">Create board</button>
     </form>
