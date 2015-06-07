@@ -28,6 +28,11 @@
                 $scope.rootCols = [];
                 $scope.leafCols = [];
                 $scope.allCols = [];
+                $scope.limits = {
+                    'borderCols': 0,
+                    'acceptanceTestCols': 0,
+                    'highPriorityCols': 0
+                };
 
                 // Projects init
                 $scope.yourProjects = [];
@@ -70,7 +75,7 @@
                     });
 
                 $scope.createColumn = function () {
-                    $scope.newColumn = {
+                    $scope.newCol = {
                         parent_column: null
                     };
                     ngDialog.openConfirm({
@@ -79,13 +84,34 @@
                         scope: $scope
                     })
                         .then(function () {
-                            $scope.newColumn.board = $routeParams.boardId;
-                            $scope.newColumn.location = $scope.calculateColLocation($scope.newColumn);
-                            delete $scope.newColumn.left;
-                            delete $scope.newColumn.right;
+                            $scope.newCol.board = $routeParams.boardId;
+                            $scope.newCol.location = $scope.calculateColLocation($scope.newCol);
+                            delete $scope.newCol.left;
+                            delete $scope.newCol.right;
 
-                            BoardService.createColumn($scope.newColumn)
+                            BoardService.createColumn($scope.newCol)
                                 .success(function (data) {
+                                    $scope.proccessSavedColumn(data);
+                                });
+                        });
+                };
+
+                $scope.editColumn = function (oldCol) {
+                    $scope.newCol = oldCol;
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/createEditColumn.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            $scope.newCol.board = $routeParams.boardId;
+                            $scope.newCol.location = $scope.calculateColLocation($scope.newCol);
+                            delete $scope.newCol.left;
+                            delete $scope.newCol.right;
+
+                            BoardService.updateColumn($scope.newCol)
+                                .success(function (data) {
+                                    $scope.allCols = Underscore.without($scope.allCols, oldCol);
                                     $scope.proccessSavedColumn(data);
                                 });
                         });
@@ -131,6 +157,12 @@
                     }
                     // Most right column between siblings - search for right leaf col
                     if (col.right === undefined) {
+                        // Check if left column has sub columns
+                        if (!col.left.isLeafCol) {
+                            // If it does, get his right most sub/leaf column
+                            col.left = $scope.getSubLeafCols(col.left).pop();
+                        }
+
                         rightCol = $scope.getRightLeafCol(col.left);
                         if (rightCol) {
                             return (col.left.location + rightCol.location) / 2;
@@ -140,6 +172,11 @@
                     }
                     // Most left column between siblings - search for left leaf col
                     if (col.left === undefined) {
+                        // Check if right column has sub columns
+                        if (!col.right.isLeafCol) {
+                            // If it does, get his left most sub/leaf column
+                            col.right = $scope.getSubLeafCols(col.right).shift();
+                        }
                         leftCol = $scope.getLeftLeafCol(col.right);
                         if (leftCol) {
                             return (leftCol.location + col.right.location) / 2;
@@ -185,6 +222,26 @@
                     return Underscore.sortBy(result, 'location');
                 };
 
+                $scope.getSubLeafCols = function (col) {
+                    var result = [],
+                        subCols,
+                        subCol,
+                        i;
+
+                    if (col.isLeafCol) {
+                        return [col];
+                    }
+
+                    subCols = $scope.getSubCols(col.id);
+
+                    for (i = 0; i < subCols.length; i += 1) {
+                        subCol = subCols[i];
+                        result = result.concat($scope.getSubLeafCols(subCol));
+                    }
+
+                    return Underscore.sortBy(result, 'location');
+                };
+
                 // Function return the kumulative width of given columns and while calculating it
                 // sets the style settings for every column
                 // When called with $scope.rootCols it will return board width
@@ -208,11 +265,16 @@
                         };
 
                         col.isLeafCol = subCols.length === 0; // If it has the same width as basic column it's a leaf column
+                        col.depth = depth;
                         kumWidth += col.style.width;
                     }
 
                     // This here we specify width for single column
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
+                };
+
+                $scope.getColById = function (colId) {
+                    return Underscore.findWhere($scope.allCols, { 'id': colId });
                 };
 
 
