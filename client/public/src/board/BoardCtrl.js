@@ -632,12 +632,9 @@
                         scope: $scope
                     })
                         .then(function () {
-                            $scope.newCard.project = $scope.newCard.project.id;
-                            $scope.newCard.column = $scope.cardColumn.id;
-                            $scope.newCard.type = $scope.type;
-                            BoardService.createCard($scope.newCard)
-                                .success(function (data) {
-                                    $scope.allCards.push(data);
+                            BoardService.updateCard($scope.card)
+                                .success(function () {
+                                    console.log("YEEAAAA");
                                 });
                         });
                 };
