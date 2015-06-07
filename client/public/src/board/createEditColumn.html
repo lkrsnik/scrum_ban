@@ -64,12 +64,11 @@
             <input type="checkbox" value="" ng-model="newCol.is_border">
         </div>
 
-        <div class="form-group" ng-if="!specialCols.acceptanceTestCol || newCol.acceptance_test"
+        <div class="form-group" ng-if="!specialCols.acceptanceTestCol || newCol.id === specialCols.acceptanceTestCol.id"
             ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
             <label>Is acceptance test column:</label>
             <input type="checkbox" value="" ng-model="newCol.acceptance_test">
         </div>
-        {{newCol}}
         <button class="btn btn-primary" ng-disabled="columnForm.$invalid"
             type="submit">Save column</button>
     </form>

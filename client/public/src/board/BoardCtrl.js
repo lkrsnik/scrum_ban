@@ -47,7 +47,7 @@
                 $scope.violationDescription = "";
                 $scope.silverBullet = false;
                 $scope.WIPErr = false;
-                $scope.numAllCards = 0;
+                $scope.allCards = [];
 
 
                 //////////////////////////////////////// BOARD /////////////////////////////////////////
@@ -161,10 +161,6 @@
                         return c.isLeafCol;
                     }), 'location');
                     $scope.updateHighPriorityCol();
-
-                    $scope.numAllCards = Underscore.foldr($scope.rootCols, function (numCards, col) {
-                        return numCards + $scope.countCards(col);
-                    }, 0);
                 };
 
                 $scope.updateHighPriorityCol = function () {
