@@ -719,7 +719,7 @@
                     }
                 };
 
-                /*$scope.getMaxColDepth = function (cols) {
+                $scope.getMaxColDepth = function (cols) {
                     var maxDepth = 0,
                         tmp,
                         i;
@@ -731,7 +731,7 @@
                     }
                     return maxDepth;
                 };
-                $scope.getMaxSubColsLen = function (cols) {
+                /*$scope.getMaxSubColsLen = function (cols) {
                     var maxSubColsLen = cols.length,
                         tmp,
                         i;

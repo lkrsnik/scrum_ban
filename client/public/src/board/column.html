@@ -9,7 +9,7 @@
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
-            ng-drop-success="onDropComplete($data, proj, col)">
+        ng-drop-success="onDropComplete($data, proj, col)">
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
             class="card panel {{card.cardClass}}"
             ng-drag="true" ng-drag-data="card"
