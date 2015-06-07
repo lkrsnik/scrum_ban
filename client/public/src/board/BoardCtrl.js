@@ -579,6 +579,7 @@
                             is_legal: false
                         };
                         BoardService.createMove(move);
+                        $scope.notify('Error', 'This move is forbidden!');
                         return;
                     }
                     move = {
