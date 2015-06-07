@@ -12,6 +12,18 @@
                 <span class="glyphicon glyphicon-plus"></span> Card
             </span>
         </div>
+        <div class="alert alert-warning" ng-show="specialCols.borderCols.length < 2">
+            Board must have exactly 2 border columns.
+        </div>
+        <div class="alert alert-warning" ng-show="!specialCols.highPriorityCol">
+            Board must have a high priority column. Create one by creating at least one border column.
+        </div>
+        <div class="alert alert-warning" ng-show="!specialCols.acceptanceTestCol">
+            Board must have an acceptance test column.
+        </div>
+        <div class="alert alert-warning" ng-show="board.projects.length < 1">
+            There is no projects on the table. Add one!
+        </div>
     </div>
     <!--Border cols <br />
     {{specialCols.borderCols}} <br />
@@ -20,21 +32,10 @@
     High priority <br />
     {{specialCols.highPriorityCol}} <br />
     {{allCards.length}} <br />-->
-    <div class="alert alert-warning" ng-show="specialCols.borderCols.length < 2">
-        Board must have exactly 2 border columns.
-    </div>
-    <div class="alert alert-warning" ng-show="!specialCols.highPriorityCol">
-        Board must have a high priority column. Create one by creating at least one border column.
-    </div>
-    <div class="alert alert-warning" ng-show="!specialCols.acceptanceTestCol">
-        Board must have an acceptance test column.
-    </div>
-    <div class="alert alert-warning" ng-show="board.projects.length < 1">
-        There is no projects on the table. Add one!
-    </div>
+        
     <div class="col-md-12 board-col-container padless">
         <div class="project-names">
-            <div class="vertical-text project-name" ng-repeat="proj in yourProjects" ng-style="{ 'height': COL_DIM.height }">{{proj.name}}</div>
+            <div class="vertical-text project-name" ng-repeat="proj in yourBoardProjects" ng-style="{ 'height': COL_DIM.height }">{{proj.name}}</div>
         </div>
         <div class="col-md-12 board-col-line" 
             ng-style="getBoardStyle()">
@@ -56,7 +57,7 @@ this is what you own:
 <p>{{yourOwnedPOProjects}}</p>
 <p>{{yourOwnedSMProjects}}</p>
 end of owned
-<p>{{yourProjects}}</p>
+<p>{{yourBoardProjects}}</p>
 konc
 <p>{{allCards}}</p>
 ads

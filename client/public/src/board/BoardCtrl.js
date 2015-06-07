@@ -35,6 +35,8 @@
                 };
 
                 // Projects init
+                $scope.yourBoardProjects = [];
+                $scope.yourNullProjects = [];
                 $scope.yourProjects = [];
                 $scope.yourOwnedSMProjects = [];
                 $scope.yourOwnedPOProjects = [];
@@ -351,7 +353,7 @@
                         i,
                         col,
                         subCols,
-                        numProjects = $scope.yourProjects ? $scope.yourProjects.length : 1;
+                        numProjects = $scope.yourBoardProjects ? $scope.yourBoardProjects.length : 1;
 
                     numProjects = (numProjects < 1) ? 1 : numProjects;
 
@@ -389,7 +391,7 @@
                 };
                 $scope.getProjects();
 
-                $scope.getBoardProjects = function (boardId) {
+                /*$scope.getBoardProjects = function (boardId) {
                     $scope.promises.projectsPromise
                         .then(function () {
                             var tmp = Underscore.filter($scope.allProjects, function (proj) {
@@ -397,14 +399,19 @@
                             });
                             $scope.board.projects = (tmp === undefined) ? [] : tmp;
                         });
-                };
+                };*/
 
                 $scope.promises.boardPromise
                     .then(function () {
-                        $scope.getBoardProjects($scope.board.id);
+                        //$scope.getBoardProjects($scope.board.id);
+                        ProjectService.getProjectsByUser()
+                            .success(function (data){
+                                $scope.yourProjects = data;
+                                $scope.yourNullProjects = Underscore.where(data, { 'board': null });
+                            });
                         ProjectService.getProjectbyBoardUser($scope.board.id)
                             .success(function (data) {
-                                $scope.yourProjects = data;
+                                $scope.yourBoardProjects = data;
                             });
                         ProjectService.getProjectbyBoardUserRole($scope.board.id, "ScrumMaster")
                             .success(function (data) {
@@ -439,11 +446,11 @@
                         scope: $scope
                     })
                         .then(function () {
-                            $scope.addBoardProjects($scope.board);
+                            $scope.editBoardProjects($scope.board);
                         });
                 };
 
-                $scope.addBoardProjects = function (board) {
+                $scope.editBoardProjects = function (board) {
                     var proj,
                         projects = angular.copy(board.projects),
                         i,
@@ -466,7 +473,7 @@
                     var projStyle = {
                         'min-height': COL_DIM.height
                     },
-                        numProjects = $scope.board.projects ? $scope.board.projects.length : 1;
+                        numProjects = $scope.yourBoardProjects ? $scope.yourBoardProjects.length : 1;
                     if (isFirst) {
                         projStyle['min-height'] = col.style['min-height'] - ((numProjects - 1) * COL_DIM.height);
                     }

@@ -32,6 +32,14 @@
                             }
                     });
                 },
+                getProjectsByUser: function () {
+                    return $http.get(API_URL + 'projects/', {
+                        params:
+                            {
+                                'userProjects': true
+                            }
+                    });
+                },
                 updateProject: function (project) {
                     console.log(project);
                     return $http.put(API_URL + 'projects/' + project.id + '/', project)
