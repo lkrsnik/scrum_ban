@@ -2,10 +2,10 @@
     <div class="col-md-12 panel panel-default board-cmd-line padless">
         <div class="panel-heading">{{board.name}}</div>
         <div class="panel-body">
-            <span ng-click="addProject()" class="btn btn-primary handcursor" title="Add or remove board projects">
+            <span ng-click="editBoardProjects()" class="btn btn-primary handcursor" title="Add or remove board projects">
                 <span class="glyphicon glyphicon-pencil"></span> Projects
             </span>
-            <span ng-show="allCards.length < 1" ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
+            <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
                 <span class="glyphicon glyphicon-plus"></span> Column
             </span>
             <span ng-show="userOwnsProjects && (specialCols.borderCols.length >= 2 && specialCols.highPriorityCol &&  specialCols.acceptanceTestCol)" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
@@ -25,7 +25,13 @@
             There is no projects on the table. Add one!
         </div>
     </div>
-    <!--Border cols <br />
+    <!--Your projects <br />
+    <span ng-repeat="p in yourProjects">{{p.name}} </span> <br />
+    Your board projects <br />
+    <span ng-repeat="p in yourBoardProjects">{{p.name}} </span> <br />
+    Null projects <br />
+    <span ng-repeat="p in yourNullProjects">{{p.name}} </span> <br />
+    Border cols <br />
     {{specialCols.borderCols}} <br />
     Acceptance <br />
     {{specialCols.acceptanceTestCol}} <br />
@@ -52,36 +58,3 @@
         </div>-->
     </div>
 </div>
-
-this is what you own:
-<p>{{yourOwnedPOProjects}}</p>
-<p>{{yourOwnedSMProjects}}</p>
-end of owned
-<p>{{yourBoardProjects}}</p>
-konc
-<p>{{allCards}}</p>
-ads
-<p>{{allProjects}}</p>
-<p>{{nullProjects}}</p>
-<p>{{board}}</p>
-
-<!--<div ng-drag="true" ng-drag-data="{obj}" ng-drag-success="onDragComplete($data,$event)" ng-center-anchor="true">
-  Draggable div
-</div>-->
-
-<div class="draglist">
-    <div  ng-repeat="obj in draggableObjects" ng-drop="true" ng-drop-success="onDropComplete(draggableObjects)">
-        <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, draggableObjects)" data-allow-transform="true"> {{obj.name}} </div>
-    </div>
-</div>
--------------------------------------------------------
-<div class="draglist">
-    <div  ng-repeat="obj in wasDragged" ng-drop="true" ng-drop-success="onDropComplete(wasDragged)">
-        <div ng-drag="true" ng-drag-data="obj" ng-drag-success="onDragComplete($data, wasDragged)" data-allow-transform="true"> {{obj.name}} </div>
-    </div>
-</div>
-All cols
-<p>{{allCols}}</p>
-Root cols
-<p>{{rootCols}}</p>
-<span class="vertical-text">To  je  moj  text<span/>
