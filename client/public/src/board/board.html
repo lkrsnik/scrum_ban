@@ -19,7 +19,7 @@
                 Board must have exactly 2 border columns.
             </div>
             <div class="alert alert-warning" ng-show="!specialCols.highPriorityCol">
-                Board must have a high priority column. Create one by creating at least one border column.
+                Board must have a high priority column. High priority column is a column left of the first border column. Therefore, create at least one border column with a free column to the left.
             </div>
             <div class="alert alert-warning" ng-show="!specialCols.acceptanceTestCol">
                 Board must have an acceptance test column.
