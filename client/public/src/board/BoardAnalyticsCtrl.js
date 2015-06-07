@@ -69,7 +69,7 @@
                 cardALT = {};
                 cardALT.id = card.id;
                 newCard = {
-                    to_itak_se_ne_dela: null,
+                    to_itak_se_ne_dela: null
                 };
                 cardALT.leadTime = Array.apply(null, new Array(days_between(start, end))).map(Number.prototype.valueOf, 0);
                 cardALT.leadTime = Underscore.map(cardALT.leadTime, function () { return newCard; });
