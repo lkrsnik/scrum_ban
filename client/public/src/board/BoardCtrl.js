@@ -105,14 +105,17 @@
                     })
                         .then(function () {
                             $scope.newCol.board = $routeParams.boardId;
-                            $scope.newCol.location = $scope.calculateColLocation($scope.newCol);
-                            delete $scope.newCol.left;
-                            delete $scope.newCol.right;
+                            if (oldCol.location !== $scope.newCol.location) {
+                                $scope.newCol.location = $scope.calculateColLocation($scope.newCol);
+                            }
 
                             BoardService.updateColumn($scope.newCol)
-                                .success(function (data) {
+                                .success(function () {
+                                    $scope.deleteSubColsLocations($scope.newCol);
+                                    $scope.recalculateSubColsLocations($scope.newCol);
+
                                     $scope.allCols = Underscore.without($scope.allCols, oldCol);
-                                    $scope.proccessSavedColumn(data);
+                                    $scope.proccessSavedColumn($scope.newCol);
                                 });
                         });
                 };
@@ -176,6 +179,48 @@
                     if (oldHighPriorityCol && (($scope.specialCols.highPriorityCol === null) || (oldHighPriorityCol.id !== $scope.specialCols.highPriorityCol.id))) {
                         oldHighPriorityCol.is_high_priority = false;
                         BoardService.updateColumn(oldHighPriorityCol);
+                    }
+                };
+
+                $scope.recalculateSubColsLocations = function (col) {
+                    var subCol,
+                        subCols = $scope.getSubCols(col.id),
+                        i;
+
+                    // We expect left to be set here
+                    if (!col.left) {
+                        console.log("left not set error");
+                    }
+
+                    col.location = $scope.calculateColLocation(col);
+                    BoardService.updateColumn(col);
+
+                    for (i = 0; i < subCols.length; i += 1) {
+                        subCol = subCols[i];
+
+                        if (i === 0) {
+                            // First sub col
+                            subCol.left = $scope.getLeftLeafCol(col);
+                        } else {
+                            subCol.left = subCols[i - 1];
+                        }
+
+                        $scope.recalculateSubColsLocations(subCol);
+                    }
+
+
+                    // Get subcolumns a
+                };
+
+                $scope.deleteSubColsLocations = function (col) {
+                    var subCol,
+                        subCols = $scope.getSubCols(col.id),
+                        i;
+                    delete col.location;
+
+                    for (i = 0; i < subCols.length; i += 1) {
+                        subCol = subCols[i];
+                        $scope.deleteSubColsLocations(subCol);
                     }
                 };
 
