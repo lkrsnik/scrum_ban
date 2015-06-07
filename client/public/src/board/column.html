@@ -14,7 +14,7 @@
             class="card panel {{card.cardClass}}"
             ng-drag="true" ng-drag-data="card"
             ng-drag-success="onDragComplete(card)">
-            <div class="panel-heading card-heading">{{card.name}}</div>
+            <div class="panel-heading card-heading"><a ng-click="editCard(card)">{{card.name}}</a></div>
             <div class="panel-body">
                <p>{{card.content}}</p>
 

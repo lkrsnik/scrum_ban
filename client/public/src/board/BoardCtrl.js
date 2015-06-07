@@ -570,6 +570,25 @@
                         });
                 };
 
+                $scope.editCard = function (card) {
+                    console.log(card);
+                    $scope.card = card;
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/editCard.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            $scope.newCard.project = $scope.newCard.project.id;
+                            $scope.newCard.column = $scope.cardColumn.id;
+                            $scope.newCard.type = $scope.type;
+                            BoardService.createCard($scope.newCard)
+                                .success(function (data) {
+                                    $scope.allCards.push(data);
+                                });
+                        });
+                };
+
                 $scope.countCards = function (column) {
                     if (column.isLeafCol) {
                         return Underscore.where($scope.allCards, {'column': column.id}).length;
@@ -598,7 +617,9 @@
                 };
 
                 $scope.onDropComplete = function (data, proj, col) {
-
+                    if (col.id === data.column) {
+                        return;
+                    }
                     $scope.countCards(data);
                     var right = $scope.getRightLeafCol(col),
                         left = $scope.getLeftLeafCol(col),
@@ -609,17 +630,17 @@
 
                     // when card is not moved one place right, one left or on the same column
                     // and when card isn't moved from acceptance test column to one before or on high priority column
-                    if (!((right && right.id === data.column) || (left && left.id === data.column) || (col.id === data.column)) &&
+                    if (!((right && right.id === data.column) || (left && left.id === data.column)) &&
                             !(prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) && $scope.isPO)) {
                         $scope.notify('Error', 'This move is forbidden!');
                         return;
                     }
-                    if (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col)) {
+                    if (prevCol.acceptance_test && (highestPriorityCol === col || Underscore.contains(colsLeftOfHighPriColumn, col))) {
                         if (data.type !== 'silverBullet') {
                             data.type = 'rejected';
                         }
                     }
-                    if ($scope.wipError(col) && col.id !== data.column) {
+                    if ($scope.wipError(col)) {
                         move = {
                             card: data.id,
                             user: $scope.session.userid,

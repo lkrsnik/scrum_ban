@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+    <div class="panel-heading">{{card.name}}
+    </div>
+    <div class="panel-body">
+    <form name="cardForm" class="create-card-form" role="form" 
+        ng-submit="confirm()" novalidate> 
+        <div class="form-group"
+            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
+            <label>Card name</label>
+            <p>{{card.name}}</p>
+            <input ng-model="card.name" type="text" name="name" 
+                class="form-control" placeholder="Card name" required autofocus>
+            <p ng-show="cardForm.name.$error.required && cardForm.name.$dirty" 
+                class="help-block">Please enter card name.</p>
+        </div>   
+        <div class="form-group"
+            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
+            <label>Card content</label>
+            <p>{{card.content}}</p>
+            <textarea ng-model="card.content" type="text-area" rows="8" name="name" 
+                class="form-control" placeholder="Card content" required autofocus></textarea>
+            <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
+            Please enter card content.</p>
+        </div> 
+        <div class="form-group"
+            ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
+            <label>Select responsible user</label>
+            <p ng-show="card.user">{{card.user}}</p>
+            <p ng-show="!card.user">No user selected</p>
+            <select class="form-control" 
+                ng-model="card.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
+        </div>
+                 
+        <button class="btn btn-primary" ng-disabled="cardForm.$invalid"
+            type="submit">Save card</button>
+    </form>
+  </div>
+</div>
