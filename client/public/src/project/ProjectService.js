@@ -5,7 +5,12 @@
         ['$http', 'API_URL', function ($http, API_URL) {
             return {
                 createProject: function (project) {
-                    return $http.post(API_URL + 'projects/', project);
+                    console.log(project);
+                    return $http.post(API_URL + 'projects/', project)
+                        .error(function (error, status) {
+                            console.log('Error in updating project: ' + status);
+                            console.log(error);
+                        });
                 },
                 getProjects: function () {
                     return $http.get(API_URL + 'projects/');
@@ -28,7 +33,12 @@
                     });
                 },
                 updateProject: function (project) {
-                    return $http.put(API_URL + 'projects/' + project.id + '/', project);
+                    console.log(project);
+                    return $http.put(API_URL + 'projects/' + project.id + '/', project)
+                        .error(function (error, status) {
+                            console.log('Error in updating project: ' + status);
+                            console.log(error);
+                        });
                 },
                 deleteProject: function (project) {
                     return $http.delete(API_URL + 'projects/' + project.id + '/');
