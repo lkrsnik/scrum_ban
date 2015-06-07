@@ -55,7 +55,6 @@
                                         }),
                                         newCol = {},
                                         i,
-                                        childCols = Underscore.difference(data, topLevelCols),
                                         compl = [];
                                     for (i = 0; i < data.length; i += 1) {
                                         newCol = {
@@ -69,18 +68,9 @@
                                             "wip": data[i].wip
                                         };
                                         compl.push(BoardService.createColumn(newCol));
-                                        //cc = BoardService.createColumnR(topLevelCols[i].id, newCol);
-                                        //console.log(cc);
-                                        //cc[1].then(createColumnSuccessFun(cc));
-                                        //cc[1].success(createColumnSuccessFun(cc));
-                                            //.success(createColumnSuccessFun(data, topLevelCols[i].id));
-                                            //.success(printDataFun(topLevelCols[i].id));
-
                                     }
-                                    console.log(childCols);
                                     $q.all(compl).then(function () {
                                         var complChild = [],
-                                            lastAdded,
                                             parent,
                                             newParent,
                                             newChild,
@@ -94,12 +84,9 @@
                                             findNC = function (col) {
                                                 return col.name === childCols[i].name && col.parent_column === parent.id;
                                             };
-                                        console.log(childCols);
                                         BoardService.getColumns(created.id)
                                             .success(function (data) {
-                                                //data = data.reverse();
                                                 // take newly added cols
-                                                //data = Underscore.first(data, topLevelCols.length);
                                                 console.log(data);
                                                 for (i = 0; i < childCols.length; i += 1) {
                                                     parent = Underscore.find(topLevelCols, findTLC);
@@ -112,7 +99,7 @@
                                                     console.log(newChild);
                                                     complChild.push(BoardService.updateColumn(newChild));
                                                 }
-                                                $q.all(complChild).then(function (){
+                                                $q.all(complChild).then(function () {
                                                     $location.path('/');
                                                 });
                                             });
