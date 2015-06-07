@@ -578,9 +578,9 @@
                         $scope.type = 'newFunctionality';
                         $scope.cardColumn = $scope.firstColumn[0];
                     }
-                    if ($scope.wipError($scope.cardColumn[0])) {
+                    if ($scope.wipError($scope.cardColumn)) {
                         $scope.WIPErr = true;
-                        alert("You are going to violate WIP!");
+                        $scope.notify('Warning', 'You have exceeded WIP limit!');
                     }
                 };
 
@@ -614,9 +614,10 @@
                                         card: data.id,
                                         user: $scope.session.userid,
                                         from_position: null,
-                                        is_legal: false,
+                                        is_legal: !$scope.WIPErr,
                                         to_position: $scope.newCard.column
                                     };
+                                    $scope.WIPErr = false;
                                     BoardService.createMove(move);
                                 });
                         });
