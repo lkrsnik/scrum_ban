@@ -10,7 +10,7 @@ class UserViewSet(viewsets.ModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
 
-    permission_classes = (IsStaffOrScrumMasterGroup,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
