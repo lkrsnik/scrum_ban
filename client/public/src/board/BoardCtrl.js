@@ -428,12 +428,9 @@
                                     $scope.userOwnsProjects = true;
                                     $scope.isPO = true;
                                     $scope.yourOwnedPOProjects = Underscore.flatten($scope.yourOwnedPOProjects, true);
-                                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
-                                    if ($scope.silverBullet.length > 0) {
-                                        $scope.silverBullet = true;
-                                    } else {
-                                        $scope.silverBullet = false;
+                                    if ($scope.specialCols.highPriorityCol) {
+                                        $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.specialCols.highPriorityCol.id });
+                                        $scope.silverBullet = $scope.silverBullet.length > 0;
                                     }
                                 }
                             });
@@ -516,11 +513,11 @@
                     $scope.showCreateCardForm = true;
                     if (type === 'ProductOwner') {
                         $scope.type = 'silverBullet';
-                        $scope.cardColumn = $scope.firstColumn;
+                        $scope.cardColumn = $scope.specialCols.highPriorityCol;
                     }
                     if (type === 'ScrumMaster') {
                         $scope.type = 'newFunctionality';
-                        $scope.cardColumn = $scope.highPriorityColumn;
+                        $scope.cardColumn = $scope.firstColumn[0];
                     }
                     if ($scope.wipError($scope.cardColumn[0])) {
                         $scope.WIPErr = true;
@@ -530,19 +527,17 @@
 
                 $scope.createCard = function () {
                     var move;
-                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
-                    $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.highPriorityColumn[0].id });
-                    if ($scope.silverBullet.length > 0) {
-                        $scope.silverBullet = true;
-                    } else {
-                        $scope.silverBullet = false;
+                    if ($scope.specialCols.highPriorityCol) {
+                        $scope.silverBullet = Underscore.where($scope.allCards, {'type': 'silverBullet', 'column': $scope.specialCols.highPriorityCol.id });
+                        console.log($scope.silverBullet);
+                        $scope.silverBullet = $scope.silverBullet.length > 0;
+                        console.log($scope.silverBullet);
                     }
                     $scope.showCreateCardForm = false;
                     $scope.cardColumn = null;
-                    $scope.highPriorityColumn = Underscore.where($scope.allCols, {'is_high_priority': true});
                     $scope.firstColumn = Underscore.sortBy($scope.allCols, function (x) { return x.location; });
                     //Alerts for non validate board
-                    if ($scope.highPriorityColumn.length < 1) {
+                    if ($scope.specialCols.highPriorityCol === null) {
                         alert("Column with high priority is missing. Add one!");
                         return;
                     }
@@ -562,7 +557,7 @@
                     })
                         .then(function () {
                             $scope.newCard.project = $scope.newCard.project.id;
-                            $scope.newCard.column = $scope.cardColumn[0].id;
+                            $scope.newCard.column = $scope.cardColumn.id;
                             $scope.newCard.type = $scope.type;
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
@@ -571,7 +566,8 @@
                                         card: data.id,
                                         user: $scope.session.userid,
                                         from_position: null,
-                                        is_legal: false
+                                        is_legal: false,
+                                        to_position: $scope.newCard.column
                                     };
                                     BoardService.createMove(move);
                                 });
