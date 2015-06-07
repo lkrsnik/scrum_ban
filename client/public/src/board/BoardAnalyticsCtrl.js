@@ -47,21 +47,46 @@
                 return (new Date(date));
             }
 
-            function getAverageLeadTime(card) {
-                var from, to;
+            function days_between(date1, date2) {
+                var ONE_DAY, date1_ms, date2_ms, difference_ms;
+                // The number of milliseconds in one day
+                ONE_DAY = 1000 * 60 * 60 * 24;
+
+                // Convert both dates to milliseconds
+                date1_ms = date1.getTime();
+                date2_ms = date2.getTime();
+
+                // Calculate the difference in milliseconds
+                difference_ms = Math.abs(date1_ms - date2_ms);
+
+                // Convert back to days and return
+                return Math.round(difference_ms / ONE_DAY);
+
+            }
+
+            function getAverageLeadTime(card, start, end) {
+                var from, to, cardALT, newCard;
+                cardALT = {};
+                cardALT.id = card.id;
+                newCard = {
+                    to_itak_se_ne_dela: null,
+                };
+                cardALT.leadTime = Array.apply(null, new Array(days_between(start, end))).map(Number.prototype.valueOf, 0);
+                cardALT.leadTime = Underscore.map(cardALT.leadTime, function () { return newCard; });
                 from = getDate(card.creation_date);
                 to = getDate(card.completion_date);
                 if (to === null) {
                     to = new Date();
                     to = to.getDate();
                 }
+                //increase for one day
                 from.setDate(from.getDate() + 1);
             }
 
             $scope.showAnalytics = function (subset) {
-
-
-                getAverageLeadTime($scope.allCards[0]);
+                var from = getDate($scope.allCards[0].creation_date);
+                from.setDate(from.getDate() + 7);
+                getAverageLeadTime($scope.allCards[0], getDate($scope.allCards[0].creation_date), from);
                 $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&
