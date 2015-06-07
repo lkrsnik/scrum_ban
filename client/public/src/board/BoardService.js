@@ -17,6 +17,9 @@
                 createColumn: function (column) {
                     return $http.post(API_URL + 'columns/', column);
                 },
+                updateColumn: function (column) {
+                    return $http.put(API_URL + 'columns/' + column.id + '/', column);
+                },
                 deleteColumn: function (columnId) {
                     return $http.delete(API_URL + 'columns/' + columnId + '/');
                 },

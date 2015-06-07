@@ -28,10 +28,10 @@
                 $scope.rootCols = [];
                 $scope.leafCols = [];
                 $scope.allCols = [];
-                $scope.limits = {
-                    'borderCols': 0,
-                    'acceptanceTestCols': 0,
-                    'highPriorityCols': 0
+                $scope.specialCols = {
+                    'borderCols': [],
+                    'acceptanceTestCol': null,
+                    'highPriorityCol': null
                 };
 
                 // Projects init
@@ -97,7 +97,7 @@
                 };
 
                 $scope.editColumn = function (oldCol) {
-                    $scope.newCol = oldCol;
+                    $scope.newCol = angular.copy(oldCol);
                     ngDialog.openConfirm({
                         template: '/static/html/board/createEditColumn.html',
                         className: 'ngdialog-theme-plain',
@@ -117,19 +117,39 @@
                         });
                 };
 
-                $scope.deleteColumn = function (column) {
-                    BoardService.deleteColumn(column.id);
+                $scope.deleteColumn = function (col) {
+                    BoardService.deleteColumn(col.id);
 
-                    $scope.allCols = Underscore.without($scope.allCols, column);
+                    $scope.allCols = Underscore.without($scope.allCols, col);
                     $scope.updateCols();
                 };
 
                 $scope.proccessSavedColumn = function (col) {
+                    var parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
+
+                    if (parentCol && parentCol.is_border) {
+                        // If yes change the child column to be border column
+                        parentCol.is_border = false;
+                        BoardService.updateColumn(parentCol);
+                        col.is_border = true;
+                        BoardService.updateColumn(col);
+                    }
+
+                    if (parentCol && parentCol.acceptance_test) {
+                        parentCol.acceptance_test = false;
+                        BoardService.updateColumn(parentCol);
+                        col.acceptance_test = true;
+                        BoardService.updateColumn(col);
+                    }
+
                     $scope.allCols.push(col);
                     $scope.updateCols();
                 };
 
                 $scope.updateCols = function () {
+                    $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
+                    $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
+
                     $scope.allCols = Underscore.sortBy($scope.allCols, 'location');
                     $scope.rootCols = $scope.getSubCols(null);
                     // Set leaf columns values
@@ -137,6 +157,26 @@
                     $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
                         return c.isLeafCol;
                     }), 'location');
+                    $scope.updateHighPriorityCol();
+                };
+
+                $scope.updateHighPriorityCol = function () {
+                    var oldHighPriorityCol = angular.copy($scope.specialCols.highPriorityCol);
+                    if ($scope.specialCols.borderCols.length > 0) {
+                        $scope.specialCols.highPriorityCol = $scope.getLeftLeafCol($scope.specialCols.borderCols[0]);
+                        if ($scope.specialCols.highPriorityCol) {
+                            $scope.specialCols.highPriorityCol.is_high_priority = true;
+                            BoardService.updateColumn($scope.specialCols.highPriorityCol);
+                        }
+                    } else {
+                        $scope.specialCols.highPriorityCol = null;
+                    }
+
+                    // If high priority column changed reset old high priority column
+                    if (oldHighPriorityCol && (($scope.specialCols.highPriorityCol === null) || (oldHighPriorityCol.id !== $scope.specialCols.highPriorityCol.id))) {
+                        oldHighPriorityCol.is_high_priority = false;
+                        BoardService.updateColumn(oldHighPriorityCol);
+                    }
                 };
 
                 $scope.calculateColLocation = function (col) {
@@ -145,10 +185,15 @@
                         parentCol;
                     // First column ever
                     if ($scope.allCols.length === 0) {
-                        return 100;
+                        return 1000;
                     }
+                    // Edit column, no changes regarding with location were made
+                    if ((col.left === undefined || col.left === null) && (col.right === undefined || col.right === null) && col.location) {
+                        return col.location;
+                    }
+
                     // First sub column
-                    if (col.left === undefined && col.right === undefined && col.parent_column !== null) {
+                    if ((col.left === undefined || col.left === null) && (col.right === undefined || col.right === null) && col.parent_column !== null) {
                         parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
                         col.left = $scope.getLeftLeafCol(parentCol);
                         col.right = $scope.getRightLeafCol(parentCol);
@@ -156,10 +201,10 @@
                         return $scope.calculateColLocation(col);
                     }
                     // Most right column between siblings - search for right leaf col
-                    if (col.right === undefined) {
+                    if ((col.right === undefined || col.right === null)) {
                         // Check if left column has sub columns
                         if (!col.left.isLeafCol) {
-                            // If it does, get his right most sub/leaf column
+                            // If it does, get his right most sub-leaf column
                             col.left = $scope.getSubLeafCols(col.left).pop();
                         }
 
@@ -168,13 +213,13 @@
                             return (col.left.location + rightCol.location) / 2;
                         }
                         // Most right column between leaf cols
-                        return col.left.location + 1;
+                        return col.left.location + 100;
                     }
                     // Most left column between siblings - search for left leaf col
-                    if (col.left === undefined) {
+                    if ((col.left === undefined || col.left === null)) {
                         // Check if right column has sub columns
                         if (!col.right.isLeafCol) {
-                            // If it does, get his left most sub/leaf column
+                            // If it does, get his left most sub-leaf column
                             col.right = $scope.getSubLeafCols(col.right).shift();
                         }
                         leftCol = $scope.getLeftLeafCol(col.right);
@@ -182,7 +227,18 @@
                             return (leftCol.location + col.right.location) / 2;
                         }
                         // Most left column between leaf cols
-                        return col.right.location - 1;
+                        return col.right.location - 100;
+                    }
+                    // Both left and right are defined
+                    // Check if left column has sub columns
+                    if (!col.left.isLeafCol) {
+                        // If it does, get his right most sub-leaf column
+                        col.left = $scope.getSubLeafCols(col.left).pop();
+                    }
+                    // Check if right column has sub columns
+                    if (!col.right.isLeafCol) {
+                        // If it does, get his left most sub-leaf column
+                        col.right = $scope.getSubLeafCols(col.right).shift();
                     }
                     return (col.left.location + col.right.location) / 2;
                 };
@@ -271,10 +327,6 @@
 
                     // This here we specify width for single column
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
-                };
-
-                $scope.getColById = function (colId) {
-                    return Underscore.findWhere($scope.allCols, { 'id': colId });
                 };
 
 

@@ -1,7 +1,9 @@
 <div class="panel-heading">
-    {{col.name}} [{{countCards(col)}}/{{col.wip}}]
-    <span ng-show="col.isLeafCol" ng-click="deleteColumn(col)"  
+    {{col.name}} [{{countCards(col)}}/{{col.wip}}] {{col.location}}
+    <span ng-show="col.isLeafCol" ng-click="deleteColumn(col)" title="Delete column" 
         class="glyphicon glyphicon-trash handcursor"></span>
+    <span ng-click="editColumn(col)" title="Edit column"
+        class="glyphicon glyphicon-pencil handcursor"></span>
 </div>
 <div class="panel-body column-body">
 

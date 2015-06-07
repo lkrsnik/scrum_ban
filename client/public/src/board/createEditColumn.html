@@ -23,24 +23,24 @@
             </select>
         </div>
 
-        <div class="form-group" ng-if="newCol.right === undefined && getSubCols(newCol.parent_column).length > 0" 
+        <div class="form-group" ng-if="(newCol.right === undefined || newCol.right === null) && getSubCols(newCol.parent_column).length > 0" 
             ng-class="{ 'has-error' : columnForm.left.$invalid && columnForm.left.$dirty }" }>
             <label>Select left column:</label>
             <select class="form-control" 
                 ng-model="newCol.left" 
                 ng-options="c as c.name for c in getSubCols(newCol.parent_column)"
-                ng-required="!newCol.location && newCol.right === undefined && getSubCols(newCol.parent_column).length > 0">
+                ng-required="!newCol.location && (newCol.right === undefined || newCol.right === null) && getSubCols(newCol.parent_column).length > 0">
                 <option value="">-- choose left column --</option>
             </select>
         </div>
 
-        <div class="form-group" ng-if="newCol.left === undefined && getSubCols(newCol.parent_column).length > 0" 
+        <div class="form-group" ng-if="(newCol.left === undefined || newCol.left === null) && getSubCols(newCol.parent_column).length > 0" 
             ng-class="{ 'has-error' : columnForm.right.$invalid && columnForm.right.$dirty }" }>
             <label>Select right column:</label>
             <select class="form-control" 
                 ng-model="newCol.right" 
                 ng-options="c as c.name for c in getSubCols(newCol.parent_column)"
-                ng-required="!newCol.location && newCol.left === undefined && getSubCols(newCol.parent_column).length > 0">
+                ng-required="!newCol.location && (newCol.left === undefined || newCol.left === null) && getSubCols(newCol.parent_column).length > 0">
                 <option value="">-- choose right column --</option>
             </select>
         </div>
@@ -52,24 +52,24 @@
                 class="form-control" placeholder="0" required>
         </div>
 
-        <div class="form-group"
+        <!--<div class="form-group"
             ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
             <label>Is high priority column:</label>
             <input type="checkbox" value="" ng-model="newCol.is_high_priority">
-        </div>
+        </div>-->
 
-        <div class="form-group" ng-if="limits.borderCols >= 2"
+        <div class="form-group" ng-if="specialCols.borderCols.length < 2 || newCol.is_border"
             ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
             <label>Is border column:</label>
             <input type="checkbox" value="" ng-model="newCol.is_border">
         </div>
 
-        <div class="form-group" 
+        <div class="form-group" ng-if="!specialCols.acceptanceTestCol || newCol.acceptance_test"
             ng-class="{ 'has-error' : columnForm.wip.$invalid && columnForm.wip.$dirty }">
             <label>Is acceptance test column:</label>
             <input type="checkbox" value="" ng-model="newCol.acceptance_test">
         </div>
-        
+        {{newCol}}
         <button class="btn btn-primary" ng-disabled="columnForm.$invalid"
             type="submit">Save column</button>
     </form>
