@@ -64,13 +64,12 @@
                                         if (scrumMaster === productOwner) {
                                             newRoleTeam =
                                                 {
-                                                    "user_team": data.id,
+                                                    "user_team": data.user_team,
                                                     "role": $scope.scrumMasterR[0].id
                                                 };
                                             $scope.userteamSM = data;
                                             createSecondUserTeamPromise = createFirstRoleTeamPromise;
-                                            createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
-
+                                            //981881
                                         } else {
                                             createSecondUserTeamPromise = TeamService.createUserTeam(newSM)
                                                 .success(function (data) {
@@ -86,11 +85,12 @@
                                                             "role": $scope.scrumMasterR[0].id
                                                         };
                                                     $scope.userteamSM = data;
-                                                    createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
                                                 });
                                         }
                                         createFirstRoleTeamPromise.then(function () {
                                             createSecondUserTeamPromise.then(function () {
+                                                console.log(newRoleTeam);
+                                                createRoleTeamPromise = TeamService.createRoleTeam(newRoleTeam);
                                                 createRoleTeamPromise.then(function () {
                                                     var i = 0,
                                                         created = [],
@@ -123,7 +123,7 @@
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {
-                                                                        "user_team": $scope.userteamSM.id,
+                                                                        "user_team": $scope.userteamSM.user_team,
                                                                         "role": $scope.teamMemberR[0].id
                                                                     };
                                                             } else {
