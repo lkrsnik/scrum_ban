@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('EditProjectCtrl',
-        ['$scope', '$filter', 'ProjectService', 'TeamService', '$routeParams',  '$location', function ($scope, $filter, ProjectService, TeamService, $routeParams, $location) {
+        ['$scope', '$filter', 'ProjectService', 'TeamService', 'BoardService', '$routeParams',  '$location', function ($scope, $filter, ProjectService, TeamService, BoardService, $routeParams, $location) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -14,6 +14,7 @@
             }
 
             $scope.project = null;
+            $scope.hasStarted = false;
             $scope.today = $filter('date')(new Date(), 'yyyy-MM-dd');
             $scope.getTeams = function () {
                 TeamService.getTeams()
@@ -32,7 +33,16 @@
                         $scope.project.team = Underscore.find($scope.teams, function (t) {
                             return t.id === $scope.project.team;
                         });
-                        // TODO_: ČE ŽE OBSTAJAJO KARTICE NA PROJEKTU, NI MOČ VEČ SPREMENITI DATUMA PROJEKTA!!!
+                        BoardService.getCards()
+                            .success(function (data) {
+                                var cards;
+                                cards = Underscore.filter(data, function (c) {
+                                    return c.project === $scope.project.id;
+                                });
+                                if (cards.length > 0) {
+                                    $scope.hasStarted = true;
+                                }
+                            });
                     });
             };
 

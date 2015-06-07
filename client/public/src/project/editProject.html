@@ -29,7 +29,7 @@
         <div class="form-group"
             ng-class="{ 'has-error' : createProjectForm.start_date.$invalid && createProjectForm.start_date.$dirty }" }> 
             <label>Start date</label>
-            <input ng-model="project.start_date" type="date" name="start_date" 
+            <input ng-model="project.start_date" type="date" name="start_date" ng-disabled="hasStarted"
                 class="form-control" placeholder="Start date (yyyy-mm-dd)" ng-change="validateStartDate()" required autofocus>
             <p ng-show="createProjectForm.start_date.$error.required && createProjectForm.start_date.$dirty" 
                 class="help-block">Please enter start date.</p>
