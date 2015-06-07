@@ -47,6 +47,7 @@
                 $scope.violationDescription = "";
                 $scope.silverBullet = false;
                 $scope.WIPErr = false;
+                $scope.numAllCards = 0;
 
 
                 //////////////////////////////////////// BOARD /////////////////////////////////////////
@@ -105,14 +106,13 @@
                     })
                         .then(function () {
                             $scope.newCol.board = $routeParams.boardId;
-                            if (oldCol.location !== $scope.newCol.location) {
-                                $scope.newCol.location = $scope.calculateColLocation($scope.newCol);
-                            }
 
                             BoardService.updateColumn($scope.newCol)
                                 .success(function () {
-                                    $scope.deleteSubColsLocations($scope.newCol);
-                                    $scope.recalculateSubColsLocations($scope.newCol);
+                                    if (oldCol.location !== $scope.newCol.location) {
+                                        $scope.deleteSubColsLocations($scope.newCol);
+                                        $scope.recalculateSubColsLocations($scope.newCol);
+                                    }
 
                                     $scope.allCols = Underscore.without($scope.allCols, oldCol);
                                     $scope.proccessSavedColumn($scope.newCol);
@@ -161,6 +161,10 @@
                         return c.isLeafCol;
                     }), 'location');
                     $scope.updateHighPriorityCol();
+
+                    $scope.numAllCards = Underscore.foldr($scope.rootCols, function (numCards, col) {
+                        return numCards + $scope.countCards(col);
+                    }, 0);
                 };
 
                 $scope.updateHighPriorityCol = function () {
@@ -351,7 +355,7 @@
                         i,
                         col,
                         subCols,
-                        numProjects = $scope.board.projects ? $scope.board.projects.length : 1;
+                        numProjects = $scope.yourProjects ? $scope.yourProjects.length : 1;
 
                     numProjects = (numProjects < 1) ? 1 : numProjects;
 
@@ -463,13 +467,6 @@
                         ProjectService.updateProject(proj)
                             .success(updateProjectSuccessFunction);
                     }
-                };
-
-                $scope.getProjectsIfLeafColumn = function (colId, board) {
-                    if ($scope.getSubCols(colId).length > 0) {
-                        return board.projects.length > 0 ? [board.projects[0]] : [{ 'name': 'fake' }];
-                    }
-                    return board.projects;
                 };
 
                 $scope.getProjectStyle = function (col, isFirst, isLast) {

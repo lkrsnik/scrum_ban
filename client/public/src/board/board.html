@@ -1,16 +1,36 @@
 <div class="row board-container">
     <div class="col-md-12 panel panel-default board-cmd-line">
+        <div class="panel-heading">{{board.name}}</div>
         <div class="panel-body">
-            <span ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
+            <span ng-show="numAllCards < 1" ng-click="createColumn()" class="btn btn-success handcursor" title="Create column">
                 <span class="glyphicon glyphicon-plus"></span> Column
             </span>
-            <span ng-show="userOwnsProjects" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
+            <span ng-show="userOwnsProjects && (specialCols.borderCols.length >= 2 && specialCols.highPriorityCol &&  specialCols.acceptanceTestCol)" ng-click="createCard()" class="btn btn-success handcursor" title="Create card">
                 <span class="glyphicon glyphicon-plus"></span> Card
             </span>
             <span ng-click="addProject()" class="btn btn-success handcursor" title="Add project to board">
                 <span class="glyphicon glyphicon-plus"></span> Project
             </span>
         </div>
+    </div>
+    <!--Border cols <br />
+    {{specialCols.borderCols}} <br />
+    Acceptance <br />
+    {{specialCols.acceptanceTestCol}} <br />
+    High priority <br />
+    {{specialCols.highPriorityCol}} <br />
+    {{numAllCards}} <br />-->
+    <div class="alert alert-warning" ng-show="specialCols.borderCols.length < 2">
+        Board must have exactly 2 border columns.
+    </div>
+    <div class="alert alert-warning" ng-show="!specialCols.highPriorityCol">
+        Board must have a high priority column. Create one by creating at least one border column.
+    </div>
+    <div class="alert alert-warning" ng-show="!specialCols.acceptanceTestCol">
+        Board must have an acceptance test column.
+    </div>
+    <div class="alert alert-warning" ng-show="board.projects.length < 1">
+        There is no projects on the table. Add one!
     </div>
     <div class="col-md-12 board-col-line" 
         ng-style="getBoardStyle()">
