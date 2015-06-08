@@ -23,7 +23,7 @@ class CardSerializer(serializers.ModelSerializer):
         model = Card
         fields = ('id', 'type', 'name', 'content', 'creation_date',
                   'completion_date', 'development_start_date', 'is_active',
-                  'column', 'project', 'user')
+                  'column', 'project', 'user', 'story_points')
         read_only_fields = ('id',)
 
 
