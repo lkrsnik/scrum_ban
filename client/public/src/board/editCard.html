@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel {{card.cardClass}}">
     <div class="panel-heading">{{card.name}}
     </div>
     <div class="panel-body">
@@ -24,8 +24,8 @@
         </div> 
         <div class="form-group"
             ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
-            <label>Select responsible user</label>
-            <p ng-show="card.user">{{card.user}}</p>
+            <label>Responsible user</label>
+            <p ng-show="card.user">{{card.username.first_name}}</p>
             <p ng-show="!card.user">No user selected</p>
             <select class="form-control" 
                 ng-model="card.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>

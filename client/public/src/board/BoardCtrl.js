@@ -626,6 +626,7 @@
                 $scope.editCard = function (card) {
                     console.log(card);
                     $scope.card = card;
+                    $scope.card.username = Underscore.where($scope.allUsers, {'id': $scope.card.user})[0];
                     ngDialog.openConfirm({
                         template: '/static/html/board/editCard.html',
                         className: 'ngdialog-theme-plain',
@@ -634,7 +635,7 @@
                         .then(function () {
                             BoardService.updateCard($scope.card)
                                 .success(function () {
-                                    console.log("YEEAAAA");
+                                    console.log("YEAA");
                                 });
                         });
                 };
