@@ -4,15 +4,6 @@
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
         ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', 'ngDialog', function ($scope, ROLES, $routeParams, BoardService, ProjectService, ngDialog) {
 
-            $scope.ROLES = ROLES;
-            $scope.yourOwnedSMProjects = [];
-            $scope.types = [
-                "newFunctionality",
-                "silverBullet",
-                "rejected",
-                ""
-            ];
-
             if (!$scope.session) {
                 $scope.promises.sessionPromise
                     .then(function () {
@@ -23,6 +14,27 @@
             } else {
                 $scope.redirectNonAuthenticated('/');
             }
+
+            $scope.ROLES = ROLES;
+            $scope.yourOwnedSMProjects = [];
+            $scope.types = [
+                "newFunctionality",
+                "silverBullet",
+                "rejected",
+                ""
+            ];
+            $scope.specialCols = {
+                'borderCols': [],
+                'acceptanceTestCol': null,
+                'highPriorityCol': null
+            };
+
+            BoardService.getColumns($routeParams.boardId)
+                .success(function (data) {
+                    $scope.allCols = data;
+                    $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
+                    $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
+                });
 
             BoardService.getCards()
                 .success(function (data) {
@@ -47,7 +59,19 @@
                 return (new Date(date));
             }
 
-            function days_between(date1, date2) {
+            $scope.getRightCols = function (col, cols) {
+                var result = Underscore.filter(cols, function (c) {
+                    return c.location > col.location;
+                });
+                return Underscore.sortBy(result, 'location');
+            };
+                
+            $scope.getRightLeafCol = function (col) {
+                var rightCols = $scope.getRightCols(col, $scope.leafCols);
+                return rightCols.shift(); // Returns first element and returns undefined if array is empty
+            };
+
+            /*function days_between(date1, date2) {
                 var ONE_DAY, date1_ms, date2_ms, difference_ms;
                 // The number of milliseconds in one day
                 ONE_DAY = 1000 * 60 * 60 * 24;
@@ -62,9 +86,9 @@
                 // Convert back to days and return
                 return Math.round(difference_ms / ONE_DAY);
 
-            }
+            }*/
 
-            function getAverageLeadTime(card, start, end) {
+            /*function getAverageLeadTime(card, start, end) {
                 var from, to, cardALT, newCard;
                 cardALT = {};
                 cardALT.id = card.id;
@@ -81,12 +105,27 @@
                 }
                 //increase for one day
                 from.setDate(from.getDate() + 1);
+            }*/
+
+            function getDateOfColumnCard(card, column, type) {
+                var moves;
+                BoardService.getMoves(card.id)
+                    .success(function (data) {
+                        moves = Underscore.where(data, {to_position: column.id});
+                        moves = Underscore.sortBy(moves, function (move) { return getDate(move.date); });
+                        if (type === "first") {
+                            return getDate((Underscore.first(moves)).date);
+                        }
+                        if (type === "last") {
+                            return getDate((Underscore.last(moves)).date);
+                        }
+                    });
+                return null;
             }
 
+
             $scope.showAnalytics = function (subset) {
-                var from = getDate($scope.allCards[0].creation_date);
-                from.setDate(from.getDate() + 7);
-                getAverageLeadTime($scope.allCards[0], getDate($scope.allCards[0].creation_date), from);
+                console.log($scope.allCards[0]);
                 $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&

@@ -22,7 +22,8 @@ class BoardViewSet(viewsets.ModelViewSet):
 
         # Get all projects and their boards
         allProjectsQS = Project.objects.all()
-        notNullBoardsQS = Board.objects.filter(id__in=allProjectsQS.values('board'))
+        notNullBoardsQS = \
+            Board.objects.filter(id__in=allProjectsQS.values('board'))
 
         # Get all boards
         allBoardsQS = Board.objects.all()
@@ -71,3 +72,12 @@ class MoveViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = MoveSerializer
     queryset = Move.objects.all()
+
+    def list(self, request):
+        if request.QUERY_PARAMS.get('cardId'):
+            moveQS = Move.objects.filter(card=request.QUERY_PARAMS['cardId'])
+            serializer = self.serializer_class(moveQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = Move.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

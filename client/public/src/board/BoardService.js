@@ -44,6 +44,11 @@
                 },
                 createMove: function (move) {
                     return $http.post(API_URL + 'moves/', move);
+                },
+                getMoves: function (cardId) {
+                    return $http.get(API_URL + 'moves/', {
+                        params: { cardId: cardId }
+                    });
                 }
                 /*,
                 getBoard: function (boardId) {
