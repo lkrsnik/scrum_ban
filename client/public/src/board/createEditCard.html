@@ -38,6 +38,15 @@
             <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
             Please enter card content.</p>
         </div> 
+        <div class="form-group " ng-show="showCreateCardForm"
+            ng-class="{ 'has-error' : cardForm.completion_date.$invalid && cardForm.completion_date.$dirty }" }> 
+            <label>Deadline</label>
+            <input ng-model="newCard.completion_date" type="date" name="completion_date" 
+                class="form-control" placeholder="completion date (yyyy-mm-dd)" ng-change="validateCompletionDate()" autofocus>
+            <p ng-show="cardForm.completion_date.$error.required && cardForm.completion_date.$dirty" 
+                class="help-block">Please enter deadline date.</p>
+            <p ng-show="cardForm.completion_date.$error.completionAfterToday" class="help-block">Deadline is after today!</p>
+        </div>
         <div class="form-group" ng-show="showCreateCardForm"
             ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
             <label>Select responsible user</label>

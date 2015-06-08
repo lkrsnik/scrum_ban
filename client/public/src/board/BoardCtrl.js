@@ -2,8 +2,8 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardCtrl',
-        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService', '$location',
-            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService, $location) {
+        ['$scope', 'BoardService', '$routeParams', 'ngDialog', 'COL_DIM', 'ProjectService', 'UserService', '$location', '$filter',
+            function ($scope, BoardService, $routeParams, ngDialog, COL_DIM, ProjectService, UserService, $location, $filter) {
 
                 //////////////////////////////////////// INIT ////////////////////////////////////////
 
@@ -50,6 +50,7 @@
                 $scope.silverBullet = false;
                 $scope.WIPErr = false;
                 $scope.allCards = [];
+                $scope.newCard = {};
 
                 // Redirect init
                 $scope.go = function (path) {
@@ -607,9 +608,11 @@
                             $scope.newCard.project = $scope.newCard.project.id;
                             $scope.newCard.column = $scope.cardColumn.id;
                             $scope.newCard.type = $scope.type;
+                            $scope.newCard.completion_date = $filter('date')($scope.newCard.completion_date, 'yyyy-MM-ddTHH:mm');
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
                                     $scope.allCards.push(data);
+                                    console.log(data);
                                     move = {
                                         card: data.id,
                                         user: $scope.session.userid,
