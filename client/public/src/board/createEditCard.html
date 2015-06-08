@@ -4,20 +4,21 @@
     <div class="panel-body">
     <form name="cardForm" class="create-card-form" role="form" 
         ng-submit="confirm()" novalidate>
-        <p ng-show="isPO && silverBullet" >You can not create cards as Product owner because there is already one silverbullet in high-priority column.</p>
-        <div class="form-group" ng-show="isPO && !silverBullet" 
+        <p ng-show="isSM && silverBullet" >You can not create cards as Scrum master because there is already one silverbullet in high-priority column.</p>
+        <div class="form-group" ng-show="isSM && !silverBullet"
             ng-class="{ 'has-error' : cardForm.project.$invalid && cardForm.project.$dirty }" }>
-            <label>Dear product owner, select project to create silverbullet: </label>
+            <label>Dear scrum master, select project to create silverbullet: </label>
             <select class="form-control" 
-                ng-model="newCard.project" ng-options="p as p.name for p in yourOwnedPOProjects" name="project" ng-change="onProjectSelectionChange('ProductOwner')" ></select>
+                ng-model="newCard.project" ng-options="p as p.name for p in yourOwnedSMProjects" name="project" ng-change="onProjectSelectionChange('ScrumMaster')" ></select>
             <p ng-show="cardForm.project.$error.required && cardForm.project.$dirty" class="help-block">
             Please choose cards project.</p>
         </div>  
-        <div class="form-group" ng-show="isSM"
+
+        <div class="form-group" ng-show="isPO" 
             ng-class="{ 'has-error' : cardForm.project.$invalid && cardForm.project.$dirty }" }>
-            <label>Dear scrum master, select project to create new functionality card: </label>
+            <label>Dear product owner, select project to create new functionality card: </label>
             <select class="form-control" 
-                ng-model="newCard.project" ng-options="p as p.name for p in yourOwnedSMProjects" name="project" ng-change="onProjectSelectionChange('ScrumMaster')" ></select>
+                ng-model="newCard.project" ng-options="p as p.name for p in yourOwnedPOProjects" name="project" ng-change="onProjectSelectionChange('ProductOwner')" ></select>
             <p ng-show="cardForm.project.$error.required && cardForm.project.$dirty" class="help-block">
             Please choose cards project.</p>
         </div>  
@@ -30,9 +31,9 @@
                 class="help-block">Please enter card name.</p>
         </div>   
         <div class="form-group" ng-show="showCreateCardForm"
-            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
+            ng-class="{ 'has-error' : cardForm.content.$invalid && cardForm.content.$dirty }">
             <label>Card content</label>
-            <textarea ng-model="newCard.content" type="text-area" rows="8" name="name" 
+            <textarea ng-model="newCard.content" type="text-area" rows="8" name="content" 
                 class="form-control" placeholder="Card content" required autofocus></textarea>
             <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
             Please enter card content.</p>

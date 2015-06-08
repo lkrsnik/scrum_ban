@@ -570,11 +570,11 @@
 
                 $scope.onProjectSelectionChange = function (type) {
                     $scope.showCreateCardForm = true;
-                    if (type === 'ProductOwner') {
+                    if (type === 'ScrumMaster') {
                         $scope.type = 'silverBullet';
                         $scope.cardColumn = $scope.specialCols.highPriorityCol;
                     }
-                    if (type === 'ScrumMaster') {
+                    if (type === 'ProductOwner') {
                         $scope.type = 'newFunctionality';
                         $scope.cardColumn = $scope.firstColumn[0];
                     }
