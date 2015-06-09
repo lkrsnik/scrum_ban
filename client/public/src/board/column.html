@@ -4,11 +4,10 @@
         class="glyphicon glyphicon-trash handcursor"></span>
     <span ng-click="editColumn(col)" title="Edit column"
         class="glyphicon glyphicon-pencil handcursor"></span>
-    <span ng-click="resizeColumn(col)" title="Resize column"
-        class="glyphicon glyphicon-resize-horizontal handcursor"></span>
+    <!--<span ng-click="resizeColumn(col)" title="Resize column"
+        class="glyphicon glyphicon-resize-horizontal handcursor"></span>-->
 </div>
 <div class="panel-body column-body">
-{{col.style}}
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
