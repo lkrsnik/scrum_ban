@@ -20,14 +20,14 @@
             $scope.types = [
                 "newFunctionality",
                 "silverBullet",
-                "rejected",
-                "all"
+                "rejected"
             ];
             $scope.specialCols = {
                 'borderCols': [],
                 'acceptanceTestCol': null,
                 'highPriorityCol': null
             };
+            $scope.subsetCards = [];
 
             BoardService.getColumns($routeParams.boardId)
                 .success(function (data) {
@@ -42,7 +42,7 @@
             BoardService.getBoardCards($routeParams.boardId)
                 .success(function (data) {
                     $scope.allCards = data;
-                    $scope.subsetCards = data;
+                    //$scope.subsetCards = data;
                 });
 
             BoardService.getBoard($routeParams.boardId)
@@ -259,7 +259,7 @@
 
             $scope.chartObject = {
                 "type": "ColumnChart",
-                "displayed": false,
+                "displayed": true,
                 "data": {
                     "cols": [{
                         "id": "cardName",
