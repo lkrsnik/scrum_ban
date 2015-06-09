@@ -85,7 +85,7 @@
 
                 // Calculate the difference in milliseconds
                 //difference_ms = Math.abs(date1_ms - date2_ms);
-                return Math.round((((Math.abs(date1 - date2) / 3600000)/24)) * 100) / 100;
+                return Math.round((((Math.abs(date1 - date2) / 3600000) / 24)) * 100) / 100;
                 // Convert back to days and return
                 //return Math.round(difference_ms / ONE_DAY);
 
@@ -217,19 +217,19 @@
                 $scope.averageLeadTimeSum = 0;
 
                 $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
+
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&
                         (!subset.points_to || subset.points_to >= x.story_points) &&
-                        (!subset.type || subset.type === "" || subset.type === x.type) &&
-                        (!subset.create_start_date || subset.create_start_date <= getDate(x.creation_date)) &&
-                        (!subset.create_end_date || subset.create_end_date >= getDate(x.creation_date)) &&
-                        (!subset.finished_start_date || subset.finished_start_date <= getDate(x.done_date)) &&
-                        (!subset.finished_end_date || subset.finished_end_date >= getDate(x.done_date)) &&
-                        (!subset.development_start_date || subset.development_start_date <= getDate(x.development_start_date)) &&
-                        (!subset.development_end_date || subset.development_end_date >= getDate(x.development_start_date))
+                        (!subset.type || subset.type === "all" || subset.type === x.type) &&
+                        (!subset.create_start_date || getDate(subset.create_start_date) <= getDate(x.creation_date)) &&
+                        (!subset.create_end_date || getDate(subset.create_end_date) >= getDate(x.creation_date)) &&
+                        (!subset.finished_start_date || getDate(subset.finished_start_date) <= getDate(x.done_date)) &&
+                        (!subset.finished_end_date || getDate(subset.finished_end_date) >= getDate(x.done_date)) &&
+                        (!subset.development_start_date || getDate(subset.development_start_date) <= getDate(x.development_start_date)) &&
+                        (!subset.development_end_date || getDate(subset.development_end_date) >= getDate(x.development_start_date))
                         );
                 });
-
                 $scope.getMovesPromises = [];
                 for (i = 0; i < $scope.subsetCards.length; i += 1) {
                     $scope.getMovesPromises.push(BoardService.getMoves($scope.subsetCards[i].id)
