@@ -719,6 +719,43 @@
                         });
                 };
 
+                $scope.deleteCard = function (card) {
+                    $scope.card = card;
+                    $scope.move = {
+                        card: card.id,
+                        user: $scope.session.userid,
+                        from_position: card.column,
+                        to_position: null,
+                        description: ''
+                    };
+
+                    ngDialog.openConfirm({
+                        template: '/static/html/board/deleteCard.html',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    })
+                        .then(function () {
+                            BoardService.createMove($scope.move);
+                            $scope.card.is_active = false;
+                            BoardService.updateCard($scope.card)
+                                .success(function () {
+                                    $scope.allCards = Underscore.without($scope.allCards, card);
+                                });
+                        });
+                };
+
+                $scope.canDeleteCard = function (card) {
+                    if ($scope.specialCols.borderCols.length > 1 || $scope.isSM) {
+                        var leftBorderCols = $scope.getLeftCols($scope.specialCols.borderCols[0], $scope.leafCols),
+                            isLeft = Underscore.where(leftBorderCols, {'id': card.column}).length > 0;
+                        if (($scope.isPO && isLeft) || $scope.isSM) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                };
+
                 $scope.countCards = function (column) {
                     if (column.isLeafCol) {
                         return Underscore.where($scope.allCards, {'column': column.id}).length;
