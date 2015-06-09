@@ -203,7 +203,7 @@
                         // Sort moves by date
                         moves = Underscore.sortBy(data, function (move) { return getDate(move.date); });
 
-                        fromMove = Underscore.first(Underscore.where(moves, {from_position: subset.column_from.id}));
+                        fromMove = Underscore.first(Underscore.where(moves, {to_position: subset.column_from.id}));
                         toMove = Underscore.last(Underscore.where(moves, {to_position: subset.column_to.id}));
                         if (!fromMove || !toMove) {
                             $scope.subsetCards[i].averageLeadTime = 0;
