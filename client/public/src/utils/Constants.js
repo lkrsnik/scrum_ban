@@ -73,13 +73,18 @@
                     content: "Here you can create a new board by entering it's name. You can also copy another board's structure by selecting another board from dropdown menu."
                 },
                 {
+                    header: 'My boards',
+                    content: "This is a view of all the boards with your team's projects and all the boards with no projects on them. The latter are listed to enable a scrum master user to even add projects to newly created boards."
+                },
+                {
                     header: 'Create card',
                     roles: ['ScrumMaster', 'ProductOwner'],
                     content: "Here you can create a new card. As Scrum Master you can only create silverbullet card, which is automatic moved to high priority column. You can not create silverbullet if there is already one in the high priority column. As Product Owner you can create cards with new functionality. They are moved to lefmost column. When you ae creating new card, first you must choose appropriate project, then you must enter card name, card content and optionally you can add deadline and responsible user."
                 },
                 {
-                    header: 'My boards',
-                    content: "This is a view of all the boards with your team's projects and all the boards with no projects on them. The latter are listed to enable a scrum master user to even add projects to newly created boards."
+                    header: 'Create column',
+                    roles: ['ScrumMaster', 'ProductOwner'],
+                    content: "Here you can create a new column. To have a valid board you must add two border columns and one column on the left side of left border column. This column is then marked as high priority column. You can create a column inside column if you choose a parent column. You can set the WIP value which will set limitation warnings if the number of cards in one column will be higher then the value you choose."
                 }]
         }, {
             title : 'Login',
