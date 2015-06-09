@@ -46,6 +46,7 @@
                     return $http.post(API_URL + 'moves/', move);
                 },
                 getMoves: function (cardId) {
+                    // user returns first_name not ID
                     return $http.get(API_URL + 'moves/', {
                         params: { cardId: cardId }
                     });

@@ -1,15 +1,17 @@
 <div class="panel panel-default">
   <div class="panel-heading">User documentation</div>
   <div class="panel-body">
-    <input type="search" class="form-group" 
-      ng-model="q" placeholder="filter documentation..." aria-label="filter documentation" />
-    <div class="animate-repeat" ng-repeat="section in DOCS | filter: q">
+    <div class="form-group">
+      <input type="search" class="form-control" 
+        ng-model="q" placeholder="filter documentation..." aria-label="filter documentation" />
+    </div>
+    <div class="animate-repeat thumbnail" 
+      ng-repeat="section in DOCS | filter: q | filter: filterStaffAndRoles">
       <h4>{{ section.title }}</h4>
-      <div ng-repeat="chapter in section.chapters | filter: q">
+      <div ng-repeat="chapter in section.chapters | filter: q | filter: filterStaffAndRoles">
         <label>{{chapter.header}}</label>
         <p>{{chapter.content}}</p>
       </div>
-      <hr />
     </div>
   </div>
 </div>

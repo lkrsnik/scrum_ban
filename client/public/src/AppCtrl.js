@@ -91,5 +91,20 @@
                     scope: $scope
                 });
             };
+
+            $scope.filterStaff = function (value) {
+                return value.is_staff && $scope.session.is_staff;
+            };
+
+            $scope.filterRoles = function (value) {
+                // If roles are undefined on a value and is not for staff,
+                // then value is accessible to all roles,
+                // otherwise filter them regarding session.roles
+                return (!value.roles && !value.is_staff) || Underscore.intersection($scope.session.roles, value.roles).length > 0;
+            };
+
+            $scope.filterStaffAndRoles = function (value) {
+                return ($scope.filterRoles(value) || $scope.filterStaff(value));
+            };
         }]);
 }());

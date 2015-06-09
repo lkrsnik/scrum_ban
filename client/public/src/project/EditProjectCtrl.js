@@ -66,7 +66,6 @@
             $scope.getTeams();
             $scope.editProject = function (project) {
                 project.team = project.team.id;
-                project.board = null;
                 project.start_date = $filter('date')(project.start_date, 'yyyy-MM-ddTHH:mm');
                 project.end_date = $filter('date')(project.end_date, 'yyyy-MM-ddTHH:mm');
                 project.is_active = $scope.project.is_active;
