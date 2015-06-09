@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
-        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', '$q', function ($scope, ROLES, $routeParams, BoardService, ProjectService, $q) {
+        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', function ($scope, ROLES, $routeParams, BoardService, ProjectService) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -39,7 +39,7 @@
                     }), 'location');
                 });
 
-            BoardService.getCards()
+            BoardService.getBoardCards($routeParams.boardId)
                 .success(function (data) {
                     $scope.allCards = data;
                     $scope.subsetCards = data;
@@ -110,28 +110,32 @@
                 from.setDate(from.getDate() + 1);
             }
             */
-            $scope.movePromises = [];
+            /*$scope.movePromises = [];
             $scope.firstDates = [];
             $scope.lastDates = [];
             function getDateOfColumnCard(card, column, type) {
                 var moves, movePromise;
                 movePromise = BoardService.getMoves(card.id)
                     .success(function (data) {
+                        console.log(new Date() + "wwq");
                         if (type === "first") {
+                            console.log(new Date() + "wwqasdads");
                             moves = Underscore.where(data, {from_position: column.id});
                         } else if (type === "last") {
                             moves = Underscore.where(data, {to_position: column.id});
                         }
-
+                        console.log(new Date() + "člkčlk");
                         moves = Underscore.sortBy(moves, function (move) { return getDate(move.date); });
                         if (!moves || moves.length === 0) {
                             return;
                         }
+                        console.log(new Date());
                         if (type === "first") {
                             $scope.firstDates.push(getDate((Underscore.first(moves)).date));
                         } else if (type === "last") {
                             $scope.lastDates.push(getDate((Underscore.last(moves)).date));
                         }
+                        console.log(new Date());
                     });
                 $scope.movePromises.push(movePromise);
             }
@@ -140,6 +144,7 @@
             $scope.showAnalytics = function (subset) {
                 var startOfDevelopmentCol, doneCol, i, averageLeadTime;
                 $scope.averageLeadTimeSum = 0;
+                $scope.cardsAndTime = [];
                 //-- časovni interval, v katerem je bila kartica končana (premaknjena v stolpec, ki sledi stolpcu za sprejemno testiranje)
                 doneCol = $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol);
                 //-- časovni interval, v katerem se je dejansko pričel razvoj - prvi border column
@@ -157,22 +162,76 @@
                         (subset.development_end_date === null || subset.development_end_date >= getDateOfColumnCard(x, startOfDevelopmentCol, "first"))
                         );
                 });
-
+                console.log(new Date());
+                movePromise = BoardService.getMoves(card.id);
                 for (i = 0; i < $scope.subsetCards.length; i += 1) {
                     getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_from, "first");
-                    getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_to, "last");
+                    //getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_to, "last");
                 }
                 $q.all($scope.movePromises).then(function () {
+                    console.log(new Date());
                     for (i = 0; i < $scope.subsetCards.length; i += 1) {
                         //if (firstDates.length !== null  &&  second !== null) {
                         averageLeadTime = days_between($scope.firstDates[i], $scope.lastDates[i]);
                         //} else {
                         //    averageLeadTime = null;
                         //}S
+                        console.log(averageLeadTime);
+                        $scope.cardsAndTime[i] =
+                            {
+                                card: $scope.subsetCards[i].name,
+                                time: averageLeadTime
+                            };
                         $scope.subsetCards[i].averageLeadTime = averageLeadTime;
                         $scope.averageLeadTimeSum += averageLeadTime;
+
                     }
+                    
+                    console.log($scope.cardsAndTime);
                 });
+            };*/
+
+
+            $scope.showAnalytics = function (subset) {
+                var i, moves, fromMove, toMove, getMovesSuccessFun;
+                getMovesSuccessFun = function (i) {
+                    return function (data) {
+                        // Sort moves by date
+                        moves = Underscore.sortBy(data, function (move) { return getDate(move.date); });
+
+                        fromMove = Underscore.first(Underscore.where(moves, {from_position: subset.column_from.id}));
+                        toMove = Underscore.last(Underscore.where(moves, {to_position: subset.column_to.id}));
+                        if (!fromMove || !toMove) {
+                            $scope.subsetCards[i].averageLeadTime = 0;
+                        } else {
+                            $scope.subsetCards[i].averageLeadTime = days_between(getDate(fromMove.date), getDate(toMove.date));
+                            $scope.averageLeadTimeSum += $scope.subsetCards[i].averageLeadTime;
+                        }
+                    };
+                };
+                $scope.subsetCards = $scope.allCards;
+                $scope.averageLeadTimeSum = 0;
+                $scope.cardsAndTime = [];
+
+                $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
+                    return ((!subset.project || subset.project === x.project) &&
+                        (!subset.points_from || subset.points_from <= x.story_points) &&
+                        (!subset.points_to || subset.points_to >= x.story_points) &&
+                        (!subset.type || subset.type === "" || subset.type === x.type) &&
+                        (subset.create_start_date === null || subset.create_start_date <= getDate(x.creation_date)) &&
+                        (subset.create_end_date === null || subset.create_end_date >= getDate(x.creation_date)) &&
+                        (subset.finished_start_date === null || subset.finished_start_date <= getDate(x.done_date)) &&
+                        (subset.finished_end_date === null || subset.finished_end_date >= getDate(x.done_date)) &&
+                        (subset.development_start_date === null || subset.development_start_date <= getDate(x.development_start_date)) &&
+                        (subset.development_end_date === null || subset.development_end_date >= getDate(x.development_start_date))
+                        );
+                });
+
+
+                for (i = 0; i < $scope.subsetCards.length; i += 1) {
+                    BoardService.getMoves($scope.subsetCards[i].id)
+                        .success(getMovesSuccessFun(i));
+                }
             };
         }]);
 }());

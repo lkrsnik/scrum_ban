@@ -42,6 +42,11 @@
                 getCards: function () {
                     return $http.get(API_URL + 'cards/');
                 },
+                getBoardCards: function (boardId) {
+                    return $http.get(API_URL + 'cards/', {
+                        params: { boardId: boardId }
+                    });
+                },
                 createMove: function (move) {
                     return $http.post(API_URL + 'moves/', move);
                 },

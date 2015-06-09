@@ -71,13 +71,13 @@
             ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
             <label>COLUMN: </label>
             <label>from</label>
-            <select ng-model="subset.column_from" ng-options="p as p.name for p in allCols" name="column_from" class="form-control"> </select>
+            <select ng-model="subset.column_from" ng-options="p as p.name for p in allCols" name="column_from" class="form-control" required> </select>
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
             <label>to</label>
             <select ng-model="subset.column_to" ng-options="p as p.name for p in allCols" name="column_to"
-                class="form-control"> </select>
+                class="form-control" required> </select>
         </div>
         <div class="form-group">
         <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"
@@ -85,10 +85,9 @@
         </div>
     </form>
     <div name="analyticsShow" class="create-board-form col-md-3">
+        AVERAGE LEAD TIME for all selected cards: {{averageLeadTimeSum}}
         <ul>
-            <li ng-repeat="card in subsetCards">
-               <p> {{card.id}} {{card.name}}: {{card.averageLeadTime}}  </p>         
-            </li>
+            <li ng-repeat="c in subsetCards">{{c.name}} {{c.averageLeadTime}}</li>
         </ul>
     </div>
   </div>

@@ -819,6 +819,12 @@
                             .then(function () {
                                 //data.project = proj.id;
                                 data.column = col.id;
+                                if (col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
+                                    data.done_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
+                                }
+                                if (col.id === $scope.specialCols.borderCols[0].id && data.development_start_date !== null) {
+                                    data.development_start_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
+                                }
                                 createMove(move);
                                 BoardService.updateCard(data);
                             });
@@ -831,6 +837,13 @@
                         };
                         //data.project = proj.id;
                         data.column = col.id;
+                        if (col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
+                            data.done_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
+                        }
+                        if (col.id === $scope.specialCols.borderCols[0].id && data.development_start_date === null) {
+                            data.development_start_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
+                        }
+
                         createMove(move);
                         BoardService.updateCard(data);
                     }
