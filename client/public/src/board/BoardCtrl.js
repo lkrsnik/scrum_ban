@@ -382,7 +382,13 @@
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
                 };
 
-
+                $scope.getParentCols = function (col) {
+                    var parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
+                    if (!parentCol) {
+                        return [col];
+                    }
+                    return [col].concat($scope.getParentCols(parentCol));
+                };
 
                 //////////////////////////////////////// PROJECTS ////////////////////////////////////////
 
