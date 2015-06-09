@@ -68,7 +68,8 @@ class Card(models.Model):
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)
     user = models.ForeignKey(User, null=True)
-    story_points = models.DecimalField(null=True, max_digits=5, decimal_places=2)
+    story_points = models.DecimalField(null=True, max_digits=5,
+                                    decimal_places=2, default=0)
 
 
 class Move(models.Model):

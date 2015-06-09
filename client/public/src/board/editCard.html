@@ -2,37 +2,46 @@
     <div class="panel-heading">{{card.name}}
     </div>
     <div class="panel-body">
-    <form name="cardForm" class="create-card-form" role="form" 
+    <form name="newCardForm" class="create-newCard-form" role="form" 
         ng-submit="confirm()" novalidate> 
         <div class="form-group"
-            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
-            <label>Card name</label>
-            <p>{{card.name}}</p>
-            <input ng-model="card.name" type="text" name="name" 
-                class="form-control" placeholder="Card name" required autofocus>
-            <p ng-show="cardForm.name.$error.required && cardForm.name.$dirty" 
-                class="help-block">Please enter card name.</p>
+            ng-class="{ 'has-error' : newCardForm.name.$invalid && newCardForm.name.$dirty }">
+            <label>newCard name</label>
+            <p>{{newCard.name}}</p>
+            <input ng-model="newCard.name" type="text" name="name" 
+                class="form-control" placeholder="newCard name" required autofocus>
+            <p ng-show="newCardForm.name.$error.required && newCardForm.name.$dirty" 
+                class="help-block">Please enter newCard name.</p>
         </div>   
         <div class="form-group"
-            ng-class="{ 'has-error' : cardForm.name.$invalid && cardForm.name.$dirty }">
-            <label>Card content</label>
-            <p>{{card.content}}</p>
-            <textarea ng-model="card.content" type="text-area" rows="8" name="name" 
-                class="form-control" placeholder="Card content" required autofocus></textarea>
-            <p ng-show="cardForm.content.$error.required && cardForm.content.$dirty" class="help-block">
-            Please enter card content.</p>
+            ng-class="{ 'has-error' : newCardForm.content.$invalid && newCardForm.content.$dirty }">
+            <label>newCard content</label>
+            <p>{{newCard.content}}</p>
+            <textarea ng-model="newCard.content" type="text-area" rows="8" name="content" 
+                class="form-control" placeholder="newCard content" required autofocus></textarea>
+            <p ng-show="newCardForm.content.$error.required && newCardForm.content.$dirty" class="help-block">
+            Please enter newCard content.</p>
         </div> 
         <div class="form-group"
-            ng-class="{ 'has-error' : cardForm.user.$invalid && cardForm.user.$dirty }" }>
+            ng-class="{ 'has-error' : newCardForm.user.$invalid && newCardForm.user.$dirty }" }>
             <label>Responsible user</label>
-            <p ng-show="card.user">{{card.username.first_name}}</p>
-            <p ng-show="!card.user">No user selected</p>
+            <p ng-show="newCard.user">{{newCard.username.first_name}}</p>
+            <p ng-show="!newCard.user">No user selected</p>
             <select class="form-control" 
-                ng-model="card.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
+                ng-model="newCard.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
         </div>
+        <div class="form-group"
+            ng-class="{ 'has-error' : newCardForm.story_points.$invalid && newCardForm.story_points.$dirty }">
+            <label>Story points</label>
+            <p>{{newCard.story_points}}</p>
+            <input ng-model="newCard.story_points" type="number" step="any" name="story_points" 
+                class="form-control" placeholder="Story points" required autofocus>
+            <p ng-show="newCardForm.story_points.$error.required && newCardForm.story_points.$dirty" class="help-block">
+            Please enter story points as decimal number.</p>
+        </div> 
                  
-        <button class="btn btn-primary" ng-disabled="cardForm.$invalid"
-            type="submit">Save card</button>
+        <button class="btn btn-primary" ng-disabled="newCardForm.$invalid"
+            type="submit">Save newCard</button>
     </form>
   </div>
 </div>

@@ -65,7 +65,7 @@
                 });
                 return Underscore.sortBy(result, 'location');
             };
-                
+
             $scope.getRightLeafCol = function (col) {
                 var rightCols = $scope.getRightCols(col, $scope.leafCols);
                 return rightCols.shift(); // Returns first element and returns undefined if array is empty
@@ -105,7 +105,7 @@
                 }
                 //increase for one day
                 from.setDate(from.getDate() + 1);
-            }*/
+            }
 
             function getDateOfColumnCard(card, column, type) {
                 var moves;
@@ -121,7 +121,7 @@
                         }
                     });
                 return null;
-            }
+            }*/
 
 
             $scope.showAnalytics = function (subset) {

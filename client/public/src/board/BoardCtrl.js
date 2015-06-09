@@ -543,11 +543,13 @@
                 };
 
                 //////////////////////////////////////// CARDS ///////////////////////////////////////////
-
-                BoardService.getCards()
-                    .success(function (data) {
-                        $scope.allCards = data;
-                    });
+                $scope.getCards = function () {
+                    BoardService.getCards()
+                        .success(function (data) {
+                            $scope.allCards = data;
+                        });
+                };
+                $scope.getCards();
 
                 UserService.getUsers()
                     .success(function (data) {
@@ -566,7 +568,7 @@
                             entry.cardClass = "panel-warning";
                         }
                     });
-                    return cards;
+                    return Underscore.sortBy(cards, 'id');
                 };
 
                 $scope.onProjectSelectionChange = function (type) {
@@ -630,15 +632,18 @@
                     console.log(card);
                     $scope.card = card;
                     $scope.card.username = Underscore.where($scope.allUsers, {'id': $scope.card.user})[0];
+                    $scope.newCard = JSON.parse(JSON.stringify($scope.card));
                     ngDialog.openConfirm({
                         template: '/static/html/board/editCard.html',
                         className: 'ngdialog-theme-plain',
                         scope: $scope
                     })
                         .then(function () {
-                            BoardService.updateCard($scope.card)
+                            BoardService.updateCard($scope.newCard)
                                 .success(function () {
-                                    console.log("YEAA");
+                                    $scope.allCards = Underscore.without($scope.allCards, card);
+                                    $scope.allCards.push($scope.newCard);
+                                    //$scope.getCards();
                                 });
                         });
                 };
