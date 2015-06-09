@@ -64,6 +64,7 @@ class Card(models.Model):
     creation_date = models.DateTimeField(default=datetime.now)
     completion_date = models.DateTimeField(null=True)
     development_start_date = models.DateTimeField(null=True)
+    done_date = models.DateTimeField(null=True)
     is_active = models.BooleanField(default=True)
     column = models.ForeignKey(Column)
     project = models.ForeignKey(Project, null=True)

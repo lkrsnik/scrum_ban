@@ -1,0 +1,21 @@
+<div class="panel panel-warning">
+    <div class="panel-heading">Are you sure you want to delete a card?
+    </div>
+    <div class="panel-body">
+    <form name="deleteCardForm" class="delete-card-form" role="form" 
+        ng-submit="confirm()" novalidate> 
+        <div class="form-group"
+            ng-class="{ 'has-error' : deleteCardForm.description.$invalid && deleteCardForm.description.$dirty }">
+            <label>Description of deletion</label>
+            <textarea ng-model="move.description" type="text-area" rows="8" name="description" 
+                class="form-control" placeholder="deletion description" required autofocus></textarea>
+            <p ng-show="deleteCardForm.description.$error.required && deleteCardForm.description.$dirty" class="help-block">
+            Please enter description for card deletion.</p>
+        </div>       
+        <button class="btn btn-primary" ng-disabled="deleteCardForm.$invalid"
+            type="submit">Delete</button>
+        <button class="btn btn-primary"
+            type="cancel">Cancel</button>
+    </form>
+  </div>
+</div>
