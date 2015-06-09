@@ -117,9 +117,9 @@
                 var moves, movePromise;
                 movePromise = BoardService.getMoves(card.id)
                     .success(function (data) {
-                        if (type === "first") {                            
+                        if (type === "first") {
                             moves = Underscore.where(data, {from_position: column.id});
-                        } else if (type === "last") {                            
+                        } else if (type === "last") {
                             moves = Underscore.where(data, {to_position: column.id});
                         }
 
@@ -138,7 +138,7 @@
 
 
             $scope.showAnalytics = function (subset) {
-                var startOfDevelopmentCol, doneCol, i, first, second, averageLeadTime, firstVals, secondVals;
+                var startOfDevelopmentCol, doneCol, i, averageLeadTime;
                 $scope.averageLeadTimeSum = 0;
                 //-- časovni interval, v katerem je bila kartica končana (premaknjena v stolpec, ki sledi stolpcu za sprejemno testiranje)
                 doneCol = $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol);
@@ -157,8 +157,7 @@
                         (subset.development_end_date === null || subset.development_end_date >= getDateOfColumnCard(x, startOfDevelopmentCol, "first"))
                         );
                 });
-                firstVals = [];
-                secondVals = [];
+
                 for (i = 0; i < $scope.subsetCards.length; i += 1) {
                     getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_from, "first");
                     getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_to, "last");
@@ -169,10 +168,7 @@
                         averageLeadTime = days_between($scope.firstDates[i], $scope.lastDates[i]);
                         //} else {
                         //    averageLeadTime = null;
-                        //}
-                        console.log($scope.firstDates[i]);
-                        console.log($scope.lastDates[i]);
-                        console.log(averageLeadTime);
+                        //}S
                         $scope.subsetCards[i].averageLeadTime = averageLeadTime;
                         $scope.averageLeadTimeSum += averageLeadTime;
                     }
