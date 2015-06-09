@@ -82,7 +82,8 @@ gulp.task('concat-libs-js', function () {
             './public/libs/bootstrap/dist/js/bootstrap.min.js',
             './public/libs/ngstorage/ngStorage.js',
             './public/libs/ngDialog/js/ngDialog.js',
-            './public/libs/ngDraggable/ngDraggable.js'
+            './public/libs/ngDraggable/ngDraggable.js',
+            './public/libs/angular-google-charts/ng-google-chart.js'
             ])
         .pipe(concat('libs.js'))
         .pipe(gulp.dest('dist/libs'));

@@ -19,9 +19,10 @@
     "bootstrap": "~3.3.4",
     "font-awesome": "~4.3.0",
     "ngDialog": "~0.4.0",
-    "ngDraggable": "0.0.3.1"
+    "ngDraggable": "0.0.3.1",
+    "angular-google-charts": "~0.0.11"
   },
   "resolutions": {
-    "angular": "1.2.x"
+    "angular": "~1.2.9"
   }
 }
