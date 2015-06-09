@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
-        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', '$q', function ($scope, ROLES, $routeParams, BoardService, ProjectService, $q) {
+        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', function ($scope, ROLES, $routeParams, BoardService, ProjectService) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -21,7 +21,7 @@
                 "newFunctionality",
                 "silverBullet",
                 "rejected",
-                ""
+                "all"
             ];
             $scope.specialCols = {
                 'borderCols': [],
