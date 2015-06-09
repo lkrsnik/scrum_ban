@@ -6,42 +6,72 @@
         ng-submit="confirm()" novalidate> 
         <div class="form-group"
             ng-class="{ 'has-error' : newCardForm.name.$invalid && newCardForm.name.$dirty }">
-            <label>newCard name</label>
-            <p>{{newCard.name}}</p>
-            <input ng-model="newCard.name" type="text" name="name" 
+            <label>Card name</label>
+            <p ng-if="newCard.readOnly">{{newCard.name}}</p>
+            <input ng-if="!newCard.readOnly" ng-model="newCard.name" type="text" name="name" 
                 class="form-control" placeholder="newCard name" required autofocus>
             <p ng-show="newCardForm.name.$error.required && newCardForm.name.$dirty" 
                 class="help-block">Please enter newCard name.</p>
         </div>   
         <div class="form-group"
             ng-class="{ 'has-error' : newCardForm.content.$invalid && newCardForm.content.$dirty }">
-            <label>newCard content</label>
-            <p>{{newCard.content}}</p>
-            <textarea ng-model="newCard.content" type="text-area" rows="8" name="content" 
+            <label>Card content</label>
+            <p ng-if="newCard.readOnly">{{newCard.content}}</p>
+            <textarea ng-if="!newCard.readOnly" ng-model="newCard.content" type="text-area" rows="8" name="content" 
                 class="form-control" placeholder="newCard content" required autofocus></textarea>
             <p ng-show="newCardForm.content.$error.required && newCardForm.content.$dirty" class="help-block">
             Please enter newCard content.</p>
-        </div> 
+        </div>
+        <div class="form-group "
+            ng-class="{ 'has-error' : newCardForm.completion_date.$invalid && newCardForm.completion_date.$dirty }" }> 
+            <label>Deadline</label>
+            <p ng-if="newCard.readOnly">{{newCard.completion_date}}</p>
+            <input ng-if="!newCard.readOnly" ng-model="newCard.completion_date" type="date" name="completion_date" 
+                class="form-control" placeholder="completion date (yyyy-mm-dd)" ng-change="validateCompletionDate()" autofocus>
+            <p ng-show="newCardForm.completion_date.$error.required && newCardForm.completion_date.$dirty" 
+                class="help-block">Please enter deadline date.</p>
+            <p ng-show="newCardForm.completion_date.$error.completionAfterToday" class="help-block">Deadline is after today!</p>
+        </div>
         <div class="form-group"
             ng-class="{ 'has-error' : newCardForm.user.$invalid && newCardForm.user.$dirty }" }>
             <label>Responsible user</label>
-            <p ng-show="newCard.user">{{newCard.username.first_name}}</p>
-            <p ng-show="!newCard.user">No user selected</p>
-            <select class="form-control" 
+            <p ng-show="newCard.user" ng-if="newCard.readOnly">{{newCard.username.first_name}}</p>
+            <p ng-show="!newCard.user" ng-if="newCard.readOnly">No user selected</p>
+            <select ng-if="!newCard.readOnly" class="form-control" 
                 ng-model="newCard.user" ng-options="u.id as u.first_name for u in allUsers" name="user"></select>
         </div>
         <div class="form-group"
             ng-class="{ 'has-error' : newCardForm.story_points.$invalid && newCardForm.story_points.$dirty }">
             <label>Story points</label>
-            <p>{{newCard.story_points}}</p>
-            <input ng-model="newCard.story_points" type="number" step="any" name="story_points" 
+            <p ng-if="newCard.readOnly">{{newCard.story_points}}</p>
+            <input ng-if="!newCard.readOnly" ng-model="newCard.story_points" type="number" step=".01" name="story_points" 
                 class="form-control" placeholder="Story points" required autofocus>
             <p ng-show="newCardForm.story_points.$error.required && newCardForm.story_points.$dirty" class="help-block">
             Please enter story points as decimal number.</p>
         </div> 
                  
-        <button class="btn btn-primary" ng-disabled="newCardForm.$invalid"
-            type="submit">Save newCard</button>
+        <button ng-if="!newCard.readOnly" class="btn btn-primary" ng-disabled="newCardForm.$invalid"
+            type="submit">Save card</button>
+            
     </form>
+    <div class="panel panel-default moves-table">
+        <div class="panel-heading">Moves</div>
+
+        <!-- Table -->
+        <table class="table table-hover">
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>User</th>
+                <th>Date</th>
+            </tr>
+            <tr class="handcursor {{move.legal}}" ng-repeat="move in newCard.moves">
+                <td> {{ move.from_position_name }}</td>
+                <td> {{ move.to_position_name }}</td>
+                <td> {{ move.user_first_name }}</td>
+                <td> {{ move.date }}</td>
+            </tr>
+        </table>
+    </div>
   </div>
 </div>
