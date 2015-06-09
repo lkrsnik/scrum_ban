@@ -1,94 +1,109 @@
 <div class="panel panel-default">
   <div class="panel-heading">Board analytics: {{board.name}} </div>
     <div class="panel-body row">
-    <form name="analyticsForm" class="create-board-form col-md-3" role="form" 
+    <form name="analyticsForm" class="col-md-4 create-board-form row" role="form" 
         ng-submit="showAnalytics(subset)" novalidate>
-        <label>Select subset of cards: </label>
-        <div class="form-group" 
+        <label class="col-md-12">Select subset of cards: </label>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
+            <label>COLUMN: </label>
+            <label>from</label>
+            <select ng-model="subset.column_from" ng-options="p as p.name for p in allCols" 
+                name="column_from" class="form-control" required
+                ng-change="showAnalytics(subset)"> </select>
+        </div>
+        <div class="form-group col-md-6"
+            ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
+            <label>to</label>
+            <select ng-model="subset.column_to" ng-options="p as p.name for p in allCols" name="column_to"
+                class="form-control" required
+                ng-change="showAnalytics(subset)"> </select>
+        </div>
+        <div class="form-group col-md-12" 
             ng-class="{ 'has-error' : analyticsForm.project.$invalid && analyticsForm.project.$dirty }">
             <label>PROJECT: </label>
             <select class="form-control" 
-                ng-model="subset.project" ng-options="p.id as p.name for p in yourOwnedSMProjects" name="project" autofocus></select>
+                ng-model="subset.project" ng-options="p.id as p.name for p in yourOwnedSMProjects" name="project" autofocus ng-change="showAnalytics(subset)">
+                <option value="">all</option>
+            </select>
         </div>  
-        <div class="form-group">
+        <div class="form-group col-md-12">
             <label>TYPE: </label>
             <select class="form-control" 
-                ng-model="subset.type" ng-options="p for p in types" name="type"></select>
+                ng-model="subset.type" ng-options="p for p in types" name="type"
+                ng-change="showAnalytics(subset)"></select>
         </div>      
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.create_start_date.$invalid && analyticsForm.create_start_date.$dirty }" }> 
             <label>CREATED: </label>
             <label>from</label>
             <input ng-model="subset.create_start_date" type="date" name="create_start_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.create_end_date.$invalid && analyticsForm.create_end_date.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.create_end_date" type="date" name="create_end_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>        
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.finished_start_date.$invalid && analyticsForm.finished_start_date.$dirty }" }> 
            <label>FINISHED: </label>
             <label>from</label>
             <input ng-model="subset.finished_start_date" type="date" name="finished_start_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.finished_end_date.$invalid && analyticsForm.finished_end_date.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.finished_end_date" type="date" name="finished_end_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.development_start_date.$invalid && analyticsForm.development_start_date.$dirty }" }> 
             <label>DEVELOPMENT: </label>
             <label>from</label>
             <input ng-model="subset.development_start_date" type="date" name="development_start_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.development_end_date.$invalid && analyticsForm.development_end_date.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.development_end_date" type="date" name="development_end_date" 
-                class="form-control" placeholder="Start date (yyyy-mm-dd)" >
+                class="form-control" placeholder="Start date (yyyy-mm-dd)" 
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.points_from.$invalid && analyticsForm.points_from.$dirty }" }> 
             <label>POINTS: </label>
             <label>from</label>
             <input ng-model="subset.points_from" type="number" name="points_from" 
-                class="form-control" placeholder="0">
+                class="form-control" placeholder="0"
+                ng-change="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.points_to.$invalid && analyticsForm.points_to.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.points_to" type="number" name="points_to" 
-                class="form-control" placeholder="0">
+                class="form-control" placeholder="0"
+                ng-change="showAnalytics(subset)">
         </div>
-        <div class="form-group col-md-6"
-            ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
-            <label>COLUMN: </label>
-            <label>from</label>
-            <select ng-model="subset.column_from" ng-options="p as p.name for p in allCols" name="column_from" class="form-control" required> </select>
-        </div>
-        <div class="form-group col-md-6"
-            ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
-            <label>to</label>
-            <select ng-model="subset.column_to" ng-options="p as p.name for p in allCols" name="column_to"
-                class="form-control" required> </select>
-        </div>
-        <div class="form-group">
-        <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"
-            type="submit">Select</button>
+        <div class="form-group col-md-6">
+            <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"
+                type="submit">Select</button>
         </div>
     </form>
-    <div name="analyticsShow" class="create-board-form col-md-3">
+    <div name="analyticsShow" class="col-md-8">
         AVERAGE LEAD TIME for all selected cards: {{averageLeadTimeSum}}
-        <ul>
+        <!--<ul>
             <li ng-repeat="c in subsetCards">{{c.name}} {{c.averageLeadTime}}</li>
-        </ul>
+        </ul>-->
+        <div class="google-chart" google-chart chart="chartObject"></div>
     </div>
   </div>
 </div>
