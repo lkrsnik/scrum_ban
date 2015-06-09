@@ -64,7 +64,7 @@
             <li><a href="#/projects">List projects</a></li>
           </ul>
         </li>
-        <li><a class="handcursor" ng-click="getDocs()">Help</a></li>
+        <li><a class="handcursor" ng-if="session.authenticated" ng-click="getDocs()">Help</a></li>
       </ul>
       <!--<form class="navbar-form navbar-left" role="search">
         <div class="form-group">
