@@ -382,7 +382,13 @@
                     return (kumWidth === 0) ? COL_DIM.width : kumWidth;
                 };
 
-
+                $scope.getParentCols = function (col) {
+                    var parentCol = Underscore.findWhere($scope.allCols, { 'id': col.parent_column });
+                    if (!parentCol) {
+                        return [col];
+                    }
+                    return [col].concat($scope.getParentCols(parentCol));
+                };
 
                 //////////////////////////////////////// PROJECTS ////////////////////////////////////////
 
@@ -556,6 +562,11 @@
                         $scope.allUsers = data;
                     });
 
+                function createMove(move) {
+                    console.log(move);
+                    return 0;
+                }
+
                 $scope.getColumnProjectCards = function (projectId, columnId) {
                     var cards;
                     cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
@@ -622,7 +633,7 @@
                                         to_position: $scope.newCard.column
                                     };
                                     $scope.WIPErr = false;
-                                    BoardService.createMove(move);
+                                    createMove(move);
                                 });
                         });
                 };
@@ -739,7 +750,7 @@
                             .then(function () {
                                 //data.project = proj.id;
                                 data.column = col.id;
-                                BoardService.createMove(move);
+                                createMove(move);
                                 BoardService.updateCard(data);
                             });
                     } else {
@@ -751,7 +762,7 @@
                         };
                         //data.project = proj.id;
                         data.column = col.id;
-                        BoardService.createMove(move);
+                        createMove(move);
                         BoardService.updateCard(data);
                     }
                 };

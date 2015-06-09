@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
-        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', 'ngDialog', function ($scope, ROLES, $routeParams, BoardService, ProjectService, ngDialog) {
+        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', function ($scope, ROLES, $routeParams, BoardService, ProjectService) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -34,6 +34,9 @@
                     $scope.allCols = data;
                     $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
                     $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
+                    $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
+                        return c.isLeafCol;
+                    }), 'location');
                 });
 
             BoardService.getCards()
@@ -71,7 +74,7 @@
                 return rightCols.shift(); // Returns first element and returns undefined if array is empty
             };
 
-            /*function days_between(date1, date2) {
+            function days_between(date1, date2) {
                 var ONE_DAY, date1_ms, date2_ms, difference_ms;
                 // The number of milliseconds in one day
                 ONE_DAY = 1000 * 60 * 60 * 24;
@@ -86,7 +89,7 @@
                 // Convert back to days and return
                 return Math.round(difference_ms / ONE_DAY);
 
-            }*/
+            }
 
             /*function getAverageLeadTime(card, start, end) {
                 var from, to, cardALT, newCard;
@@ -106,13 +109,18 @@
                 //increase for one day
                 from.setDate(from.getDate() + 1);
             }
-
+            */
             function getDateOfColumnCard(card, column, type) {
                 var moves;
                 BoardService.getMoves(card.id)
                     .success(function (data) {
+                        console.log("moves");
+                        console.log(data);
                         moves = Underscore.where(data, {to_position: column.id});
                         moves = Underscore.sortBy(moves, function (move) { return getDate(move.date); });
+                        if (!moves) {
+                            return null;
+                        }
                         if (type === "first") {
                             return getDate((Underscore.first(moves)).date);
                         }
@@ -121,11 +129,15 @@
                         }
                     });
                 return null;
-            }*/
+            }
 
 
             $scope.showAnalytics = function (subset) {
-                console.log($scope.allCards[0]);
+                var startOfDevelopmentCol, doneCol, i, first, second, averageLeadTime;
+                //-- časovni interval, v katerem je bila kartica končana (premaknjena v stolpec, ki sledi stolpcu za sprejemno testiranje)
+                doneCol = $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol);
+                //-- časovni interval, v katerem se je dejansko pričel razvoj - prvi border column
+                startOfDevelopmentCol = $scope.specialCols.borderCols[0];
                 $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&
@@ -133,21 +145,22 @@
                         (!subset.type || subset.type === "" || subset.type === x.type) &&
                         (subset.create_start_date === null || subset.create_start_date <= getDate(x.creation_date)) &&
                         (subset.create_end_date === null || subset.create_end_date >= getDate(x.creation_date)) &&
-                        (subset.finished_start_date === null || subset.finished_start_date <= getDate(x.completion_date)) &&
-                        (subset.finished_end_date === null || subset.finished_end_date >= getDate(x.completion_date)) &&
-                        (subset.development_start_date === null || subset.development_start_date <= getDate(x.development_start_date)) &&
-                        (subset.development_end_date === null || subset.development_end_date >= getDate(x.development_start_date))
+                        (subset.finished_start_date === null || subset.finished_start_date <= getDateOfColumnCard(x, doneCol, "last")) &&
+                        (subset.finished_end_date === null || subset.finished_end_date >= getDateOfColumnCard(x, doneCol, "last")) &&
+                        (subset.development_start_date === null || subset.development_start_date <= getDateOfColumnCard(x, startOfDevelopmentCol, "first")) &&
+                        (subset.development_end_date === null || subset.development_end_date >= getDateOfColumnCard(x, startOfDevelopmentCol, "first"))
                         );
                 });
-
-                ngDialog.openConfirm({
-                    template: '/static/html/board/showAnalytics.html',
-                    className: 'ngdialog-theme-plain',
-                    scope: $scope
-                })
-                    .then(function () {
-                        console.log("this is it");
-                    });
+                for (i = 0; i < $scope.subsetCards.length; i += 1) {
+                    first = getDateOfColumnCard($scope.subsetCards[i], $scope.allCols[0], "first");
+                    second = getDateOfColumnCard($scope.subsetCards[i], $scope.allCols[1], "last");
+                    if (first !== null  &&  second !== null) {
+                        averageLeadTime = days_between(first, second);
+                    } else {
+                        averageLeadTime = null;
+                    }
+                    $scope.subsetCards[i].averageLeadTime = averageLeadTime;
+                }
             };
         }]);
 }());
