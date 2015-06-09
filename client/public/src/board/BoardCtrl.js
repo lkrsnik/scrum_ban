@@ -614,7 +614,6 @@
                             BoardService.createCard($scope.newCard)
                                 .success(function (data) {
                                     $scope.allCards.push(data);
-                                    console.log(data);
                                     move = {
                                         card: data.id,
                                         user: $scope.session.userid,
@@ -629,21 +628,50 @@
                 };
 
                 $scope.editCard = function (card) {
-                    console.log(card);
                     $scope.card = card;
+                    $scope.card.story_points = parseFloat($scope.card.story_points);
                     $scope.card.username = Underscore.where($scope.allUsers, {'id': $scope.card.user})[0];
                     $scope.newCard = JSON.parse(JSON.stringify($scope.card));
+                    if ($scope.specialCols.borderCols.length > 1) {
+                        var leftBorderCols = $scope.getLeftCols($scope.specialCols.borderCols[0], $scope.leafCols),
+                            isLeft = Underscore.where(leftBorderCols, {'id': $scope.card.column}).length > 0,
+                            rightBorderCols = $scope.getRightCols($scope.specialCols.borderCols[1], $scope.leafCols),
+                            isRight = Underscore.where(rightBorderCols, {'id': $scope.card.column}).length > 0;
+                        if (($scope.isPO || $scope.isSM) && isLeft) {
+                            $scope.newCard.readOnly = false;
+                        } else if (!isLeft && !isRight && !$scope.isPO) {
+                            $scope.newCard.readOnly = false;
+                        } else {
+                            $scope.newCard.readOnly = true;
+                        }
+                    } else {
+                        $scope.newCard.readOnly = true;
+                    }
+                    BoardService.getMoves(card.id)
+                        .success(function (data) {
+                            var i;
+                            for (i = 0; i < data.length; i += 1) {
+                                data[i].date = $filter('date')(data[i].date, 'yyyy-MM-dd');
+                                if (data[i].is_legal) {
+                                    data[i].legal = '';
+                                } else {
+                                    data[i].legal = 'danger';
+                                }
+                            }
+                            $scope.newCard.moves = data;
+                        });
+                    $scope.newCard.completion_date = $filter('date')($scope.newCard.completion_date, 'yyyy-MM-dd');
                     ngDialog.openConfirm({
                         template: '/static/html/board/editCard.html',
-                        className: 'ngdialog-theme-plain',
+                        className: 'ngdialog-theme-plain custom-width',
                         scope: $scope
                     })
                         .then(function () {
+                            $scope.newCard.completion_date = $filter('date')($scope.newCard.completion_date, 'yyyy-MM-ddTHH:mm');
                             BoardService.updateCard($scope.newCard)
                                 .success(function () {
                                     $scope.allCards = Underscore.without($scope.allCards, card);
                                     $scope.allCards.push($scope.newCard);
-                                    //$scope.getCards();
                                 });
                         });
                 };

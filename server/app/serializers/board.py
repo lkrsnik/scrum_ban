@@ -28,8 +28,13 @@ class CardSerializer(serializers.ModelSerializer):
 
 
 class MoveSerializer(serializers.ModelSerializer):
+    # under user return first_name
+    user_first_name = serializers.ReadOnlyField(source='user.first_name')
+    from_position_name = serializers.ReadOnlyField(source='from_position.name')
+    to_position_name = serializers.ReadOnlyField(source='to_position.name')
     class Meta:
         model = Move
         fields = ('id', 'date', 'is_legal', 'description', 'card',
-                  'user', 'from_position', 'to_position')
-        read_only_fields = ('id',)
+                  'user', 'from_position', 'to_position', 'user_first_name',
+                  'from_position_name', 'to_position_name')
+        read_only_fields = ('id', 'user_first_name')
