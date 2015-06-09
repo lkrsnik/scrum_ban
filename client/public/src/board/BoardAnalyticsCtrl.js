@@ -252,6 +252,8 @@
                         }]
                     };
                 });
+
+                $scope.chartObject.options.title = "Kumulative average lead time: " + $scope.averageLeadTimeSum;
             };
 
             $scope.chartObject = {
@@ -272,7 +274,7 @@
                     "rows": []
                 },
                 "options": {
-                    "title": "Average lead time",
+                    "title": "Kumulative average lead time: ",
                     "isStacked": "false",
                     "fill": 4,
                     "displayExactValues": true,
