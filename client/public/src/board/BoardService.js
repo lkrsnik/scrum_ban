@@ -44,7 +44,19 @@
                 },
                 getBoardCards: function (boardId) {
                     return $http.get(API_URL + 'cards/', {
-                        params: { boardId: boardId }
+                        params:
+                            {
+                                boardId: boardId
+                            }
+                    });
+                },
+                getBoardDeletedCards: function (boardId) {
+                    return $http.get(API_URL + 'cards/', {
+                        params:
+                            {
+                                boardId: boardId,
+                                deleted: true
+                            }
                     });
                 },
                 createMove: function (move) {

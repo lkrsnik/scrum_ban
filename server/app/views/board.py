@@ -65,6 +65,13 @@ class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
 
     def list(self, request, pk=None):
+        if request.QUERY_PARAMS.get('deleted'):
+            projectQS = Project.objects.filter(board=request.QUERY_PARAMS['boardId'])
+            cardQS = Card.objects.filter(
+                project__in=projectQS.values('id'),
+                is_active=False)
+            serializer = self.serializer_class(cardQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         if request.QUERY_PARAMS.get('boardId'):
             projectQS = Project.objects.filter(board=request.QUERY_PARAMS['boardId'])
             cardQS = Card.objects.filter(

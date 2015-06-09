@@ -1,0 +1,19 @@
+<div class="panel {{card.cardClass}}">
+    <div class="panel-body">
+    <div class="panel panel-default moves-table">
+        <div class="panel-heading">Deleted cards</div>
+
+        <!-- Table -->
+        <table class="table table-hover">
+            <tr>
+                <th>Name</th>
+                <th>Description on delete</th>
+            </tr>
+            <tr class="handcursor" ng-repeat="card in deletedCards">
+                <td> {{ card.name }} </td>
+                <td> {{ card.deleteDescription }} </td>
+            </tr>
+        </table>
+    </div>
+  </div>
+</div>

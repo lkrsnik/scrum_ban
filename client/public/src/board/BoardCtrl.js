@@ -718,6 +718,35 @@
                                 });
                         });
                 };
+                function getDate(date) {
+                    if (date === null || !date) {
+                        return null;
+                    }
+                    return (new Date(date));
+                }
+
+                $scope.showDeleted = function () {
+                    var i, getMovesSuccessFun, moves;
+                    getMovesSuccessFun = function (i) {
+                        return function (data) {
+                            moves = Underscore.sortBy(data, function (move) { return getDate(move.date); });
+                            $scope.deletedCards[i].deleteDescription =  Underscore.last(moves).description;
+                        };
+                    };
+                    BoardService.getBoardDeletedCards($routeParams.boardId)
+                        .success(function (data) {
+                            $scope.deletedCards = data;
+                            for (i = 0; i < data.length; i += 1) {
+                                BoardService.getMoves($scope.deletedCards[i].id)
+                                    .success(getMovesSuccessFun(i));
+                            }
+                            ngDialog.openConfirm({
+                                template: '/static/html/board/deletedCards.html',
+                                className: 'ngdialog-theme-plain custom-width',
+                                scope: $scope
+                            });
+                        });
+                };
 
                 $scope.deleteCard = function (card) {
                     $scope.card = card;
@@ -819,7 +848,7 @@
                             .then(function () {
                                 //data.project = proj.id;
                                 data.column = col.id;
-                                if (col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
+                                if ($scope.getRightLeafCol($scope.specialCols.acceptanceTestCol) && col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
                                     data.done_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
                                 }
                                 if (col.id === $scope.specialCols.borderCols[0].id && data.development_start_date !== null) {
@@ -837,7 +866,7 @@
                         };
                         //data.project = proj.id;
                         data.column = col.id;
-                        if (col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
+                        if ($scope.getRightLeafCol($scope.specialCols.acceptanceTestCol) && col.id ===  $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol).id) {
                             data.done_date = $filter('date')(new Date(), 'yyyy-MM-ddTHH:mm');
                         }
                         if (col.id === $scope.specialCols.borderCols[0].id && data.development_start_date === null) {

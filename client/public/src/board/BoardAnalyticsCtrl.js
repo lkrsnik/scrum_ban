@@ -211,7 +211,6 @@
                 };
                 $scope.subsetCards = $scope.allCards;
                 $scope.averageLeadTimeSum = 0;
-                $scope.cardsAndTime = [];
 
                 $scope.subsetCards = Underscore.filter($scope.allCards, function (x) {
                     return ((!subset.project || subset.project === x.project) &&
