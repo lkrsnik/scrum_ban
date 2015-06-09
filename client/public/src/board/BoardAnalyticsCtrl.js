@@ -20,14 +20,14 @@
             $scope.types = [
                 "newFunctionality",
                 "silverBullet",
-                "rejected",
-                "all"
+                "rejected"
             ];
             $scope.specialCols = {
                 'borderCols': [],
                 'acceptanceTestCol': null,
                 'highPriorityCol': null
             };
+            $scope.subsetCards = [];
 
             BoardService.getColumns($routeParams.boardId)
                 .success(function (data) {
@@ -42,7 +42,7 @@
             BoardService.getBoardCards($routeParams.boardId)
                 .success(function (data) {
                     $scope.allCards = data;
-                    $scope.subsetCards = data;
+                    //$scope.subsetCards = data;
                 });
 
             BoardService.getBoard($routeParams.boardId)
@@ -253,7 +253,8 @@
                     };
                 });
 
-                $scope.chartObject.options.title = "Kumulative average lead time: " + $scope.averageLeadTimeSum;
+                $scope.chartObject.options.title = "Kumulative average lead time: " + 
+                    Math.round($scope.averageLeadTimeSum * 100) / 100;
             };
 
             $scope.chartObject = {
@@ -279,7 +280,7 @@
                     "fill": 4,
                     "displayExactValues": true,
                     "vAxis": {
-                        "title": "Hours",
+                        "title": "Days",
                         "gridlines": {
                             "count": 5
                         }
