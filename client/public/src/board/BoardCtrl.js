@@ -563,7 +563,27 @@
                     });
 
                 function createMove(move) {
-                    console.log(move);
+                    var toColumns, fromColumns, i, j, toCol, fromCol;
+                    toCol = Underscore.findWhere($scope.allCols, {'id': move.to_position });
+                    toColumns = $scope.getParentCols(toCol);
+                    if (move.from_position === null) {
+                        for (i = 0; i < toColumns.length; i += 1) {
+                            move.to_position = toColumns[i].id;
+                            BoardService.createMove(move);
+                        }
+                    } else {
+                        fromCol = Underscore.findWhere($scope.allCols, {'id': move.from_position });
+                        fromColumns = $scope.getParentCols(fromCol);
+                        for (i = 0; i < toColumns.length; i += 1) {
+                            for (j = 0; j < fromColumns.length; j += 1) {
+                                if (toColumns[i].id !== fromColumns[j].id) {
+                                    move.to_position = toColumns[i].id;
+                                    move.from_position = fromColumns[j].id;
+                                    BoardService.createMove(angular.copy(move));
+                                }
+                            }
+                        }
+                    }
                     return 0;
                 }
 

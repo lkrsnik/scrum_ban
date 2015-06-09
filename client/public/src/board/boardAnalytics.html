@@ -84,5 +84,12 @@
             type="submit">Select</button>
         </div>
     </form>
+    <div name="analyticsShow" class="create-board-form col-md-3">
+        <ul>
+            <li ng-repeat="card in subsetCards">
+               <p> {{card.id}} {{card.name}}: {{card.averageLeadTime}}  </p>         
+            </li>
+        </ul>
+    </div>
   </div>
 </div>

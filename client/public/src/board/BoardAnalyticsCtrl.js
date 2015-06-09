@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
-        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', function ($scope, ROLES, $routeParams, BoardService, ProjectService) {
+        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', '$q', function ($scope, ROLES, $routeParams, BoardService, ProjectService, $q) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
@@ -56,7 +56,7 @@
                 });
 
             function getDate(date) {
-                if (date === null) {
+                if (date === null || !date) {
                     return null;
                 }
                 return (new Date(date));
@@ -75,19 +75,19 @@
             };
 
             function days_between(date1, date2) {
-                var ONE_DAY, date1_ms, date2_ms, difference_ms;
+                //var ONE_DAY, date1_ms, date2_ms, difference_ms;
                 // The number of milliseconds in one day
-                ONE_DAY = 1000 * 60 * 60 * 24;
+                //ONE_DAY = 1000 * 60 * 60 * 24;
 
                 // Convert both dates to milliseconds
-                date1_ms = date1.getTime();
-                date2_ms = date2.getTime();
+                //date1_ms = date1.getTime();
+                //date2_ms = date2.getTime();
 
                 // Calculate the difference in milliseconds
-                difference_ms = Math.abs(date1_ms - date2_ms);
-
+                //difference_ms = Math.abs(date1_ms - date2_ms);
+                return Math.abs(date1 - date2) / 360000 / 60;
                 // Convert back to days and return
-                return Math.round(difference_ms / ONE_DAY);
+                //return Math.round(difference_ms / ONE_DAY);
 
             }
 
@@ -110,30 +110,36 @@
                 from.setDate(from.getDate() + 1);
             }
             */
+            $scope.movePromises = [];
+            $scope.firstDates = [];
+            $scope.lastDates = [];
             function getDateOfColumnCard(card, column, type) {
-                var moves;
-                BoardService.getMoves(card.id)
+                var moves, movePromise;
+                movePromise = BoardService.getMoves(card.id)
                     .success(function (data) {
-                        console.log("moves");
-                        console.log(data);
-                        moves = Underscore.where(data, {to_position: column.id});
+                        if (type === "first") {                            
+                            moves = Underscore.where(data, {from_position: column.id});
+                        } else if (type === "last") {                            
+                            moves = Underscore.where(data, {to_position: column.id});
+                        }
+
                         moves = Underscore.sortBy(moves, function (move) { return getDate(move.date); });
-                        if (!moves) {
-                            return null;
+                        if (!moves || moves.length === 0) {
+                            return;
                         }
                         if (type === "first") {
-                            return getDate((Underscore.first(moves)).date);
-                        }
-                        if (type === "last") {
-                            return getDate((Underscore.last(moves)).date);
+                            $scope.firstDates.push(getDate((Underscore.first(moves)).date));
+                        } else if (type === "last") {
+                            $scope.lastDates.push(getDate((Underscore.last(moves)).date));
                         }
                     });
-                return null;
+                $scope.movePromises.push(movePromise);
             }
 
 
             $scope.showAnalytics = function (subset) {
-                var startOfDevelopmentCol, doneCol, i, first, second, averageLeadTime;
+                var startOfDevelopmentCol, doneCol, i, first, second, averageLeadTime, firstVals, secondVals;
+                $scope.averageLeadTimeSum = 0;
                 //-- časovni interval, v katerem je bila kartica končana (premaknjena v stolpec, ki sledi stolpcu za sprejemno testiranje)
                 doneCol = $scope.getRightLeafCol($scope.specialCols.acceptanceTestCol);
                 //-- časovni interval, v katerem se je dejansko pričel razvoj - prvi border column
@@ -151,16 +157,26 @@
                         (subset.development_end_date === null || subset.development_end_date >= getDateOfColumnCard(x, startOfDevelopmentCol, "first"))
                         );
                 });
+                firstVals = [];
+                secondVals = [];
                 for (i = 0; i < $scope.subsetCards.length; i += 1) {
-                    first = getDateOfColumnCard($scope.subsetCards[i], $scope.allCols[0], "first");
-                    second = getDateOfColumnCard($scope.subsetCards[i], $scope.allCols[1], "last");
-                    if (first !== null  &&  second !== null) {
-                        averageLeadTime = days_between(first, second);
-                    } else {
-                        averageLeadTime = null;
-                    }
-                    $scope.subsetCards[i].averageLeadTime = averageLeadTime;
+                    getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_from, "first");
+                    getDateOfColumnCard($scope.subsetCards[i], $scope.subset.column_to, "last");
                 }
+                $q.all($scope.movePromises).then(function () {
+                    for (i = 0; i < $scope.subsetCards.length; i += 1) {
+                        //if (firstDates.length !== null  &&  second !== null) {
+                        averageLeadTime = days_between($scope.firstDates[i], $scope.lastDates[i]);
+                        //} else {
+                        //    averageLeadTime = null;
+                        //}
+                        console.log($scope.firstDates[i]);
+                        console.log($scope.lastDates[i]);
+                        console.log(averageLeadTime);
+                        $scope.subsetCards[i].averageLeadTime = averageLeadTime;
+                        $scope.averageLeadTimeSum += averageLeadTime;
+                    }
+                });
             };
         }]);
 }());
