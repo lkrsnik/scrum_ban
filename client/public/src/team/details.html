@@ -1,7 +1,10 @@
 <div class="panel panel-default">
   <div class="panel-heading">Details about users</div>
   <div class="panel-body">
-      <input type="search" class="form-group" ng-model="q" placeholder="filter users..." aria-label="filter users" />
+      <div class="form-group">
+        <input type="search" class="form-control" ng-model="q" 
+          placeholder="filter users..." aria-label="filter users" />
+      </div>
       <ul class="example-animate-container">
         <li class="animate-repeat" ng-repeat="user in filtered = (allUsers | filter: {'fullname': q})">
              <h3>{{ user.fullname }}</h3>
