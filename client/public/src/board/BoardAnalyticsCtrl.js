@@ -85,7 +85,7 @@
 
                 // Calculate the difference in milliseconds
                 //difference_ms = Math.abs(date1_ms - date2_ms);
-                return Math.abs(date1 - date2) / 360000 / 60;
+                return Math.round((Math.abs(date1 - date2) / 360000 / 60) * 100) / 100;
                 // Convert back to days and return
                 //return Math.round(difference_ms / ONE_DAY);
 
@@ -193,6 +193,10 @@
 
 
             $scope.showAnalytics = function (subset) {
+                // Check if no columns are set
+                if (!subset.column_from || !subset.column_to) {
+                    return;
+                }
                 var i, moves, fromMove, toMove, getMovesSuccessFun;
                 getMovesSuccessFun = function (i) {
                     return function (data) {
@@ -216,21 +220,73 @@
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&
                         (!subset.points_to || subset.points_to >= x.story_points) &&
-                        (!subset.type || subset.type === "all" || subset.type === x.type) &&
-                        (subset.create_start_date === null || subset.create_start_date <= getDate(x.creation_date)) &&
-                        (subset.create_end_date === null || subset.create_end_date >= getDate(x.creation_date)) &&
-                        (subset.finished_start_date === null || subset.finished_start_date <= getDate(x.done_date)) &&
-                        (subset.finished_end_date === null || subset.finished_end_date >= getDate(x.done_date)) &&
-                        (subset.development_start_date === null || subset.development_start_date <= getDate(x.development_start_date)) &&
-                        (subset.development_end_date === null || subset.development_end_date >= getDate(x.development_start_date))
+                        (!subset.type || subset.type === "" || subset.type === x.type) &&
+                        (!subset.create_start_date || subset.create_start_date <= getDate(x.creation_date)) &&
+                        (!subset.create_end_date || subset.create_end_date >= getDate(x.creation_date)) &&
+                        (!subset.finished_start_date || subset.finished_start_date <= getDate(x.done_date)) &&
+                        (!subset.finished_end_date || subset.finished_end_date >= getDate(x.done_date)) &&
+                        (!subset.development_start_date || subset.development_start_date <= getDate(x.development_start_date)) &&
+                        (!subset.development_end_date || subset.development_end_date >= getDate(x.development_start_date))
                         );
                 });
 
-
+                $scope.getMovesPromises = [];
                 for (i = 0; i < $scope.subsetCards.length; i += 1) {
-                    BoardService.getMoves($scope.subsetCards[i].id)
-                        .success(getMovesSuccessFun(i));
+                    $scope.getMovesPromises.push(BoardService.getMoves($scope.subsetCards[i].id)
+                        .success(getMovesSuccessFun(i)));
                 }
+
+                $q.all($scope.getMovesPromises)
+                    .then(function () {
+                        $scope.updateChart();
+                    });
+            };
+
+            $scope.updateChart = function () {
+                $scope.chartObject.data.rows = Underscore.map($scope.subsetCards, function (card) {
+                    return {
+                        "c": [{
+                            "v": card.name
+                        }, {
+                            "v": card.averageLeadTime
+                        }]
+                    };
+                });
+            };
+
+            $scope.chartObject = {
+                "type": "ColumnChart",
+                "displayed": true,
+                "data": {
+                    "cols": [{
+                        "id": "cardName",
+                        "label": "Card Name",
+                        "type": "string",
+                        "p": {}
+                    }, {
+                        "id": "averagLeadTime",
+                        "label": "Average Lead Time",
+                        "type": "number",
+                        "p": {}
+                    }],
+                    "rows": []
+                },
+                "options": {
+                    "title": "Average lead time",
+                    "isStacked": "false",
+                    "fill": 4,
+                    "displayExactValues": true,
+                    "vAxis": {
+                        "title": "Hours",
+                        "gridlines": {
+                            "count": 5
+                        }
+                    },
+                    "hAxis": {
+                        "title": "Cards"
+                    }
+                },
+                "formatters": {}
             };
         }]);
 }());

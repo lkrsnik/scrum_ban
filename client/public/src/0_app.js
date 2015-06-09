@@ -16,7 +16,8 @@ var Underscore;
         'underscore',
         'ngStorage',
         'ngDialog',
-        'ngDraggable'
+        'ngDraggable',
+        'googlechart'
     ]).
         config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
             $routeProvider
