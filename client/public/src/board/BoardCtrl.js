@@ -680,16 +680,28 @@
                     }
                     BoardService.getMoves(card.id)
                         .success(function (data) {
-                            var i;
+                            var i,
+                                fromLeaf,
+                                toLeaf,
+                                leafMoves = [];
                             for (i = 0; i < data.length; i += 1) {
+                                if (fromLeaf) {
+                                    fromLeaf = Underscore.where($scope.allCols, {'id': data[i].from_position})[0].isLeafCol;
+                                } else {
+                                    fromLeaf = true;
+                                }
+                                toLeaf = Underscore.where($scope.allCols, {'id': data[i].to_position})[0].isLeafCol;
                                 data[i].date = $filter('date')(data[i].date, 'yyyy-MM-dd');
                                 if (data[i].is_legal) {
                                     data[i].legal = '';
                                 } else {
                                     data[i].legal = 'danger';
                                 }
+                                if (fromLeaf && toLeaf) {
+                                    leafMoves.push(data[i]);
+                                }
                             }
-                            $scope.newCard.moves = data;
+                            $scope.newCard.moves = leafMoves;
                         });
                     $scope.newCard.completion_date = $filter('date')($scope.newCard.completion_date, 'yyyy-MM-dd');
                     ngDialog.openConfirm({
