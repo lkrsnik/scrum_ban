@@ -85,7 +85,7 @@
 
                 // Calculate the difference in milliseconds
                 //difference_ms = Math.abs(date1_ms - date2_ms);
-                return Math.round((Math.abs(date1 - date2) / 360000 / 60) * 100) / 100;
+                return Math.round((((Math.abs(date1 - date2) / 3600000)/24)) * 100) / 100;
                 // Convert back to days and return
                 //return Math.round(difference_ms / ONE_DAY);
 
