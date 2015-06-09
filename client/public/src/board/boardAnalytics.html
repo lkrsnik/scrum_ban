@@ -3,7 +3,7 @@
     <div class="panel-body row">
     <form name="analyticsForm" class="col-md-4 create-board-form row" role="form" 
         ng-submit="showAnalytics(subset)" novalidate>
-        <label class="col-md-12">Select subset of cards. Number of cards selected: {{subsetCards.length}}</label>
+        <label class="col-md-12">Select a subset of cards. # of selected cards: {{subsetCards.length}}</label>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
             <label>COLUMN: </label>
