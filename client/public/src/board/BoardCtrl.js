@@ -368,7 +368,7 @@
                         subCols = $scope.getSubCols(col.id);
 
                         col.style = {
-                            'width': $scope.getColsWidth(subCols, depth + 1),
+                            'width': col.narrow ? COL_DIM.narrowWidth : $scope.getColsWidth(subCols, depth + 1),
                             'left': kumWidth,
                             'min-height': (numProjects * COL_DIM.height) - (depth * (COL_DIM.headerHeight + 2)) // Offset the column height according to column depth
                         };
@@ -388,6 +388,12 @@
                         return [col];
                     }
                     return [col].concat($scope.getParentCols(parentCol));
+                };
+
+                $scope.resizeColumn = function (col) {
+                    col.narrow = !col.narrow;
+
+                    $scope.updateCols();
                 };
 
                 //////////////////////////////////////// PROJECTS ////////////////////////////////////////
