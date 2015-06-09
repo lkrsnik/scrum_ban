@@ -9,7 +9,7 @@
             <label>COLUMN: </label>
             <label>from</label>
             <select ng-model="subset.column_from" ng-options="p as p.name for p in allCols" 
-                name="column_from" class="form-control" required
+                name="column_from" class="form-control" required autofocus
                 ng-change="showAnalytics(subset)"> </select>
         </div>
         <div class="form-group col-md-6"
@@ -23,7 +23,8 @@
             ng-class="{ 'has-error' : analyticsForm.project.$invalid && analyticsForm.project.$dirty }">
             <label>PROJECT: </label>
             <select class="form-control" 
-                ng-model="subset.project" ng-options="p.id as p.name for p in yourOwnedSMProjects" name="project" autofocus ng-change="showAnalytics(subset)">
+                ng-model="subset.project" ng-options="p.id as p.name for p in yourOwnedSMProjects" name="project"
+                ng-change="showAnalytics(subset)">
                 <option value="">-- select all projects --</option>
             </select>
         </div>  
