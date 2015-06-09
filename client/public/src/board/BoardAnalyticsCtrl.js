@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     angular.module('scrumBan').controller('BoardAnalyticsCtrl',
-        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', function ($scope, ROLES, $routeParams, BoardService, ProjectService) {
+        ['$scope', 'ROLES', '$routeParams', 'BoardService', 'ProjectService', '$q', function ($scope, ROLES, $routeParams, BoardService, ProjectService, $q) {
 
             if (!$scope.session) {
                 $scope.promises.sessionPromise
