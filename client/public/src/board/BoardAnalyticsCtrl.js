@@ -253,12 +253,13 @@
                     };
                 });
 
-                $scope.chartObject.options.title = "Kumulative average lead time: " + $scope.averageLeadTimeSum;
+                $scope.chartObject.options.title = "Kumulative average lead time: " + 
+                    Math.round($scope.averageLeadTimeSum * 100) / 100;
             };
 
             $scope.chartObject = {
                 "type": "ColumnChart",
-                "displayed": true,
+                "displayed": false,
                 "data": {
                     "cols": [{
                         "id": "cardName",
@@ -279,7 +280,7 @@
                     "fill": 4,
                     "displayExactValues": true,
                     "vAxis": {
-                        "title": "Hours",
+                        "title": "Days",
                         "gridlines": {
                             "count": 5
                         }
