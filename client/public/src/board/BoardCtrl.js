@@ -388,9 +388,7 @@
                         return [col];
                     }
                     return [col].concat($scope.getParentCols(parentCol));
-                }
-
-
+                };
 
                 //////////////////////////////////////// PROJECTS ////////////////////////////////////////
 
