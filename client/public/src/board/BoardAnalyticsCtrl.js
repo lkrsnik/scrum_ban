@@ -21,7 +21,7 @@
                 "newFunctionality",
                 "silverBullet",
                 "rejected",
-                ""
+                "all"
             ];
             $scope.specialCols = {
                 'borderCols': [],
@@ -216,7 +216,7 @@
                     return ((!subset.project || subset.project === x.project) &&
                         (!subset.points_from || subset.points_from <= x.story_points) &&
                         (!subset.points_to || subset.points_to >= x.story_points) &&
-                        (!subset.type || subset.type === "" || subset.type === x.type) &&
+                        (!subset.type || subset.type === "all" || subset.type === x.type) &&
                         (subset.create_start_date === null || subset.create_start_date <= getDate(x.creation_date)) &&
                         (subset.create_end_date === null || subset.create_end_date >= getDate(x.creation_date)) &&
                         (subset.finished_start_date === null || subset.finished_start_date <= getDate(x.done_date)) &&
