@@ -64,6 +64,17 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
     queryset = Card.objects.all()
 
+    def list(self, request, pk=None):
+        if request.QUERY_PARAMS.get('boardId'):
+            projectQS = Project.objects.filter(board=request.QUERY_PARAMS['boardId'])
+            cardQS = Card.objects.filter(
+                project__in=projectQS.values('id'))
+            serializer = self.serializer_class(cardQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = Card.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class MoveViewSet(viewsets.ModelViewSet):
     """
