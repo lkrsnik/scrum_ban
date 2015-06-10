@@ -133,7 +133,7 @@
                                                     wipViolation = {
                                                         card: data[i].id,
                                                         user: $scope.session.userid,
-                                                        column: $scope.newCol.id,
+                                                        column: $scope.newCol.id
                                                     };
                                                     completed.push(BoardService.createWipViolation(wipViolation));
                                                 }
@@ -149,13 +149,7 @@
                                                     });
 
                                             });
-                                        //!!!!!!!!
-                                        //!!!!!!!!
-                                        // PREVERI TO PRI HIERARHIJI PODSTOLPCEV, ČE SE PRAVILNI VSE ZAPIŠE V BAZO!!!
-                                        //!!!!!!!!
-                                        //!!!!!!!!
-                                });
-                                
+                                    });
                             } else {
                                 BoardService.updateColumn($scope.newCol)
                                     .success(function () {
