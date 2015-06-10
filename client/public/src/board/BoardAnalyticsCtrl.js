@@ -55,9 +55,12 @@
                     $scope.yourOwnedSMProjects = data;
                 });
 
-            function getDate(date) {
+            function getDate(date, dateOnly) {
                 if (date === null || !date) {
                     return null;
+                }
+                if (dateOnly) {
+                    return (new Date(date)).setHours(0, 0, 0, 0);
                 }
                 return (new Date(date));
             }
@@ -222,12 +225,12 @@
                         (!subset.points_from || subset.points_from <= x.story_points) &&
                         (!subset.points_to || subset.points_to >= x.story_points) &&
                         (!subset.type || subset.type === "all" || subset.type === x.type) &&
-                        (!subset.create_start_date || getDate(subset.create_start_date) <= getDate(x.creation_date)) &&
-                        (!subset.create_end_date || getDate(subset.create_end_date) >= getDate(x.creation_date)) &&
-                        (!subset.finished_start_date || getDate(subset.finished_start_date) <= getDate(x.done_date)) &&
-                        (!subset.finished_end_date || getDate(subset.finished_end_date) >= getDate(x.done_date)) &&
-                        (!subset.development_start_date || getDate(subset.development_start_date) <= getDate(x.development_start_date)) &&
-                        (!subset.development_end_date || getDate(subset.development_end_date) >= getDate(x.development_start_date))
+                        (!subset.create_start_date || getDate(subset.create_start_date, true) <= getDate(x.creation_date, true)) &&
+                        (!subset.create_end_date || getDate(subset.create_end_date, true) >= getDate(x.creation_date, true)) &&
+                        (!subset.finished_start_date || getDate(subset.finished_start_date, true) <= getDate(x.done_date, true)) &&
+                        (!subset.finished_end_date || getDate(subset.finished_end_date, true) >= getDate(x.done_date, true)) &&
+                        (!subset.development_start_date || getDate(subset.development_start_date, true) <= getDate(x.development_start_date, true)) &&
+                        (!subset.development_end_date || getDate(subset.development_end_date, true) >= getDate(x.development_start_date, true))
                         );
                 });
                 $scope.getMovesPromises = [];

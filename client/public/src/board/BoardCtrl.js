@@ -297,6 +297,9 @@
                 };
 
                 $scope.getLeftCols = function (col, cols) {
+                    if (!col) {
+                        return [];
+                    }
                     var result = Underscore.filter(cols, function (c) {
                         return c.location < col.location;
                     });
@@ -311,6 +314,9 @@
                 };
 
                 $scope.getRightCols = function (col, cols) {
+                    if (!col) {
+                        return [];
+                    }
                     var result = Underscore.filter(cols, function (c) {
                         return c.location > col.location;
                     });
