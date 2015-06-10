@@ -123,7 +123,7 @@
                                                             if (members[i] === scrumMaster) {
                                                                 newRoleTeamTeamMember =
                                                                     {
-                                                                        "user_team": $scope.userteamSM.user_team,
+                                                                        "user_team": $scope.userteamSM.id,
                                                                         "role": $scope.teamMemberR[0].id
                                                                     };
                                                             } else {
