@@ -48,7 +48,7 @@
         .constant('COL_DIM', {
             'width': 250,
             'narrowWidth': 50,
-            'height': 600,
+            'height': 700,
             'headerHeight': 40
         })
         .constant('API_URL', 'api/')
