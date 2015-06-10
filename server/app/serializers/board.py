@@ -14,7 +14,8 @@ class ColumnSerializer(serializers.ModelSerializer):
     class Meta:
         model = Column
         fields = ('id', 'name', 'wip', 'location', 'parent_column', 'board',
-                  'is_border', 'is_high_priority', 'acceptance_test')
+                  'is_border', 'is_high_priority',
+                  'acceptance_test', 'narrow')
         read_only_fields = ('id',)
 
 
