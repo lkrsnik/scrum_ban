@@ -819,6 +819,7 @@
                         scope: $scope
                     })
                         .then(function () {
+                            console.log("HERE!!!");
                             BoardService.createMove($scope.move);
                             $scope.card.is_active = false;
                             BoardService.updateCard($scope.card)
