@@ -436,6 +436,8 @@
                 $scope.resizeColumn = function (col) {
                     col.narrow = !col.narrow;
 
+                    BoardService.updateColumn(col);
+
                     $scope.updateCols();
                 };
 

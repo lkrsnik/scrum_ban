@@ -87,14 +87,14 @@
             <label>from</label>
             <input ng-model="subset.points_from" type="number" name="points_from" 
                 class="form-control" placeholder="0"
-                ng-change="showAnalytics(subset)">
+                ng-blur="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.points_to.$invalid && analyticsForm.points_to.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.points_to" type="number" name="points_to" 
                 class="form-control" placeholder="0"
-                ng-change="showAnalytics(subset)">
+                ng-blur="showAnalytics(subset)">
         </div>
         <!--<div class="form-group col-md-6">
             <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"

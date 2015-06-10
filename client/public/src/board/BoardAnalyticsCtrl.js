@@ -257,7 +257,7 @@
                 });
 
                 $scope.chartObject.options.title = "Cumulative average lead time: " +
-                    Math.round($scope.averageLeadTimeSum * 100) / 100;
+                    Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
             };
 
             $scope.chartObject = {

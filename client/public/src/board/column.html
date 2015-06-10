@@ -1,23 +1,32 @@
 <div class="panel-heading">
-    {{col.name}} [{{countCards(col)}}/{{col.wip}}]
-    <span ng-show="countCards(col) < 1 && col.isLeafCol" ng-click="deleteColumn(col)" title="Delete column" 
+    <span ng-hide="col.narrow">{{col.name}} [{{countCards(col)}}/{{col.wip}}]</span>
+    <span ng-show="countCards(col) < 1 && col.isLeafCol" ng-hide="col.narrow" ng-click="deleteColumn(col)" title="Delete column" 
         class="glyphicon glyphicon-trash handcursor"></span>
-    <span ng-click="editColumn(col)" title="Edit column"
+    <span ng-click="editColumn(col)" title="Edit column" ng-hide="col.narrow"
         class="glyphicon glyphicon-pencil handcursor"></span>
-    <!--<span ng-click="resizeColumn(col)" title="Resize column"
-        class="glyphicon glyphicon-resize-horizontal handcursor"></span>-->
+    <span ng-click="resizeColumn(col)" title="Resize column"
+        class="glyphicon glyphicon-resize-horizontal handcursor"></span>
 </div>
 <div class="panel-body column-body">
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
         ng-drop-success="onDropComplete($data, proj, col)">
+        <div ng-show="$first && col.narrow" class="vertical-text narrow-col-name">
+            {{col.name}}
+        </div>
+
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
             class="card panel {{card.cardClass}}"
+            ng-hide="col.narrow"
             ng-drag="true" ng-drag-data="card"
             ng-drag-success="onDragComplete(card)">
-            <div class="panel-heading card-heading"><a ng-click="editCard(card)">{{card.name}}</a><span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)" title="Delete card" 
-        class="glyphicon glyphicon-trash handcursor"></span></div>
+            <div class="panel-heading card-heading">
+                <a ng-click="editCard(card)">{{card.name}}</a>
+                <span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)"
+                    title="Delete card" 
+                    class="glyphicon glyphicon-trash handcursor"></span>
+            </div>
             <div class="panel-body">
                <p>{{card.content}}</p>
 
