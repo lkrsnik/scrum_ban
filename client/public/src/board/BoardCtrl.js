@@ -114,17 +114,60 @@
                     })
                         .then(function () {
                             $scope.newCol.board = $routeParams.boardId;
+                            console.log($scope.newCol.wip);
+                            // show warning only if previously set column didn't exceed WIP value
+                            if ($scope.wipErrorOnColumnEdit($scope.newCol) && !$scope.wipErrorOnColumnEdit(oldCol)) {
+                                console.log("napaka");
+                                $scope.notify('Warning', 'You have exceeded WIP limit in this column! Do you still want to update WIP value?', true)
+                                    .then(function () {
+                                        var wipViolation,
+                                            i,
+                                            completed = [];
 
-                            BoardService.updateColumn($scope.newCol)
-                                .success(function () {
-                                    if (oldCol.location !== $scope.newCol.location) {
-                                        $scope.deleteSubColsLocations($scope.newCol);
-                                        $scope.recalculateSubColsLocations($scope.newCol);
-                                    }
+                                        BoardService.getCards()
+                                            .success(function (data) {
+                                                data = Underscore.filter(data, function (c) {
+                                                    return c.column === $scope.newCol.id && c.is_active;
+                                                });
+                                                for (i = 0; i < data.length; i += 1) {
+                                                    wipViolation = {
+                                                        card: data[i].id,
+                                                        user: $scope.session.userid,
+                                                        column: $scope.newCol.id,
+                                                    };
+                                                    completed.push(BoardService.createWipViolation(wipViolation));
+                                                }
+                                                BoardService.updateColumn($scope.newCol)
+                                                    .success(function () {
+                                                        if (oldCol.location !== $scope.newCol.location) {
+                                                            $scope.deleteSubColsLocations($scope.newCol);
+                                                            $scope.recalculateSubColsLocations($scope.newCol);
+                                                        }
 
-                                    $scope.allCols = Underscore.without($scope.allCols, oldCol);
-                                    $scope.proccessSavedColumn($scope.newCol);
+                                                        $scope.allCols = Underscore.without($scope.allCols, oldCol);
+                                                        $scope.proccessSavedColumn($scope.newCol);
+                                                    });
+
+                                            });
+                                        //!!!!!!!!
+                                        //!!!!!!!!
+                                        // PREVERI TO PRI HIERARHIJI PODSTOLPCEV, ČE SE PRAVILNI VSE ZAPIŠE V BAZO!!!
+                                        //!!!!!!!!
+                                        //!!!!!!!!
                                 });
+                                
+                            } else {
+                                BoardService.updateColumn($scope.newCol)
+                                    .success(function () {
+                                        if (oldCol.location !== $scope.newCol.location) {
+                                            $scope.deleteSubColsLocations($scope.newCol);
+                                            $scope.recalculateSubColsLocations($scope.newCol);
+                                        }
+
+                                        $scope.allCols = Underscore.without($scope.allCols, oldCol);
+                                        $scope.proccessSavedColumn($scope.newCol);
+                                    });
+                            }
                         });
                 };
 
@@ -812,6 +855,20 @@
 
                 $scope.wipError = function (column) {
                     if ($scope.countCards(column) >= column.wip) {
+                        return true;
+                    }
+                    if (!column.parent_column) {
+                        return false;
+                    }
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    if (parentColumn) {
+                        return $scope.wipError(parentColumn);
+                    }
+                    return false;
+                };
+
+                $scope.wipErrorOnColumnEdit = function (column) {
+                    if ($scope.countCards(column) > column.wip) {
                         return true;
                     }
                     if (!column.parent_column) {

@@ -1,4 +1,4 @@
-from app.models import Board, Column, Card, Move
+from app.models import Board, Column, Card, Move, WipViolation
 from django.db import models
 from rest_framework import serializers
 
@@ -37,4 +37,14 @@ class MoveSerializer(serializers.ModelSerializer):
         fields = ('id', 'date', 'is_legal', 'description', 'card',
                   'user', 'from_position', 'to_position', 'user_first_name',
                   'from_position_name', 'to_position_name')
+        read_only_fields = ('id', 'user_first_name')
+
+class WipViolationSerializer(serializers.ModelSerializer):
+    # under user return first_name
+    user_first_name = serializers.ReadOnlyField(source='user.first_name')
+    column_name = serializers.ReadOnlyField(source='column.name')
+    class Meta:
+        model = WipViolation
+        fields = ('id', 'date', 'card', 'user', 'column', 'user_first_name',
+                  'column_name')
         read_only_fields = ('id', 'user_first_name')

@@ -1,9 +1,10 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.board import BoardSerializer, ColumnSerializer, \
-                                  CardSerializer, MoveSerializer
+                                  CardSerializer, MoveSerializer, \
+                                  WipViolationSerializer
 from app.models import Board, Column, Card, Project, UserTeam, Team, \
-                       Group, Move
+                       Group, Move, WipViolation
 
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -98,5 +99,23 @@ class MoveViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(moveQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         queryset = Move.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class WipViolationViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows WIP violations to be viewed or edited.
+    """
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = WipViolationSerializer
+    queryset = WipViolation.objects.all()
+
+    def list(self, request):
+        if request.QUERY_PARAMS.get('cardId'):
+            moveQS = WipViolation.objects.filter(card=request.QUERY_PARAMS['cardId'])
+            serializer = self.serializer_class(moveQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = WipViolation.objects.all()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

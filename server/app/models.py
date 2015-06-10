@@ -99,3 +99,9 @@ class Permission(models.Model):
     role = models.ForeignKey(Group, related_name='role')
     from_position = models.ForeignKey(Column, related_name='from')
     to_position = models.ForeignKey(Column, related_name='to')
+
+class WipViolation(models.Model):
+    date = models.DateTimeField(default=datetime.now)
+    card = models.ForeignKey(Card)
+    user = models.ForeignKey(User)
+    column = models.ForeignKey(Column)

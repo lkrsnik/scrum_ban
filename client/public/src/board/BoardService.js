@@ -67,6 +67,15 @@
                     return $http.get(API_URL + 'moves/', {
                         params: { cardId: cardId }
                     });
+                },
+                createWipViolation: function (wipViolation) {
+                    return $http.post(API_URL + 'wip-violations/', wipViolation);
+                },
+                getWipViolations: function (cardId) {
+                    // user returns first_name not ID
+                    return $http.get(API_URL + 'wip-violations/', {
+                        params: { cardId: cardId }
+                    });
                 }
                 /*,
                 getBoard: function (boardId) {
