@@ -16,20 +16,21 @@
             {{col.name}}
         </div>
 
-        <div ng-if="!col.narrow"
-            ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
-            class="card panel {{card.cardClass}}"
-            ng-drag="true" ng-drag-data="card"
-            ng-drag-success="onDragComplete(card)">
-            <div class="panel-heading card-heading">
-                <a ng-click="editCard(card)">{{card.name}}</a>
-                <span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)"
-                    title="Delete card" 
-                    class="glyphicon glyphicon-trash handcursor"></span>
-            </div>
-            <div class="panel-body {{ card.classCritical }}">
-               <p>{{card.content}}</p>
+        <div ng-if="!col.narrow">
+            <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
+                class="card panel {{card.cardClass}}"
+                ng-drag="true" ng-drag-data="card"
+                ng-drag-success="onDragComplete(card)">
+                <div class="panel-heading card-heading">
+                    <a ng-click="editCard(card)">{{card.name}}</a>
+                    <span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)"
+                        title="Delete card" 
+                        class="glyphicon glyphicon-trash handcursor"></span>
+                </div>
+                <div class="panel-body {{ card.classCritical }}">
+                   <p>{{card.content}}</p>
 
+                </div>
             </div>
         </div>
     </div>
