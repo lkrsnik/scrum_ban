@@ -69,7 +69,26 @@
                 return (new Date(date));
             }
 
+            $scope.getColsBetween = function (colFrom, colTo, cols) {
+                if (!colFrom.location) {
+                    colFrom = Underscore.findWhere(cols, { 'id': colFrom });
+                }
+                if (!colTo.location) {
+                    colTo = Underscore.findWhere(cols, { 'id': colTo });
+                }
+                var result = Underscore.filter(cols, function (c) {
+                    return colFrom.location <= c.location && c.location <= colTo.location;
+                });
+                return Underscore.sortBy(result, 'location');
+            };
+
             $scope.getRightCols = function (col, cols) {
+                if (!col) {
+                    return cols;
+                }
+                if (!col.location) {
+                    col = Underscore.findWhere(cols, { 'id': col });
+                }
                 var result = Underscore.filter(cols, function (c) {
                     return c.location > col.location;
                 });
@@ -123,7 +142,13 @@
                 if (!subset.column_from || !subset.column_to) {
                     return;
                 }
-                var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves;
+                var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
+                    allDateMoves, firstDate, lastDate, days, day, dataObj;
+
+                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols);
+                allDateMoves = [];
+                days = [];
+
                 getMovesSuccessFun = function (i) {
                     return function (data) {
                         moves = Underscore.sortBy(data, function (move) { return getDate(move.date); });
@@ -144,11 +169,14 @@
                                 return move.date.substring(0, 10);
                             });
 
-                            /*dateMoves = Underscore.map(dateMoves, function (dm) {
-                                return Underscore.groupBy(dm, 'to_position_name');
-                            });*/
+                            dateMoves = Underscore.map(dateMoves, function (moves) {
+                                var move = Underscore.last(moves);
+                                move.date = new Date(move.date.substring(0, 10));
 
-                            console.log(dateMoves);
+                                return move;
+                            });
+
+                            allDateMoves = allDateMoves.concat(dateMoves);
                         }
 
                     };
@@ -179,6 +207,22 @@
                 $q.all($scope.getMovesPromises)
                     .then(function () {
                         if (subset.display_type === 'avgLeadTime') {
+                            $scope.chartObject.type = 'ColumnChart';
+                            $scope.chartObject.options.vAxis.title = 'Days';
+                            $scope.chartObject.options.hAxis.title = 'Cards';
+                            $scope.chartObject.data.cols = [{
+                                "id": "cardName",
+                                "label": "Card Name",
+                                "type": "string",
+                                "p": {}
+                            }, {
+                                "id": "averageLeadTime",
+                                "label": "Average Lead Time",
+                                "type": "number",
+                                "p": {}
+                            }];
+
+
                             $scope.chartObject.data.rows = Underscore.map($scope.subsetCards, function (card) {
                                 return {
                                     "c": [{
@@ -193,7 +237,58 @@
                                 Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
                         } else {
                             // Cumulative flow diagram
+                            allDateMoves = Underscore.sortBy(allDateMoves, 'date');
 
+                            firstDate = Underscore.first(allDateMoves).date;
+                            lastDate = Underscore.last(allDateMoves).date;
+
+                            while (firstDate <= lastDate) {
+                                dataObj = {
+                                    'date': firstDate,
+                                    'cols': subsetCols
+                                };
+
+                                days.push(angular.copy(dataObj));
+
+                                firstDate.setDate(firstDate.getDate() + 1);
+                            }
+
+
+                            $scope.chartObject.type = 'AreaChart';
+                            $scope.chartObject.options.vAxis.title = 'Number of cards in a column';
+                            $scope.chartObject.options.hAxis.title = 'Days';
+                            $scope.chartObject.data.cols = [{
+                                "id": "date",
+                                "label": "Date",
+                                "type": "string",
+                                "p": {}
+                            }];
+
+                            Underscore.map(subsetCols, function (c) {
+                                $scope.chartObject.data.cols.push({
+                                    "id": c.id,
+                                    "label": c.name,
+                                    "type": "number",
+                                    "p": {}
+                                });
+                            });
+
+                            $scope.chartObject.data.rows = Underscore.map(days, function (d) {
+                                day = {
+                                    "c": [{
+                                        "v": d.date.toDateString()
+                                    }]
+                                };
+                                day.c = day.c.concat(Underscore.map(d.cols, function (c) {
+                                    c = Underscore.filter(allDateMoves, function (dm) {
+                                        return dm.date.toDateString() === d.date.toDateString() && dm.to_position === c.id;
+                                    }).length;
+                                    return {
+                                        "v": c
+                                    };
+                                }));
+                                return day;
+                            });
                         }
                     });
             };
@@ -208,7 +303,7 @@
                         "type": "string",
                         "p": {}
                     }, {
-                        "id": "averagLeadTime",
+                        "id": "averageLeadTime",
                         "label": "Average Lead Time",
                         "type": "number",
                         "p": {}
@@ -216,7 +311,6 @@
                     "rows": []
                 },
                 "options": {
-                    "title": "Cumulative average lead time: ",
                     "isStacked": "false",
                     "fill": 4,
                     "displayExactValues": true,
