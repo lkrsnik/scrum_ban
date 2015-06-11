@@ -145,7 +145,7 @@
                 var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
                     allDateMoves, firstDate, lastDate, days, day, dataObj, dateMove;
 
-                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols);
+                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
                 allDateMoves = [];
                 days = [];
 
