@@ -743,21 +743,34 @@
                             var i,
                                 fromLeaf,
                                 toLeaf,
-                                leafMoves = [];
+                                leafMoves = [],
+                                fromCol,
+                                toCol;
                             for (i = 0; i < data.length; i += 1) {
-                                if (fromLeaf) {
+                                fromCol = Underscore.findWhere($scope.allCols, {'id': data[i].from_position});
+                                if (!fromCol) {
+                                    fromLeaf = true;
+                                } else {
+                                    fromLeaf = fromCol.isLeafCol;
+                                }
+                                /*if (fromLeaf) {
+                                    test1 = Underscore.where($scope.allCols, {'id': data[i].from_position});
                                     fromLeaf = Underscore.where($scope.allCols, {'id': data[i].from_position})[0].isLeafCol;
                                 } else {
                                     fromLeaf = true;
-                                }
-                                toLeaf = Underscore.where($scope.allCols, {'id': data[i].to_position})[0].isLeafCol;
+                                }*/
+
+                                toCol = Underscore.findWhere($scope.allCols, {'id': data[i].to_position});
+                                toLeaf = toCol.isLeafCol;
                                 data[i].date = $filter('date')(data[i].date, 'yyyy-MM-dd');
                                 if (data[i].is_legal) {
                                     data[i].legal = '';
                                 } else {
                                     data[i].legal = 'danger';
                                 }
+                                console.log(toLeaf);
                                 if (fromLeaf && toLeaf) {
+                                    console.log(data[i]);
                                     leafMoves.push(data[i]);
                                 }
                             }
