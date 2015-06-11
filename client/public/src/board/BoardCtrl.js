@@ -616,7 +616,7 @@
                 function createMove(move) {
                     var toColumns, fromColumns, i, j, toCol, fromCol;
                     toCol = Underscore.findWhere($scope.allCols, {'id': move.to_position });
-                    toColumns = $scope.getParentCols(toCol);
+                    toColumns = $scope.getParentCols(toCol).reverse();
                     if (move.from_position === null) {
                         for (i = 0; i < toColumns.length; i += 1) {
                             move.to_position = toColumns[i].id;
@@ -624,7 +624,7 @@
                         }
                     } else {
                         fromCol = Underscore.findWhere($scope.allCols, {'id': move.from_position });
-                        fromColumns = $scope.getParentCols(fromCol);
+                        fromColumns = $scope.getParentCols(fromCol).reverse();
                         for (i = 0; i < toColumns.length; i += 1) {
                             for (j = 0; j < fromColumns.length; j += 1) {
                                 if (toColumns[i].id !== fromColumns[j].id) {

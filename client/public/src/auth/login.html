@@ -15,7 +15,7 @@
             ng-class="{ 'has-error' : loginForm.password.$invalid && loginForm.password.$dirty }">
             <label>Password</label>
             <input ng-model="credentials.password" type="password" name="password" 
-                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Password" required autofocus>
+                class="form-control" ng-change="resetCredentialsValidity()" placeholder="Password" required >
             <p ng-show="loginForm.password.$error.required && loginForm.password.$dirty" 
                 class="help-block">Please enter password.</p>
             <p ng-show="loginForm.password.$error.wrongCredentials && (loginForm.password.$dirty || loginForm.username.$dirty)" 
