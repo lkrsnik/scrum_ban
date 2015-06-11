@@ -4,11 +4,10 @@
     <div class="panel-body">
     <form name="criticalCardForm" class="create-card-form" role="form" 
         ng-submit="confirm()" novalidate>
-
         <div class="form-group"
             ng-class="{ 'has-error' : criticalCardForm.days_left.$invalid && criticalCardForm.days_left.$dirty }" }> 
             <label>Choose how many days before deadline you want to see warning on cards: </label>
-            <input ng-model="critical_cards.days_left" type="number" name="days_left" min="0"
+            <input ng-model="criticalCards[0].days_left" type="number" name="days_left" min="0"
                 class="form-control" placeholder="0">
         </div>                 
         <button class="btn btn-primary" ng-disabled="criticalCardForm.$invalid"

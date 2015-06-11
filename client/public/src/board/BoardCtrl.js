@@ -57,6 +57,11 @@
                     $location.path($location.path() + path);
                 };
 
+                BoardService.getCriticalCardsByUser($scope.session.userid)
+                    .success(function (data) {
+                        $scope.days_left = data[0].days_left;
+                    });
+
 
                 //////////////////////////////////////// BOARD /////////////////////////////////////////
 
@@ -637,7 +642,17 @@
                     }
                     return 0;
                 }
-
+                function isCritical(card) {
+                    var date1, date2;
+                    if (!card.completion_date) {
+                        return false;
+                    }
+                    date1 = new Date(card.completion_date);
+                    date2 = new Date();
+                    date2.setDate(date2.getDate() + $scope.days_left);
+                    date2.setHours(0, 0, 0, 0);
+                    return (date2 >= date1);
+                }
                 $scope.getColumnProjectCards = function (projectId, columnId) {
                     var cards;
                     cards = Underscore.where($scope.allCards, {'project': projectId, 'column': columnId});
@@ -649,8 +664,25 @@
                         } else if (entry.type === "rejected") {
                             entry.cardClass = "panel-warning";
                         }
+                        entry.is_critical = isCritical(entry);
+                        if (entry.is_critical) {
+                            entry.classCritical = "panel-body-critical";
+                        } else {
+                            entry.classCritical = "";
+                        }
                     });
                     return Underscore.sortBy(cards, 'id');
+                };
+
+                $scope.updateCritical = function () {
+                    $scope.allCards.forEach(function (entry) {
+                        entry.is_critical = isCritical(entry);
+                        if (entry.is_critical) {
+                            entry.classCritical = "panel-body-critical";
+                        } else {
+                            entry.classCritical = "";
+                        }
+                    });
                 };
 
                 $scope.onProjectSelectionChange = function (type) {
@@ -786,33 +818,32 @@
                 }
 
                 $scope.showCritical = function () {
+                    $scope.criticalCards = {};
                     BoardService.getCriticalCardsByUser($scope.session.userid)
                         .success(function (data) {
+                            $scope.criticalCards = data;
                             ngDialog.openConfirm({
                                 template: '/static/html/board/criticalCards.html',
                                 className: 'ngdialog-theme-plain',
                                 scope: $scope
                             })
                                 .then(function () {
-                                    if (!data) {
+                                    if (!data[0].user) {
+                                        $scope.criticalCards[0].user = $scope.session.userid;
                                         $scope.criticalCards.user = $scope.session.userid;
-                                        BoardService.createCriticalCardsByUser($scope.criticalCards)
+                                        BoardService.createCriticalCards($scope.criticalCards[0])
                                             .success(function (data) {
-                                                console.log(data);
+                                                $scope.days_left = data.days_left;
+                                                $scope.updateCritical();
                                             });
                                     } else {
-                                        BoardService.updateCriticalCardsByUser($scope.criticalCards)
+                                        BoardService.updateCriticalCards($scope.criticalCards[0])
                                             .success(function (data) {
-                                                console.log(data);
+                                                $scope.days_left = data.days_left;
+                                                $scope.updateCritical();
                                             });
                                     }
-                                    console.log("HERE!!!");
-                                    BoardService.getCriticalCardsByUser($scope.session.userid)
-                                            .success(function (data) {
-                                            console.log(data);
-                                        });
                                 });
-                            console.log(data);
                         });
                 };
 
