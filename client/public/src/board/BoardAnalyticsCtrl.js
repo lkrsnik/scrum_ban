@@ -241,7 +241,7 @@
                             // Cumulative flow diagram
                             allDateMoves = Underscore.sortBy(allDateMoves, 'date');
 
-                            firstDate = Underscore.first(allDateMoves).date;
+                            firstDate = angular.copy(Underscore.first(allDateMoves).date);
                             lastDate = Underscore.last(allDateMoves).date;
 
                             while (firstDate <= lastDate) {
