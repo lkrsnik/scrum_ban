@@ -39,7 +39,7 @@
                     $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
                     $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
                     $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
-                        return c.isLeafCol;
+                        return Underscore.where($scope.allCols, { 'parent_column': c.id}).length === 0;
                     }), 'location');
                 });
 
@@ -145,7 +145,11 @@
                 var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
                     allDateMoves, firstDate, lastDate, days, day, dataObj, dateMove;
 
-                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
+                if (subset.display_type === 'avgLeadTime') {
+                    subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
+                } else {
+                    subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.leafCols).reverse();
+                }
                 allDateMoves = [];
                 days = [];
 
@@ -238,8 +242,12 @@
                                 };
                             });
 
-                            $scope.chartObject.options.title = "Average lead time: " +
-                                Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
+                            if ($scope.subsetCards.length > 0) {
+                                $scope.chartObject.options.title = "Average lead time: " +
+                                    Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
+                            } else {
+                                $scope.chartObject.options.title = "Average lead time: 0";
+                            }
                         } else {
                             // Cumulative flow diagram
                             allDateMoves = Underscore.sortBy(allDateMoves, 'date');

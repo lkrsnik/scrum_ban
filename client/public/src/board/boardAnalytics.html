@@ -14,7 +14,7 @@
             </select>
         </div>
         <label class="col-md-12">Select a subset of cards. # of selected cards: {{subsetCards.length}}</label>
-        <div class="form-group col-md-6"
+        <div class="form-group col-md-6" ng-show="subset.display_type === 'avgLeadTime'"
             ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
             <label>COLUMN: </label>
             <label>from</label>
@@ -22,10 +22,26 @@
                 name="column_from" class="form-control" required autofocus
                 ng-change="showAnalytics(subset)"> </select>
         </div>
-        <div class="form-group col-md-6"
+        <div class="form-group col-md-6" ng-show="subset.display_type === 'avgLeadTime'"
             ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
             <label>to</label>
             <select ng-model="subset.column_to" ng-options="p as p.name for p in getRightCols(subset.column_from, allCols)" name="column_to"
+                class="form-control" required
+                ng-change="showAnalytics(subset)"> </select>
+        </div>
+        <div class="form-group col-md-6" ng-show="subset.display_type === 'cumulativeFlow'"
+            ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
+            <label>COLUMN: </label>
+            <label>from</label>
+            <select ng-model="subset.column_from" ng-options="p as p.name for p in leafCols" 
+                name="column_from" class="form-control" required autofocus
+                ng-change="showAnalytics(subset)"> </select>
+        </div>
+        <div class="form-group col-md-6" ng-show="subset.display_type === 'cumulativeFlow'"
+            ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
+            <label>to</label>
+            <select ng-model="subset.column_to" 
+                ng-options="p as p.name for p in getRightCols(subset.column_from, leafCols)" name="column_to"
                 class="form-control" required
                 ng-change="showAnalytics(subset)"> </select>
         </div>
