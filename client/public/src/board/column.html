@@ -12,7 +12,7 @@
         {{col.name}}
     </div>
 
-    <div ng-if="col.isLeafCol " ng-repeat="proj in yourBoardProjects" class="project-row" 
+    <div ng-if="col.isLeafCol && !col.narrow" ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
         ng-drop-success="onDropComplete($data, proj, col)">
         
@@ -34,7 +34,6 @@
         </div>
     </div>
 
-    <div 
-        class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
+    <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
 </div>
