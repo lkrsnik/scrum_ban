@@ -209,7 +209,7 @@
                     .then(function () {
                         if (subset.display_type === 'avgLeadTime') {
                             $scope.subsetCards = Underscore.filter($scope.subsetCards, function (c) {
-                                return c.averageLeadTime != 0;
+                                return c.averageLeadTime !== 0;
                             });
 
                             $scope.chartObject.type = 'ColumnChart';
