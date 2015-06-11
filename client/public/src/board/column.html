@@ -12,9 +12,12 @@
         {{col.name}}
     </div>
 
-    <div ng-if="col.isLeafCol" ng-repeat="proj in yourBoardProjects" class="project-row" 
+    <div ng-if="col.isLeafCol " ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
         ng-drop-success="onDropComplete($data, proj, col)">
+        <div ng-if="col.narrow" class="vertical-text narrow-col-name">
+            {{col.name}}
+        </div>
         
 
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
