@@ -143,7 +143,7 @@
                     return;
                 }
                 var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
-                    allDateMoves, firstDate, lastDate, days, day, dataObj;
+                    allDateMoves, firstDate, lastDate, days, day, dataObj, dateMove;
 
                 subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols);
                 allDateMoves = [];
@@ -168,6 +168,8 @@
                             dateMoves = Underscore.groupBy(moves, function (move) {
                                 return move.date.substring(0, 10);
                             });
+                            //$scope.subsetCards[i].allCardDateMoves = angular.copy(dateMoves);
+                            $scope.subsetCards[i].position = moves[0].from_position;
 
                             dateMoves = Underscore.map(dateMoves, function (moves) {
                                 var move = Underscore.last(moves);
@@ -281,12 +283,24 @@
                                         "v": d.date.toDateString()
                                     }]
                                 };
+
+                                // For every day check if card changed location
+                                $scope.subsetCards = Underscore.map($scope.subsetCards, function (card) {
+                                    dateMove = Underscore.find(allDateMoves, function (dm) {
+                                        // If card has changed position on this day
+                                        return dm.date.getTime() === d.date.getTime() && dm.card === card.id;
+                                    });
+                                    if (dateMove) {
+                                        card.position = dateMove.to_position;
+                                    }
+                                    return card;
+                                });
+
+                                // Then update cols data according to every card location
                                 day.c = day.c.concat(Underscore.map(d.cols, function (c) {
-                                    c = Underscore.filter(allDateMoves, function (dm) {
-                                        return dm.date.toDateString() === d.date.toDateString() && dm.to_position === c.id;
-                                    }).length;
+                                    c = Underscore.where($scope.subsetCards, { 'position': c.id });
                                     return {
-                                        "v": c
+                                        "v": c.length
                                     };
                                 }));
                                 return day;
