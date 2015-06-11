@@ -168,7 +168,7 @@
                             dateMoves = Underscore.groupBy(moves, function (move) {
                                 return move.date.substring(0, 10);
                             });
-                            //$scope.subsetCards[i].position = moves[0].from_position;
+                            $scope.subsetCards[i].position = -1;
 
                             dateMoves = Underscore.map(dateMoves, function (moves) {
                                 var move = Underscore.last(moves);
