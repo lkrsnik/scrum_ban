@@ -1,6 +1,6 @@
 <div class="panel-heading">
     <span ng-hide="col.narrow">{{col.name}} [{{countCards(col)}}/{{col.wip}}]</span> 
-    <span ng-show="countCards(col) < 1 || col.narrow" ng-click="deleteColumn(col)" title="Delete column" 
+    <span ng-show="countCards(col) < 1" ng-click="deleteColumn(col)" title="Delete column" 
         class="glyphicon glyphicon-trash handcursor"></span> 
     <span ng-click="editColumn(col)" title="Edit column" ng-hide="col.narrow"
         class="glyphicon glyphicon-pencil handcursor"></span>
