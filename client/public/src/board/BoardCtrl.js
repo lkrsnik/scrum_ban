@@ -59,7 +59,12 @@
 
                 BoardService.getCriticalCardsByUser($scope.session.userid)
                     .success(function (data) {
-                        $scope.days_left = data[0].days_left;
+                        if (!data[0]) {
+                            //$scope.days_left;
+                            console.log("here");
+                        } else {
+                            $scope.days_left = data[0].days_left;
+                        }
                     });
 
 
@@ -665,7 +670,7 @@
                             entry.cardClass = "panel-warning";
                         }
                         entry.is_critical = isCritical(entry);
-                        if (entry.is_critical) {
+                        if (entry.is_critical && !entry.done_date) {
                             entry.classCritical = "panel-body-critical";
                         } else {
                             entry.classCritical = "";
@@ -677,7 +682,7 @@
                 $scope.updateCritical = function () {
                     $scope.allCards.forEach(function (entry) {
                         entry.is_critical = isCritical(entry);
-                        if (entry.is_critical) {
+                        if (entry.is_critical && !entry.done_date) {
                             entry.classCritical = "panel-body-critical";
                         } else {
                             entry.classCritical = "";
