@@ -39,7 +39,7 @@
                     $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
                     $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
                     $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
-                        return c.isLeafCol;
+                        return Underscore.where($scope.allCols, { 'parent_column': c.id}).length == 0;
                     }), 'location');
                 });
 
@@ -238,8 +238,12 @@
                                 };
                             });
 
-                            $scope.chartObject.options.title = "Average lead time: " +
-                                Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
+                            if ($scope.subsetCards.length > 0) {
+                                $scope.chartObject.options.title = "Average lead time: " +
+                                    Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
+                            } else {
+                                $scope.chartObject.options.title = "Average lead time: 0";
+                            }
                         } else {
                             // Cumulative flow diagram
                             allDateMoves = Underscore.sortBy(allDateMoves, 'date');
