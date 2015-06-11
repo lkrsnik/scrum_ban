@@ -8,16 +8,10 @@
         class="glyphicon glyphicon-resize-horizontal handcursor"></span>
 </div>
 <div class="panel-body column-body">
-    <div ng-if="!col.isLeafCol && col.narrow" class="vertical-text narrow-col-name">
-        {{col.name}}
-    </div>
 
     <div ng-if="col.isLeafCol " ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
         ng-drop-success="onDropComplete($data, proj, col)">
-        <div ng-if="col.narrow" class="vertical-text narrow-col-name">
-            {{col.name}}
-        </div>
         
 
         <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
@@ -37,7 +31,7 @@
         </div>
     </div>
 
-    <div ng-if="!col.narrow" 
+    <div 
         class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
 </div>
