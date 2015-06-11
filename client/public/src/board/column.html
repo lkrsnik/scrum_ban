@@ -8,33 +8,33 @@
         class="glyphicon glyphicon-resize-horizontal handcursor"></span>
 </div>
 <div class="panel-body column-body">
+    <div ng-if="!col.isLeafCol && col.narrow" class="vertical-text narrow-col-name">
+        {{col.name}}
+    </div>
 
     <div ng-if="col.isLeafCol" ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
         ng-drop-success="onDropComplete($data, proj, col)">
-        <div ng-show="$first && col.narrow" class="vertical-text narrow-col-name">
-            {{col.name}}
-        </div>
+        
 
-        <div ng-if="!col.narrow">
-            <div ng-show="!col.narrow" ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
-                class="card panel {{card.cardClass}}"
-                ng-drag="true" ng-drag-data="card"
-                ng-drag-success="onDragComplete(card)">
-                <div class="panel-heading card-heading">
-                    <a ng-click="editCard(card)">{{card.name}}</a>
-                    <span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)"
-                        title="Delete card" 
-                        class="glyphicon glyphicon-trash handcursor"></span>
-                </div>
-                <div class="panel-body {{ card.classCritical }}">
-                   <p>{{card.content}}</p>
+        <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
+            class="card panel {{card.cardClass}}"
+            ng-drag="true" ng-drag-data="card"
+            ng-drag-success="onDragComplete(card)">
+            <div class="panel-heading card-heading">
+                <a ng-click="editCard(card)">{{card.name}}</a>
+                <span  ng-show="canDeleteCard(card)" ng-click="deleteCard(card)"
+                    title="Delete card" 
+                    class="glyphicon glyphicon-trash handcursor"></span>
+            </div>
+            <div class="panel-body {{ card.classCritical }}">
+               <p>{{card.content}}</p>
 
-                </div>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
+    <div ng-if="!col.narrow" 
+        class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
         ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
 </div>
