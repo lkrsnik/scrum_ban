@@ -17,7 +17,7 @@
         </div>
 
         <div ng-if="!col.narrow">
-            <div ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
+            <div ng-show="!col.narrow" ng-repeat="card in getColumnProjectCards(proj.id, col.id)"
                 class="card panel {{card.cardClass}}"
                 ng-drag="true" ng-drag-data="card"
                 ng-drag-success="onDragComplete(card)">
