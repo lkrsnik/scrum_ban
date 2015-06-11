@@ -25,7 +25,7 @@
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
             <label>to</label>
-            <select ng-model="subset.column_to" ng-options="p as p.name for p in allCols" name="column_to"
+            <select ng-model="subset.column_to" ng-options="p as p.name for p in getRightCols(subset.column_from, allCols)" name="column_to"
                 class="form-control" required
                 ng-change="showAnalytics(subset)"> </select>
         </div>
