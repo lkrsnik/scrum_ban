@@ -208,6 +208,10 @@
                 $q.all($scope.getMovesPromises)
                     .then(function () {
                         if (subset.display_type === 'avgLeadTime') {
+                            $scope.subsetCards = Underscore.filter($scope.subsetCards, function (c) {
+                                return c.averageLeadTime != 0;
+                            });
+
                             $scope.chartObject.type = 'ColumnChart';
                             $scope.chartObject.options.vAxis.title = 'Days';
                             $scope.chartObject.options.hAxis.title = 'Cards';
@@ -223,7 +227,6 @@
                                 "type": "number",
                                 "p": {}
                             }];
-
 
                             $scope.chartObject.data.rows = Underscore.map($scope.subsetCards, function (card) {
                                 return {
@@ -254,7 +257,6 @@
 
                                 firstDate.setDate(firstDate.getDate() + 1);
                             }
-
 
                             $scope.chartObject.type = 'AreaChart';
                             $scope.chartObject.options.vAxis.title = 'Number of cards in a column';
