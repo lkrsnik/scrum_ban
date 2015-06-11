@@ -76,6 +76,21 @@
                     return $http.get(API_URL + 'wip-violations/', {
                         params: { cardId: cardId }
                     });
+                },
+                getCriticalCards: function () {
+                    return $http.get(API_URL + 'critical-cards/');
+                },
+                createCriticalCards: function (criticalCards) {
+                    return $http.post(API_URL + 'critical-cards/', criticalCards);
+                },
+                getCriticalCardsByUser: function (userId) {
+                    // user returns first_name not ID
+                    return $http.get(API_URL + 'critical-cards/', {
+                        params: { user: userId }
+                    });
+                },
+                updateCriticalCards: function (criticalCards) {
+                    return $http.put(API_URL + 'critical-cards/' + criticalCards.id + '/', criticalCards);
                 }
                 /*,
                 getBoard: function (boardId) {

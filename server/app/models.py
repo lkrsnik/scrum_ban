@@ -94,7 +94,6 @@ class Task(models.Model):
     card = models.ForeignKey(Card)
     user = models.ForeignKey(User)
 
-
 class Permission(models.Model):
     role = models.ForeignKey(Group, related_name='role')
     from_position = models.ForeignKey(Column, related_name='from')
@@ -105,3 +104,7 @@ class WipViolation(models.Model):
     card = models.ForeignKey(Card)
     user = models.ForeignKey(User)
     column = models.ForeignKey(Column)
+
+class CriticalCards(models.Model):
+    user = models.ForeignKey(User)
+    days_left = models.IntegerField(default=0)

@@ -1,4 +1,4 @@
-from app.models import Board, Column, Card, Move, WipViolation
+from app.models import Board, Column, Card, Move, WipViolation, CriticalCards
 from django.db import models
 from rest_framework import serializers
 
@@ -48,3 +48,9 @@ class WipViolationSerializer(serializers.ModelSerializer):
         fields = ('id', 'date', 'card', 'user', 'column', 'user_first_name',
                   'column_name')
         read_only_fields = ('id', 'user_first_name')
+
+class CriticalCardsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CriticalCards
+        fields = ('id', 'user', 'days_left')
+        read_only_fields = ('id',)
