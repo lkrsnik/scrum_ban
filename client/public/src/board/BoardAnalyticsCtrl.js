@@ -210,6 +210,7 @@
                             $scope.chartObject.type = 'ColumnChart';
                             $scope.chartObject.options.vAxis.title = 'Days';
                             $scope.chartObject.options.hAxis.title = 'Cards';
+                            $scope.chartObject.options.isStacked = false;
                             $scope.chartObject.data.cols = [{
                                 "id": "cardName",
                                 "label": "Card Name",
@@ -257,6 +258,7 @@
                             $scope.chartObject.type = 'AreaChart';
                             $scope.chartObject.options.vAxis.title = 'Number of cards in a column';
                             $scope.chartObject.options.hAxis.title = 'Days';
+                            $scope.chartObject.options.isStacked = true;
                             $scope.chartObject.data.cols = [{
                                 "id": "date",
                                 "label": "Date",
@@ -311,7 +313,6 @@
                     "rows": []
                 },
                 "options": {
-                    "isStacked": "false",
                     "fill": 4,
                     "displayExactValues": true,
                     "vAxis": {
