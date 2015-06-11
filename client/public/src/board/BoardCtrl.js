@@ -768,9 +768,7 @@
                                 } else {
                                     data[i].legal = 'danger';
                                 }
-                                console.log(toLeaf);
                                 if (fromLeaf && toLeaf) {
-                                    console.log(data[i]);
                                     leafMoves.push(data[i]);
                                 }
                             }
@@ -868,7 +866,6 @@
                         scope: $scope
                     })
                         .then(function () {
-                            console.log("HERE!!!");
                             BoardService.createMove($scope.move);
                             $scope.card.is_active = false;
                             BoardService.updateCard($scope.card)
@@ -955,7 +952,9 @@
                             data.type = 'rejected';
                         }
                     }
+                    $scope.allCards = Underscore.without($scope.allCards, data);
                     if ($scope.wipError(col)) {
+                        $scope.allCards.push(data);
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
@@ -977,6 +976,7 @@
                                 BoardService.updateCard(data);
                             });
                     } else {
+                        $scope.allCards.push(data);
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
