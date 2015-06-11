@@ -621,7 +621,7 @@
                 function createMove(move) {
                     var toColumns, fromColumns, i, j, toCol, fromCol;
                     toCol = Underscore.findWhere($scope.allCols, {'id': move.to_position });
-                    toColumns = $scope.getParentCols(toCol);
+                    toColumns = $scope.getParentCols(toCol).reverse();
                     if (move.from_position === null) {
                         for (i = 0; i < toColumns.length; i += 1) {
                             move.to_position = toColumns[i].id;
@@ -629,7 +629,7 @@
                         }
                     } else {
                         fromCol = Underscore.findWhere($scope.allCols, {'id': move.from_position });
-                        fromColumns = $scope.getParentCols(fromCol);
+                        fromColumns = $scope.getParentCols(fromCol).reverse();
                         for (i = 0; i < toColumns.length; i += 1) {
                             for (j = 0; j < fromColumns.length; j += 1) {
                                 if (toColumns[i].id !== fromColumns[j].id) {
@@ -775,14 +775,25 @@
                             var i,
                                 fromLeaf,
                                 toLeaf,
-                                leafMoves = [];
+                                leafMoves = [],
+                                fromCol,
+                                toCol;
                             for (i = 0; i < data.length; i += 1) {
-                                if (fromLeaf) {
+                                fromCol = Underscore.findWhere($scope.allCols, {'id': data[i].from_position});
+                                if (!fromCol) {
+                                    fromLeaf = true;
+                                } else {
+                                    fromLeaf = fromCol.isLeafCol;
+                                }
+                                /*if (fromLeaf) {
+                                    test1 = Underscore.where($scope.allCols, {'id': data[i].from_position});
                                     fromLeaf = Underscore.where($scope.allCols, {'id': data[i].from_position})[0].isLeafCol;
                                 } else {
                                     fromLeaf = true;
-                                }
-                                toLeaf = Underscore.where($scope.allCols, {'id': data[i].to_position})[0].isLeafCol;
+                                }*/
+
+                                toCol = Underscore.findWhere($scope.allCols, {'id': data[i].to_position});
+                                toLeaf = toCol.isLeafCol;
                                 data[i].date = $filter('date')(data[i].date, 'yyyy-MM-dd');
                                 if (data[i].is_legal) {
                                     data[i].legal = '';
@@ -886,7 +897,6 @@
                         scope: $scope
                     })
                         .then(function () {
-                            console.log("HERE!!!");
                             BoardService.createMove($scope.move);
                             $scope.card.is_active = false;
                             BoardService.updateCard($scope.card)
@@ -973,7 +983,9 @@
                             data.type = 'rejected';
                         }
                     }
+                    $scope.allCards = Underscore.without($scope.allCards, data);
                     if ($scope.wipError(col)) {
+                        $scope.allCards.push(data);
                         move = {
                             card: data.id,
                             user: $scope.session.userid,
@@ -995,6 +1007,7 @@
                                 BoardService.updateCard(data);
                             });
                     } else {
+                        $scope.allCards.push(data);
                         move = {
                             card: data.id,
                             user: $scope.session.userid,

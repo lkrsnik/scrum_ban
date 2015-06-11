@@ -143,9 +143,9 @@
                     return;
                 }
                 var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
-                    allDateMoves, firstDate, lastDate, days, day, dataObj;
+                    allDateMoves, firstDate, lastDate, days, day, dataObj, dateMove;
 
-                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols);
+                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
                 allDateMoves = [];
                 days = [];
 
@@ -168,6 +168,7 @@
                             dateMoves = Underscore.groupBy(moves, function (move) {
                                 return move.date.substring(0, 10);
                             });
+                            $scope.subsetCards[i].position = -1;
 
                             dateMoves = Underscore.map(dateMoves, function (moves) {
                                 var move = Underscore.last(moves);
@@ -207,6 +208,10 @@
                 $q.all($scope.getMovesPromises)
                     .then(function () {
                         if (subset.display_type === 'avgLeadTime') {
+                            $scope.subsetCards = Underscore.filter($scope.subsetCards, function (c) {
+                                return c.averageLeadTime !== 0;
+                            });
+
                             $scope.chartObject.type = 'ColumnChart';
                             $scope.chartObject.options.vAxis.title = 'Days';
                             $scope.chartObject.options.hAxis.title = 'Cards';
@@ -223,7 +228,6 @@
                                 "p": {}
                             }];
 
-
                             $scope.chartObject.data.rows = Underscore.map($scope.subsetCards, function (card) {
                                 return {
                                     "c": [{
@@ -234,13 +238,13 @@
                                 };
                             });
 
-                            $scope.chartObject.options.title = "Cumulative average lead time: " +
+                            $scope.chartObject.options.title = "Average lead time: " +
                                 Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
                         } else {
                             // Cumulative flow diagram
                             allDateMoves = Underscore.sortBy(allDateMoves, 'date');
 
-                            firstDate = Underscore.first(allDateMoves).date;
+                            firstDate = angular.copy(Underscore.first(allDateMoves).date);
                             lastDate = Underscore.last(allDateMoves).date;
 
                             while (firstDate <= lastDate) {
@@ -253,7 +257,6 @@
 
                                 firstDate.setDate(firstDate.getDate() + 1);
                             }
-
 
                             $scope.chartObject.type = 'AreaChart';
                             $scope.chartObject.options.vAxis.title = 'Number of cards in a column';
@@ -281,12 +284,24 @@
                                         "v": d.date.toDateString()
                                     }]
                                 };
+
+                                // For every day check if card changed location
+                                $scope.subsetCards = Underscore.map($scope.subsetCards, function (card) {
+                                    dateMove = Underscore.find(allDateMoves, function (dm) {
+                                        // If card has changed position on this day
+                                        return dm.date.getTime() === d.date.getTime() && dm.card === card.id;
+                                    });
+                                    if (dateMove) {
+                                        card.position = dateMove.to_position;
+                                    }
+                                    return card;
+                                });
+
+                                // Then update cols data according to every card location
                                 day.c = day.c.concat(Underscore.map(d.cols, function (c) {
-                                    c = Underscore.filter(allDateMoves, function (dm) {
-                                        return dm.date.toDateString() === d.date.toDateString() && dm.to_position === c.id;
-                                    }).length;
+                                    c = Underscore.where($scope.subsetCards, { 'position': c.id });
                                     return {
-                                        "v": c
+                                        "v": c.length
                                     };
                                 }));
                                 return day;
