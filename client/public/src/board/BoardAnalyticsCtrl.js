@@ -145,7 +145,11 @@
                 var i, moves, fromMove, toMove, getMovesSuccessFun, dateMoves, subsetCols,
                     allDateMoves, firstDate, lastDate, days, day, dataObj, dateMove;
 
-                subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
+                if (subset.display_type === 'avgLeadTime') {
+                    subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.allCols).reverse();
+                } else {
+                    subsetCols = $scope.getColsBetween(subset.column_from, subset.column_to, $scope.leafCols).reverse();
+                }
                 allDateMoves = [];
                 days = [];
 
