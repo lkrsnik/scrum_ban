@@ -436,6 +436,8 @@
                 $scope.resizeColumn = function (col) {
                     col.narrow = !col.narrow;
 
+                    BoardService.updateColumn(col);
+
                     $scope.updateCols();
                 };
 
@@ -727,6 +729,15 @@
                     } else {
                         $scope.newCard.readOnly = true;
                     }
+                    BoardService.getWipViolations(card.id)
+                        .success(function (data) {
+                            var i;
+                            for (i = 0; i < data.length; i += 1) {
+                                data[i].date = $filter('date')(data[i].date, 'yyyy-MM-dd');
+                                data[i].column = Underscore.where($scope.allCols, {'id': data[i].column})[0].name;
+                            }
+                            $scope.newCard.violations = data;
+                        });
                     BoardService.getMoves(card.id)
                         .success(function (data) {
                             var i,

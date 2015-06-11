@@ -50,6 +50,7 @@ class Column(models.Model):
     is_border = models.BooleanField(default=False)
     is_high_priority = models.BooleanField(default=False)
     acceptance_test = models.BooleanField(default=False)
+    narrow = models.BooleanField(default=False)
 
 
 class RoleTeam(models.Model):

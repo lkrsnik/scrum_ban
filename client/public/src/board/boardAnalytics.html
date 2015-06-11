@@ -3,6 +3,16 @@
     <div class="panel-body row">
     <form name="analyticsForm" class="col-md-4 create-board-form row" role="form" 
         ng-submit="showAnalytics(subset)" novalidate>
+        <label class="col-md-12">Select analytics type:</label>
+        <div class="form-group col-md-12"
+            ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }>
+            <select ng-model="subset.display_type" placeholder="Select analytics type..."
+                name="display_type" class="form-control" required
+                ng-change="showAnalytics(subset)">
+                <option value="avgLeadTime">Average lead time</option>
+                <option value="cumulativeFlow">Cumulative flow diagram</option>
+            </select>
+        </div>
         <label class="col-md-12">Select a subset of cards. # of selected cards: {{subsetCards.length}}</label>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.column_from.$invalid && analyticsForm.column_from.$dirty }" }> 
@@ -15,7 +25,7 @@
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.column_to.$invalid && analyticsForm.column_to.$dirty }" }> 
             <label>to</label>
-            <select ng-model="subset.column_to" ng-options="p as p.name for p in allCols" name="column_to"
+            <select ng-model="subset.column_to" ng-options="p as p.name for p in getRightCols(subset.column_from, allCols)" name="column_to"
                 class="form-control" required
                 ng-change="showAnalytics(subset)"> </select>
         </div>
@@ -87,14 +97,14 @@
             <label>from</label>
             <input ng-model="subset.points_from" type="number" name="points_from" 
                 class="form-control" placeholder="0"
-                ng-change="showAnalytics(subset)">
+                ng-blur="showAnalytics(subset)">
         </div>
         <div class="form-group col-md-6"
             ng-class="{ 'has-error' : analyticsForm.points_to.$invalid && analyticsForm.points_to.$dirty }" }> 
             <label>to</label>
             <input ng-model="subset.points_to" type="number" name="points_to" 
                 class="form-control" placeholder="0"
-                ng-change="showAnalytics(subset)">
+                ng-blur="showAnalytics(subset)">
         </div>
         <!--<div class="form-group col-md-6">
             <button class="btn btn-primary" ng-disabled="analyticsForm.$invalid"

@@ -73,5 +73,26 @@
             </tr>
         </table>
     </div>
+
+    <div class="panel panel-default moves-table" ng-if="newCard.violations.length > 0">
+        <div class="panel-heading">Other violations</div>
+
+        <!-- Table -->
+        <table class="table table-hover">
+            <tr>
+                <th>Type</th>
+                <th>Column</th>
+                <th>User</th>
+                <th>Date</th>
+            </tr>
+            <tr class="handcursor panel-danger" ng-repeat="violation in newCard.violations">
+                <td> WIP limit violation </td>
+                <td> {{ violation.column }} </td>
+                <td> {{ violation.user_first_name }}</td>
+                <td> {{ violation.date }}</td>
+            </tr>
+        </table>
+    </div>
+
   </div>
 </div>
