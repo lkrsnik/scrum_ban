@@ -39,7 +39,7 @@
                     $scope.specialCols.borderCols = Underscore.sortBy(Underscore.where($scope.allCols, { 'is_border': true }), 'location');
                     $scope.specialCols.acceptanceTestCol = Underscore.findWhere($scope.allCols, { 'acceptance_test': true });
                     $scope.leafCols = Underscore.sortBy(Underscore.filter($scope.allCols, function (c) {
-                        return Underscore.where($scope.allCols, { 'parent_column': c.id}).length == 0;
+                        return Underscore.where($scope.allCols, { 'parent_column': c.id}).length === 0;
                     }), 'location');
                 });
 
