@@ -34,7 +34,8 @@
         </div>
     </div>
 
-    <div ng-show="!col.narrow" 
-        class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
-        ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
+    <div ng-if="!col.narrow">
+        <div class="panel panel-default panel-column panel-subcolumn" ng-repeat="col in getSubCols(col.id)" 
+            ng-style="col.style" ng-include="'/static/html/board/column.html'"></div>
+    </div>
 </div>
