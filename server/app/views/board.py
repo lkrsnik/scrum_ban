@@ -2,9 +2,9 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from app.serializers.board import BoardSerializer, ColumnSerializer, \
                                   CardSerializer, MoveSerializer, \
-                                  WipViolationSerializer
+                                  WipViolationSerializer, CriticalCardsSerializer
 from app.models import Board, Column, Card, Project, UserTeam, Team, \
-                       Group, Move, WipViolation
+                       Group, Move, WipViolation, CriticalCards
 
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -117,5 +117,22 @@ class WipViolationViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(moveQS, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         queryset = WipViolation.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CriticalCardsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows WIP violations to be viewed or edited.
+    """
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CriticalCardsSerializer
+    queryset = CriticalCards.objects.all()
+
+    def list(self, request):
+        if request.QUERY_PARAMS.get('user'):
+            criticalCardQS = CriticalCards.objects.filter(user=request.QUERY_PARAMS['user'])
+            serializer = self.serializer_class(criticalCardQS, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        queryset = CriticalCards.objects.all()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

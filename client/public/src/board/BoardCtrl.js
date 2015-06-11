@@ -785,6 +785,37 @@
                     return (new Date(date));
                 }
 
+                $scope.showCritical = function () {
+                    BoardService.getCriticalCardsByUser($scope.session.userid)
+                        .success(function (data) {
+                            ngDialog.openConfirm({
+                                template: '/static/html/board/criticalCards.html',
+                                className: 'ngdialog-theme-plain',
+                                scope: $scope
+                            })
+                                .then(function () {
+                                    if (!data) {
+                                        $scope.criticalCards.user = $scope.session.userid;
+                                        BoardService.createCriticalCardsByUser($scope.criticalCards)
+                                            .success(function (data) {
+                                                console.log(data);
+                                            });
+                                    } else {
+                                        BoardService.updateCriticalCardsByUser($scope.criticalCards)
+                                            .success(function (data) {
+                                                console.log(data);
+                                            });
+                                    }
+                                    console.log("HERE!!!");
+                                    BoardService.getCriticalCardsByUser($scope.session.userid)
+                                            .success(function (data) {
+                                            console.log(data);
+                                        });
+                                });
+                            console.log(data);
+                        });
+                };
+
                 $scope.showDeleted = function () {
                     var i, getMovesSuccessFun, moves;
                     getMovesSuccessFun = function (i) {
@@ -866,7 +897,7 @@
                     if (!column.parent_column) {
                         return false;
                     }
-                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
                     if (parentColumn) {
                         return $scope.wipError(parentColumn);
                     }
@@ -880,7 +911,7 @@
                     if (!column.parent_column) {
                         return false;
                     }
-                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
                     if (parentColumn) {
                         return $scope.wipError(parentColumn);
                     }
