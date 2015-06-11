@@ -897,7 +897,7 @@
                     if (!column.parent_column) {
                         return false;
                     }
-                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
                     if (parentColumn) {
                         return $scope.wipError(parentColumn);
                     }
@@ -911,7 +911,7 @@
                     if (!column.parent_column) {
                         return false;
                     }
-                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column})[0];
+                    var parentColumn = Underscore.findWhere($scope.allCols, {'id': column.parent_column});
                     if (parentColumn) {
                         return $scope.wipError(parentColumn);
                     }
