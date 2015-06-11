@@ -8,6 +8,9 @@
         class="glyphicon glyphicon-resize-horizontal handcursor"></span>
 </div>
 <div class="panel-body column-body">
+    <div ng-if="col.narrow" class="vertical-text narrow-col-name">
+        {{col.name}}
+    </div>
 
     <div ng-if="col.isLeafCol " ng-repeat="proj in yourBoardProjects" class="project-row" 
         ng-style="getProjectStyle(col, $first, $last)" ng-drop="true" 
