@@ -238,7 +238,7 @@
                                 };
                             });
 
-                            $scope.chartObject.options.title = "Cumulative average lead time: " +
+                            $scope.chartObject.options.title = "Average lead time: " +
                                 Math.round(($scope.averageLeadTimeSum / $scope.subsetCards.length) * 100) / 100;
                         } else {
                             // Cumulative flow diagram
