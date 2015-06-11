@@ -169,14 +169,14 @@
                                 return move.date.substring(0, 10);
                             });
 
-                            Underscore.map(dateMoves, function (moves) {
-                                moves = Underscore.map(moves, function (move) {
-                                    move.date = new Date(move.date.substring(0, 10));
-                                    return move;
-                                });
+                            dateMoves = Underscore.map(dateMoves, function (moves) {
+                                var move = Underscore.last(moves);
+                                move.date = new Date(move.date.substring(0, 10));
 
-                                allDateMoves = allDateMoves.concat(moves);
+                                return move;
                             });
+
+                            allDateMoves = allDateMoves.concat(dateMoves);
                         }
 
                     };
